@@ -9,6 +9,17 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ReaXsteamSetup.h"
+#include "ReaStreamFrame.h"
+
+// The debug section
+#define logINFO         "ReaXstream [INFO]:  "
+#define logDEBUG        "ReaXstream [DEBUG]:  "
+#define logWARNING      "ReaXstream [WARNING]:  "
+#define logERROR        "ReaXstream [ERROR]:  "
+#define LOG(DTYPE,MSG) logger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
+
+
 
 //==============================================================================
 /**
@@ -24,6 +35,9 @@ public:
     ~ReaXstreamAudioProcessor() override;
 
     //==============================================================================
+    std::unique_ptr<juce::Logger> logger;//Logger
+    ReaXsteamSetup setup;// This is the setup class
+
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
