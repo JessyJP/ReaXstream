@@ -9,6 +9,7 @@ ReaXsteamSetup::ReaXsteamSetup()
 	ip = "localhost";//"broadcast"
 	port = 58710;
 	connectionLabel = "default";
+	encoding = AudioStreamEncoding::FLOAT32;
 	connectionSetupReady = false;
 }
 

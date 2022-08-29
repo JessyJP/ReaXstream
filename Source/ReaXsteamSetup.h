@@ -25,13 +25,20 @@ enum ModeOfOperation
 };
 
 // This declares the available transmission protocol methods
-enum TransmissionProtocol {
+enum TransmissionProtocol 
+{
 	UDP,
 	TCP,
 	SharedMemory,
 	USB
 };
 
+enum AudioStreamEncoding
+{
+	FLOAT32, FLOAT24, FLOAT16, FLOAT8,
+	PCM32, PCM24, PCM16, PCM8,
+	INT32, INT24, INT16, INT8
+};
 
 static const char welcomeMessage[21] = "ReaXstream Starting!";
 
@@ -48,9 +55,12 @@ class ReaXsteamSetup
 		std::string ip;
 		unsigned short port;
 		std::string connectionLabel;
+		AudioStreamEncoding encoding;
 
 	public: // States
 		bool connectionSetupReady;
+
+
 
 	public:
 		ReaXsteamSetup();// Constructor
