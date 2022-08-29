@@ -9,6 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+using namespace std;
+
 //==============================================================================
 ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -22,6 +24,14 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
                        )
 #endif
 {
+    // Initialize plug-in logger
+    string welcomeMessage;
+//    std::unique_ptr<juce::FileLogger> m_flogger;
+//    m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMsg));
+    logger = std::unique_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
+    LOG(logINFO,welcomeMessage);
+
+    setup = ReaXsteamSetup();//
 }
 
 ReaXstreamAudioProcessor::~ReaXstreamAudioProcessor()
@@ -95,6 +105,13 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    //++++++++++++++++++++++++++++++
+
+    
+ 
+
+    //++++++++++++++++++++++++++++++
 }
 
 void ReaXstreamAudioProcessor::releaseResources()
