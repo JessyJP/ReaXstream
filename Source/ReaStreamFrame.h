@@ -44,7 +44,7 @@ class ReaStreamFrame
         void packAudioBufferToTransmissionPacket(juce::AudioBuffer<float>& buffer);
         void unpackTransmissionPackToAudioBuffer();
 
-        void reset();
+        void frameReset();
 };
 
 

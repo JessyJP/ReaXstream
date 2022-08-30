@@ -8,7 +8,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "ReaStreamFrame.h"
 
 
 using namespace std;
@@ -25,16 +24,16 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
                      #endif
                        )
 #endif
+    // Calling 
+    , ReaXsteamSetup() , ReaStreamFrame()
 {
     // Initialize plug-in logger
 //    std::unique_ptr<juce::FileLogger> m_flogger;
 //    m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMsg));
     logger = std::shared_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
     LOG(logINFO, welcomeMessage);
-
-    setup = ReaXsteamSetup();
      
-    if (!setup.connectionSetupReady)
+    if (!connectionSetupReady)
     {
         LOG(logWARNING,"Requesting to setup the plugin inputs!!!")
     }
@@ -116,7 +115,9 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 
     //++++++++++++++++++++++++++++++
     
-    
+    ReaXstreamAudioProcessor::getSampleRate();
+    ReaXstreamAudioProcessor::getLatencySamples();
+
  
 
     //++++++++++++++++++++++++++++++
@@ -162,34 +163,34 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     //++++++Control LOGIC
-    if (setup.direction == DirectionOfConnection::HostServerTransmitter)
+    if (direction == DirectionOfConnection::HostServerTransmitter)
     {
-        if  (setup.mode == ModeOfOperation::ReaStreamClassic) 
+        if  (mode == ModeOfOperation::ReaStreamClassic) 
         {
             
-            rframe.packAudioBufferToTransmissionPacket(buffer);
+            packAudioBufferToTransmissionPacket(buffer);
 
 //            send(rframe);
 
-            rframe.reset();
+            frameReset();
         }
-        else if (setup.mode == ModeOfOperation::ReaStreamMobile)
+        else if (mode == ModeOfOperation::ReaStreamMobile)
         {
             LOG(logWARNING, "NOT implemented!")
         }
-        else if (setup.mode == ModeOfOperation::ReaInterConnect)
+        else if (mode == ModeOfOperation::ReaInterConnect)
         {
         }
         else { LOG(logERROR, "No such mode of opperation!") }
 
     }
-    else if (setup.direction == DirectionOfConnection::ClientReceiver)
+    else if (direction == DirectionOfConnection::ClientReceiver)
     {
-        if (setup.mode == ModeOfOperation::ReaStreamClassic)
+        if (mode == ModeOfOperation::ReaStreamClassic)
         {
             LOG(logWARNING, "NOT implemented!")
         }
-        else if (setup.mode == ModeOfOperation::ReaInterConnect)
+        else if (mode == ModeOfOperation::ReaInterConnect)
         {
             LOG(logWARNING, "NOT implemented!")
         }

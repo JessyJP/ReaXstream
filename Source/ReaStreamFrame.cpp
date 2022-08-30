@@ -13,7 +13,7 @@ ReaStreamFrame::ReaStreamFrame()
     for (auto i = 0; i < mut*2; i++) { transmissionBuffer[i] = 0; }
 
     // start of the audio datas (variable get from "sampleByteSize")
-    reset();
+    frameReset();
 }
 
 ReaStreamFrame::~ReaStreamFrame()
@@ -59,7 +59,7 @@ void ReaStreamFrame::unpackTransmissionPackToAudioBuffer()
 }
 
 
-void ReaStreamFrame::reset()
+void ReaStreamFrame::frameReset()
 {
     for (auto p = 0; p < 32; p++) { packetID[p] = 0;}
 

@@ -28,15 +28,14 @@ class ReaXstreamAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
+                            , public ReaXsteamSetup // Inheriting the connection setup class 
+                            , public ReaStreamFrame // Inheriting the transmission framing  
 {
 public:
     //==============================================================================
     ReaXstreamAudioProcessor();
     ~ReaXstreamAudioProcessor() override;
 
-    //==============================================================================
-    ReaXsteamSetup setup;// This is the setup class
-    ReaStreamFrame rframe;
     //==============================================================================
     std::shared_ptr<juce::Logger> logger;//Logger
 
