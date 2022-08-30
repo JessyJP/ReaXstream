@@ -40,10 +40,8 @@ enum AudioStreamEncoding
 	INT32, INT24, INT16, INT8
 };
 
-static const char welcomeMessage[21] = "ReaXstream Starting!";
-
-// Set maximum transmit units for UDP connection
-static const unsigned int mut = 1472;// MUT (Maximum Unit Transmission) in bytes per UDP frame
+//static const char welcomeMessage[21] = "ReaXstream Starting!";
+#define welcomeMessage "ReaXstream Starting!"
 
 
 class ReaXsteamSetup
