@@ -33,6 +33,7 @@ class ReaStreamFrame
         unsigned long long packetIndex;     // This inex is used for collision control and missing frame detection.
         float* zeroDataAudioBuffer;
         
+        char* transmissionBuffer;
     public:
         ReaStreamFrame();//Default Constructor 
         ~ReaStreamFrame();//Destructor

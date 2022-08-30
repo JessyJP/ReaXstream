@@ -8,6 +8,10 @@ ReaStreamFrame::ReaStreamFrame()
     dataAudioBuffer = (float *) malloc(mut *sizeof(float)); 
     zeroDataAudioBuffer = (float*)malloc(sizeof(dataAudioBuffer));
     for (auto i = 0; i < mut; i++) { dataAudioBuffer[i] = 0; }
+
+    transmissionBuffer = (char*)malloc(mut*2);
+    for (auto i = 0; i < mut*2; i++) { transmissionBuffer[i] = 0; }
+
     // start of the audio datas (variable get from "sampleByteSize")
     reset();
 }
@@ -16,6 +20,7 @@ ReaStreamFrame::~ReaStreamFrame()
 {
 	free(dataAudioBuffer);
     free(zeroDataAudioBuffer);
+    free(transmissionBuffer);
 }
 
 float* ReaStreamFrame::reorderAufferBufferToMultichannelFrames(float* audioSampleBuffer)
@@ -35,7 +40,7 @@ void ReaStreamFrame::packAudioBufferToTransmissionPacket(juce::AudioBuffer<float
     packetID[3] = 'R';
     
     audioSampleRate = 48000;
-    numAudioChannels = char(buffer.getNumChannels());
+    numAudioChannels = uint8_t(buffer.getNumChannels());
     unsigned short numSamples = static_cast<unsigned short>(buffer.getNumSamples());
     sampleByteSize = numAudioChannels * numSamples * sizeof(float);
 
