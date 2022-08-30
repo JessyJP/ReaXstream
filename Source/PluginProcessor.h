@@ -35,8 +35,10 @@ public:
     ~ReaXstreamAudioProcessor() override;
 
     //==============================================================================
-    std::unique_ptr<juce::Logger> logger;//Logger
     ReaXsteamSetup setup;// This is the setup class
+    ReaStreamFrame rframe;
+    //==============================================================================
+    std::shared_ptr<juce::Logger> logger;//Logger
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
