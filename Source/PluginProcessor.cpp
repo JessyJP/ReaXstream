@@ -25,13 +25,19 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
 #endif
 {
     // Initialize plug-in logger
-    string welcomeMessage;
 //    std::unique_ptr<juce::FileLogger> m_flogger;
 //    m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMsg));
     logger = std::unique_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
-    LOG(logINFO,welcomeMessage);
+    LOG(logINFO, welcomeMessage);
 
-    setup = ReaXsteamSetup();//
+    setup = ReaXsteamSetup();
+     
+    if (!setup.connectionSetupReady)
+    {
+        LOG(logWARNING,"Requesting to setup the plugin inputs!!!")
+    }
+
+
 }
 
 ReaXstreamAudioProcessor::~ReaXstreamAudioProcessor()
