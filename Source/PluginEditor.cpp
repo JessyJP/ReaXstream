@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+//#include "ReaXsteamSetup.h"
 
 //==============================================================================
 ReaXstreamAudioProcessorEditor::ReaXstreamAudioProcessorEditor (ReaXstreamAudioProcessor& p)
@@ -30,7 +31,7 @@ void ReaXstreamAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText ("Option Not Implemented!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void ReaXstreamAudioProcessorEditor::resized()
