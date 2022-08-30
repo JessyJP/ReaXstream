@@ -12,9 +12,13 @@
 #include <list>
 #include <iostream>
 
+//==============================================================================
 // This enumerations declares the basic direction mode operation
-enum DirectionOfConnection { HostServerTransmitter, ClientReceiver };
-// TODO: Maybe relabel them to make them shorter
+enum DirectionOfConnection 
+{ 
+	HostServerTransmitter, 
+	ClientReceiver 
+};
 
 // This enumeration declares the types connection modes
 enum ModeOfOperation 
@@ -39,10 +43,7 @@ enum AudioStreamEncoding
 	PCM32, PCM24, PCM16, PCM8,
 	INT32, INT24, INT16, INT8
 };
-
-//static const char welcomeMessage[21] = "ReaXstream Starting!";
-#define welcomeMessage "ReaXstream Starting!"
-
+//==============================================================================
 
 class ReaXsteamSetup
 {
