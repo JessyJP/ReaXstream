@@ -8,6 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "ReaStreamFrame.h"
+
 
 using namespace std;
 
@@ -27,7 +29,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     // Initialize plug-in logger
 //    std::unique_ptr<juce::FileLogger> m_flogger;
 //    m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMsg));
-    logger = std::unique_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
+    logger = std::shared_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
     LOG(logINFO, welcomeMessage);
 
     setup = ReaXsteamSetup();
@@ -113,7 +115,7 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // initialisation that you need..
 
     //++++++++++++++++++++++++++++++
-
+    
     
  
 
@@ -155,8 +157,48 @@ bool ReaXstreamAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    auto numSamples = buffer.getNumSamples();
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+
+    //++++++Control LOGIC
+    if (setup.direction == DirectionOfConnection::HostServerTransmitter)
+    {
+        if  (setup.mode == ModeOfOperation::ReaStreamClassic) 
+        {
+            
+            rframe.packAudioBufferToTransmissionPacket(buffer);
+
+//            send(rframe);
+
+            rframe.reset();
+        }
+        else if (setup.mode == ModeOfOperation::ReaStreamMobile)
+        {
+            LOG(logWARNING, "NOT implemented!")
+        }
+        else if (setup.mode == ModeOfOperation::ReaInterConnect)
+        {
+        }
+        else { LOG(logERROR, "No such mode of opperation!") }
+
+    }
+    else if (setup.direction == DirectionOfConnection::ClientReceiver)
+    {
+        if (setup.mode == ModeOfOperation::ReaStreamClassic)
+        {
+            LOG(logWARNING, "NOT implemented!")
+        }
+        else if (setup.mode == ModeOfOperation::ReaInterConnect)
+        {
+            LOG(logWARNING, "NOT implemented!")
+        }
+        else { LOG(logERROR, "No such mode of opperation!") }
+    
+    }
+    else { LOG(logERROR, "No such direction of transmission!") }
+
+    //+++++CONTROL LOGIC
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -166,19 +208,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    // TODO: should i keep that part?
 }
 
 //==============================================================================
