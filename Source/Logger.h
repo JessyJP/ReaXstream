@@ -5,6 +5,7 @@
 
 // The output types
 #define logINFO         "ReaXstream [INFO]:  "
+#define logPACK(x)      std::string("ReaXstream [Packet][")+ std::to_string(x)+std::string("]:  ")
 #define logDEBUG        "ReaXstream [DEBUG]:  "
 #define logWARNING      "ReaXstream [WARNING]:  "
 #define logERROR        "ReaXstream [ERROR]:  "

@@ -35,7 +35,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     {
         LOG(logWARNING,"Requesting to setup the plugin inputs!!!")
     }
-
+    printFrameHeader();
 
 }
 
@@ -167,10 +167,12 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             
             ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
-
+            ReaStreamFrame::printFrameHeader();
 //            send(rframe);
 
             ReaStreamFrame::frameReset();
+            ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
+            ReaStreamFrame::printFrameHeader();
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {

@@ -45,6 +45,7 @@ enum AudioStreamEncoding
 };
 //==============================================================================
 
+//TODO: rename This class to interconnector or something like that
 class ReaXsteamSetup
 {
 	public: // Settings/Parameter/Properties
