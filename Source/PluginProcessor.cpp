@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "Logger.h"
 
 using namespace std;
 
@@ -27,10 +28,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     // Calling 
     , ReaXsteamSetup() , ReaStreamFrame()
 {
-    // Initialize plug-in logger
-//    std::unique_ptr<juce::FileLogger> m_flogger;
-//    m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMsg));
-    logger = std::shared_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
+
     LOG(logINFO, welcomeMessage);
      
     if (!connectionSetupReady)
@@ -115,7 +113,7 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 
     //++++++++++++++++++++++++++++++
     
-    ReaXstreamAudioProcessor::getSampleRate();
+
     ReaXstreamAudioProcessor::getLatencySamples();
 
  
@@ -168,11 +166,11 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         if  (mode == ModeOfOperation::ReaStreamClassic) 
         {
             
-            packAudioBufferToTransmissionPacket(buffer);
+            ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
 
 //            send(rframe);
 
-            frameReset();
+            ReaStreamFrame::frameReset();
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {

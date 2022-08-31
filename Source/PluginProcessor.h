@@ -12,14 +12,6 @@
 #include "ReaXsteamSetup.h"
 #include "ReaStreamFrame.h"
 
-// The debug section
-#define logINFO         "ReaXstream [INFO]:  "
-#define logDEBUG        "ReaXstream [DEBUG]:  "
-#define logWARNING      "ReaXstream [WARNING]:  "
-#define logERROR        "ReaXstream [ERROR]:  "
-#define LOG(DTYPE,MSG) logger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
-
-
 
 //==============================================================================
 /**
@@ -37,8 +29,6 @@ public:
     ~ReaXstreamAudioProcessor() override;
 
     //==============================================================================
-    std::shared_ptr<juce::Logger> logger;//Logger
-
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
