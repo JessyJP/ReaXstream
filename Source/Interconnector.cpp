@@ -1,7 +1,7 @@
-#include "ReaXsteamSetup.h"
+#include "Interconnector.h"
 
 // Define Constructor 
-ReaXsteamSetup::ReaXsteamSetup() 
+Interconnector::Interconnector() 
 { 
 	// Default values
 	direction = DirectionOfConnection::HostServerTransmitter;
@@ -15,7 +15,7 @@ ReaXsteamSetup::ReaXsteamSetup()
 
 
 // Define Destructor
-ReaXsteamSetup::~ReaXsteamSetup()
+Interconnector::~Interconnector()
 {
 
 }

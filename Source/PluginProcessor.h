@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "ReaXsteamSetup.h"
+#include "Interconnector.h"
 #include "ReaStreamFrame.h"
 
 
@@ -20,7 +20,7 @@ class ReaXstreamAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
-                            , public ReaXsteamSetup // Inheriting the connection setup class 
+                            , public Interconnector // Inheriting the connection setup class 
                             , public ReaStreamFrame // Inheriting the transmission framing  
 {
 public:

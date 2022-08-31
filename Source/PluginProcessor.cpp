@@ -26,7 +26,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
                        )
 #endif
     // Calling 
-    , ReaXsteamSetup() , ReaStreamFrame()
+    , Interconnector() , ReaStreamFrame()
 {
 
     LOG(logINFO, welcomeMessage);

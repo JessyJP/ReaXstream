@@ -2760,10 +2760,10 @@
     <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\ReaStreamFrame.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.cpp">
+    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\Logger.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\Logger.cpp">
+    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\Interconnector.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5465,10 +5465,10 @@
     <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\ReaStreamFrame.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.h">
+    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\Logger.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\Logger.h">
+    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\Interconnector.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
   </ItemGroup>

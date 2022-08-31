@@ -45,8 +45,7 @@ enum AudioStreamEncoding
 };
 //==============================================================================
 
-//TODO: rename This class to interconnector or something like that
-class ReaXsteamSetup
+class Interconnector
 {
 	public: // Settings/Parameter/Properties
 		DirectionOfConnection direction;
@@ -63,8 +62,8 @@ class ReaXsteamSetup
 
 
 	public:
-		ReaXsteamSetup();// Constructor
-		~ReaXsteamSetup();// Destructor
+		Interconnector();// Constructor
+		~Interconnector();// Destructor
 		
 		//Get Connection protocols by modes
 		std::list<TransmissionProtocol> getAvailableProtocolByModeOfOperation(ModeOfOperation mode);
