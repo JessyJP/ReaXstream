@@ -12,12 +12,12 @@ ReaStreamFrame::ReaStreamFrame()
     headerByteCount = sizeof(packetID) + sizeof(packetSize) + sizeof(packetLabel) + 
                       sizeof(numAudioChannels) + sizeof(audioSampleRate) + sizeof(sampleByteSize);
 
-    dataAudioBuffer = (float *) malloc(mut *sizeof(float)); 
-    zeroDataAudioBuffer = (float*)malloc(sizeof(dataAudioBuffer));
-    for (auto i = 0; i < mut; i++) { dataAudioBuffer[i] = 0; }
+    int dataBuffLimit = 2 * 10000;//TODO: Put a limit somewhere in a variaable, don't hardcode
+    dataAudioBuffer = (float *) malloc(dataBuffLimit *sizeof(float)); 
+    for (int i = 0; i < dataBuffLimit; i++) { dataAudioBuffer[i] = 0; }
 
-    transmissionPacketByteBuffer = (char*)malloc(mut*2);
-    for (auto i = 0; i < mut*2; i++) { transmissionPacketByteBuffer[i] = 0; }
+    transmissionPacketByteBuffer = (char*)malloc(mut*2);//TODO: Put a limit somewhere in a variaable, don't hardcode
+    for (int i = 0; i < mut*2; i++) { transmissionPacketByteBuffer[i] = 0; }
 
     // start of the audio datas (variable get from "sampleByteSize")
     frameReset();
@@ -26,7 +26,6 @@ ReaStreamFrame::ReaStreamFrame()
 ReaStreamFrame::~ReaStreamFrame()
 {
 	free(dataAudioBuffer);
-    free(zeroDataAudioBuffer);
     free(transmissionPacketByteBuffer);
 }
 
@@ -99,10 +98,33 @@ void ReaStreamFrame::frameReset()
 
 }
 
-float* ReaStreamFrame::reorderAufferBufferToMultichannelFrames(float* audioSampleBuffer)
+
+void ReaStreamFrame::interleaveAudioBuffer(juce::AudioBuffer<float>& buffer)
 {
-    return nullptr;
-    //TODO:finish this function
+    const float** inputReadChannels             = buffer.getArrayOfReadPointers();
+    float* outputWriteInterleavedAudioBuffer    = dataAudioBuffer;
+    const int numberAudioChannels               = buffer.getNumChannels();
+    const int numberAudioSamples                = buffer.getNumSamples();
+    interleaveAudioChannels(inputReadChannels, outputWriteInterleavedAudioBuffer, numberAudioChannels, numberAudioSamples);
+}
+
+void ReaStreamFrame::interleaveAudioChannels(const float** inputReadChannels, float* outputWriteChannels, const int numChannels, const int numberAudioSamples)
+{
+    int p = 0;
+    for (int s = 0; s < numberAudioSamples; s++)// loop over all samples s
+    {
+        for (int c = 0; c < numChannels; c++)
+        {
+            outputWriteChannels[p++] = inputReadChannels[c][s];
+        }
+    }
+
+    if (p != numChannels * numberAudioSamples)
+    {
+        LOG(LOG_ERROR, "Buffer interleave error : p:" + to_string(p) + 
+                     "] number of channels ["+to_string(numChannels) + 
+                     "] number of audio samples ["+to_string(numberAudioSamples) + "]");
+    }
 }
 
 std::string ReaStreamFrame::printFrameHeader()

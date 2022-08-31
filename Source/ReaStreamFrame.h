@@ -31,16 +31,15 @@ class ReaStreamFrame
         char packetID[4];                   // 'MRSR' tag for every packet like an ID (4 bytes)
         unsigned int packetSize;            // size of the entire transmission packet (4 bytes)
         char packetLabel[32];               // Name of the stream (ie: default on the plugin) (32 bytes)
-        unsigned __int8 numAudioChannels;   // alternative unsigned chat; // the number of channels the plugin sends (1 byte)
+        uint8_t numAudioChannels;           // alternative unsigned chat; // the number of channels the plugin sends (1 byte)
         unsigned int audioSampleRate;       // the rate Frequency of the data (44100, 48000, ...) (4 bytes)
         unsigned short sampleByteSize ;     // size of the following bytes to read. (2 bytes)
         float* dataAudioBuffer;             // start of the audio datas (variable get from "sampleByteSize")
 
-        unsigned int headerByteCount;
+        unsigned int headerByteCount;       // Byte size sum of the header properties
         unsigned long long packetIndex;     // This inex is used for collision control and missing frame detection.
-        float* zeroDataAudioBuffer;
         
-        char* transmissionPacketByteBuffer;
+        char* transmissionPacketByteBuffer; // Byte buffer for protocol transmission
     public:
         ReaStreamFrame();//Default Constructor 
         ~ReaStreamFrame();//Destructor
@@ -50,7 +49,8 @@ class ReaStreamFrame
 
         void frameReset();
 
-        float* reorderAufferBufferToMultichannelFrames(float* audioSampleBuffer);
+        void interleaveAudioBuffer(juce::AudioBuffer<float>& buffer);
+        void interleaveAudioChannels(const float** inputReadChannels, float* outputWriteChannels, const int numChannels, const int numberAudioSamples);
 
         std::string printFrameHeader();
 };

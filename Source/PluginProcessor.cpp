@@ -177,6 +177,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
             ReaStreamFrame::frameReset();
             ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
+            interleaveAudioBuffer(buffer);
             ReaStreamFrame::printFrameHeader();
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
