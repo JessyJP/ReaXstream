@@ -2283,6 +2283,7 @@
       <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
+    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\Logger.cpp" />
     <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\ReaStreamFrame.cpp" />
     <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.cpp" />
   </ItemGroup>
@@ -3185,6 +3186,7 @@
     <ClInclude Include="..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h" />
+    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\Logger.h" />
     <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\ReaStreamFrame.h" />
     <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.h" />
   </ItemGroup>

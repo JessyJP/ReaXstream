@@ -2763,6 +2763,9 @@
     <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Projects\GitHub\ReaXstream\Source\Logger.cpp">
+      <Filter>ReaXstream\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -5463,6 +5466,9 @@
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
     <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\ReaXsteamSetup.h">
+      <Filter>ReaXstream\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Projects\GitHub\ReaXstream\Source\Logger.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
   </ItemGroup>
