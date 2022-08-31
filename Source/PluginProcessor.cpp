@@ -29,11 +29,11 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     , Interconnector() , ReaStreamFrame()
 {
 
-    LOG(logINFO, welcomeMessage);
+    LOG(LOG_INFO, welcomeMessage);
      
     if (!connectionSetupReady)
     {
-        LOG(logWARNING,"Requesting to setup the plugin inputs!!!")
+        LOG(LOG_WARNING,"Requesting to setup the plugin inputs!!!")
     }
     printFrameHeader();
 
@@ -176,28 +176,28 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
-            LOG(logWARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "NOT implemented!")
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
         }
-        else { LOG(logERROR, "No such mode of opperation!") }
+        else { LOG(LOG_ERROR, "No such mode of opperation!") }
 
     }
     else if (direction == DirectionOfConnection::ClientReceiver)
     {
         if (mode == ModeOfOperation::ReaStreamClassic)
         {
-            LOG(logWARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "NOT implemented!")
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
-            LOG(logWARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "NOT implemented!")
         }
-        else { LOG(logERROR, "No such mode of opperation!") }
+        else { LOG(LOG_ERROR, "No such mode of opperation!") }
     
     }
-    else { LOG(logERROR, "No such direction of transmission!") }
+    else { LOG(LOG_ERROR, "No such direction of transmission!") }
 
     //+++++CONTROL LOGIC
 

@@ -117,7 +117,7 @@ std::string ReaStreamFrame::printFrameHeader()
     outputString += ("audioSampleRate: [") + std::to_string(audioSampleRate) + "] " + sep;
     outputString += ("sampleByteSize: [") + std::to_string(sampleByteSize) + "] " + sep;
 
-    LOG(logPACK(packetIndex), outputString);
+    LOG(LOG_FRAME(packetIndex), outputString);
 
     return outputString;
 }

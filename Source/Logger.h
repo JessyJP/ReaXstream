@@ -1,14 +1,14 @@
 //#pragma once
 
 //static const char welcomeMessage[21] = "ReaXstream Starting!";
-#define welcomeMessage "ReaXstream Starting!"
+#define welcomeMessage  "ReaXstream Starting!"
 
 // The output types
-#define logINFO         "ReaXstream [INFO]:  "
-#define logPACK(x)      std::string("ReaXstream [Packet][")+ std::to_string(x)+std::string("]:  ")
-#define logDEBUG        "ReaXstream [DEBUG]:  "
-#define logWARNING      "ReaXstream [WARNING]:  "
-#define logERROR        "ReaXstream [ERROR]:  "
+#define LOG_INFO        "ReaXstream [INFO]:  "
+#define LOG_FRAME(x)     std::string("ReaXstream [Packet][")+ std::to_string(x)+std::string("]:  ")
+#define LOG_DEBUG       "ReaXstream [DEBUG]:  "
+#define LOG_WARNING     "ReaXstream [WARNING]:  "
+#define LOG_ERROR       "ReaXstream [ERROR]:  "
 
 // Logger Switch
 #define LOGGER_ON 
