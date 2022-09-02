@@ -12,6 +12,8 @@
 #include <list>
 #include <iostream>
 
+//#include <juce_Socket.h>
+
 //==============================================================================
 // This enumerations declares the basic direction mode operation
 enum DirectionOfConnection 
@@ -67,6 +69,11 @@ class Interconnector
 		
 		//Get Connection protocols by modes
 		std::list<TransmissionProtocol> getAvailableProtocolByModeOfOperation(ModeOfOperation mode);
+
+		//==============================================================================
+		// UDP connection
+		bool enableBroadcasting;
+
 		
 };
 
