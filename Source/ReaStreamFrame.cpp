@@ -129,7 +129,7 @@ void ReaStreamFrame::interleaveAudioChannels(const float** inputReadChannels, fl
 
 std::string ReaStreamFrame::printFrameHeader()
 {
-    char* sep = " ";
+    string sep = " ";
     string outputString = "";
 
     outputString += ("PacketID [") + string(packetID) + "] " + sep;

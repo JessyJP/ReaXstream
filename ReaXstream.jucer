@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="g2X2zG" name="ReaXstream" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginFormats="buildStandalone,buildVST3" companyName="JessyJP"
+              cppLanguageStandard="latest" pluginVST3Category="Network">
   <MAINGROUP id="DkRmHL" name="ReaXstream">
     <GROUP id="{985457EF-C243-02DD-26CE-4FA66F87D473}" name="Source">
+      <FILE id="aVXFRu" name="Interconnector.cpp" compile="1" resource="0"
+            file="Source/Interconnector.cpp"/>
+      <FILE id="PwJaQj" name="Interconnector.h" compile="0" resource="0"
+            file="Source/Interconnector.h"/>
+      <FILE id="cKV0jn" name="Logger.cpp" compile="1" resource="0" file="Source/Logger.cpp"/>
+      <FILE id="bwZ1j9" name="Logger.h" compile="0" resource="0" file="Source/Logger.h"/>
+      <FILE id="msjBap" name="ReaStreamFrame.cpp" compile="1" resource="0"
+            file="Source/ReaStreamFrame.cpp"/>
+      <FILE id="DPT1HS" name="ReaStreamFrame.h" compile="0" resource="0"
+            file="Source/ReaStreamFrame.h"/>
       <FILE id="IaKWFl" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="K1jc1C" name="PluginProcessor.h" compile="0" resource="0"
