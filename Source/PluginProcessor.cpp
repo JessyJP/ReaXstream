@@ -244,6 +244,22 @@ void ReaXstreamAudioProcessor::setStateInformation (const void* data, int sizeIn
 }
 
 //==============================================================================
+
+
+juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout propertyLayout;
+
+    juce::StringArray connectionDirection;
+    connectionDirection.add("DirectionOfConnection::ClientReceiver");
+    connectionDirection.add("DirectionOfConnection::HostServerTransmitter");
+    propertyLayout.add( std::make_unique<juce::AudioParameterChoice>("Direction","Direction", connectionDirection, 0) );
+
+    return propertyLayout;
+};
+
+
+//==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
