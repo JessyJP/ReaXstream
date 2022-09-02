@@ -31,7 +31,7 @@ void ReaXstreamAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Option Not Implemented!", getLocalBounds(), juce::Justification::centred, 1);
+
 }
 
 void ReaXstreamAudioProcessorEditor::resized()
