@@ -6,6 +6,9 @@
               cppLanguageStandard="latest" pluginVST3Category="Network">
   <MAINGROUP id="DkRmHL" name="ReaXstream">
     <GROUP id="{985457EF-C243-02DD-26CE-4FA66F87D473}" name="Source">
+      <FILE id="F2kOGG" name="Enumerations.cpp" compile="1" resource="0"
+            file="Source/Enumerations.cpp"/>
+      <FILE id="wcb40s" name="Enumerations.h" compile="0" resource="0" file="Source/Enumerations.h"/>
       <FILE id="aVXFRu" name="Interconnector.cpp" compile="1" resource="0"
             file="Source/Interconnector.cpp"/>
       <FILE id="PwJaQj" name="Interconnector.h" compile="0" resource="0"

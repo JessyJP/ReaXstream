@@ -577,6 +577,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Enumerations.cpp">
+      <Filter>ReaXstream\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Interconnector.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
@@ -2898,6 +2901,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Enumerations.h">
+      <Filter>ReaXstream\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Interconnector.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>

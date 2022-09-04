@@ -139,6 +139,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Enumerations.cpp"/>
     <ClCompile Include="..\..\Source\Interconnector.cpp"/>
     <ClCompile Include="..\..\Source\Logger.cpp"/>
     <ClCompile Include="..\..\Source\ReaStreamFrame.cpp"/>
@@ -2296,6 +2297,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Enumerations.h"/>
     <ClInclude Include="..\..\Source\Interconnector.h"/>
     <ClInclude Include="..\..\Source\Logger.h"/>
     <ClInclude Include="..\..\Source\ReaStreamFrame.h"/>
