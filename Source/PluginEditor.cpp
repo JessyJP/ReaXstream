@@ -8,19 +8,22 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-//#include "ReaXsteamSetup.h"
+
 
 //==============================================================================
 ReaXstreamAudioProcessorEditor::ReaXstreamAudioProcessorEditor (ReaXstreamAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    rxgui.reset(new ReaXstreamGUI());
+    addAndMakeVisible(rxgui.get());
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (600, 500);
 }
 
 ReaXstreamAudioProcessorEditor::~ReaXstreamAudioProcessorEditor()
 {
+    rxgui.reset();
 }
 
 //==============================================================================

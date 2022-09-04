@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "ReaXstreamGUI.h"
 
 //==============================================================================
 /**
@@ -28,6 +29,8 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     ReaXstreamAudioProcessor& audioProcessor;
+
+    std::unique_ptr<ReaXstreamGUI> rxgui;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaXstreamAudioProcessorEditor)
 };
