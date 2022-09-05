@@ -1,7 +1,11 @@
-//#pragma once
+#pragma once
 
-//static const char welcomeMessage[21] = "ReaXstream Starting!";
-#define welcomeMessage  "ReaXstream Starting!"
+//#ifndef LOGGER_H
+//#define LOGGER_H
+	
+
+//static const char LoggerWelcomeMessage[21] = "ReaXstream Starting!";
+#define LoggerWelcomeMessage  "ReaXstream Starting!"
 
 // The output types
 #define LOG_INFO        "ReaXstream [INFO]:  "
@@ -13,17 +17,21 @@
 // Logger Switch
 #define LOGGER_ON 
 
-#ifdef LOGGER_ON
-extern std::shared_ptr<juce::Logger>     logger;
-extern std::unique_ptr<juce::FileLogger> fileLogger;
-// Logger function
-#define LOG(DTYPE,MSG) logger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
 
-#endif LOGGER_ON
+//#endif 
+
+#ifdef LOGGER_ON
+	#include <JuceHeader.h>
+	extern std::shared_ptr<juce::Logger>     logger;
+	extern std::unique_ptr<juce::FileLogger> fileLogger;
+	// Logger function
+	#define LOG(DTYPE,MSG) logger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
+
+#endif
 
 #ifdef LOGGER_OFF
 
-//Empty logger function
-#define LOG(DTYPE,MSG)
+	//Empty logger function
+	#define LOG(DTYPE,MSG)
 
-#endif LOGGER_OFF
+#endif
