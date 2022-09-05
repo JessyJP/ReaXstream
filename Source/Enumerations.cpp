@@ -56,7 +56,7 @@ std::list<std::string> convertListOfTransmissionProtocolsToStringList(std::list<
 	{
 		strList.push_back(convertEnum2String(protocol));
 	}
-
+	return strList;
 }
 
 
