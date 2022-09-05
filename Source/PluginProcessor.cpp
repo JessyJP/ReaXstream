@@ -29,7 +29,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     , Interconnector() , ReaStreamFrame()
 {
 
-    LOG(LOG_INFO, welcomeMessage);
+    LOG(LOG_INFO, LoggerWelcomeMessage);
      
     if (! connectionSetupReady)
     {
