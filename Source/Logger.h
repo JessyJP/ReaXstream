@@ -9,6 +9,7 @@
 
 // The output types
 #define LOG_INFO        "ReaXstream [INFO]:  "
+#define LOG_GUI			"ReaXstream [GUI]:  "
 #define LOG_FRAME(x)     std::string("ReaXstream [Packet][")+ std::to_string(x)+std::string("]:  ")
 #define LOG_DEBUG       "ReaXstream [DEBUG]:  "
 #define LOG_WARNING     "ReaXstream [WARNING]:  "
