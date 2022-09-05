@@ -6,9 +6,7 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
-
 
 //==============================================================================
 ReaXstreamAudioProcessorEditor::ReaXstreamAudioProcessorEditor (ReaXstreamAudioProcessor& p)

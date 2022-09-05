@@ -30,7 +30,12 @@ private:
     // access the processor object that created it.
     ReaXstreamAudioProcessor& audioProcessor;
 
+    // This pointer will hold the main content componenet for the GUI
     std::unique_ptr<ReaXstreamGUI> rxgui;
+    // If needed a get funcion can be made available publicly.
+    // If that is the case then all the internal element component handles can be 
+    // made publicly available. In general, however, this shouldn't be done and only
+    // the funcionality needed should be exposed by the "ReaXstreamGUI" class.
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaXstreamAudioProcessorEditor)
 };
