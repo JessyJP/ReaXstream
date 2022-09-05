@@ -158,7 +158,8 @@ bool ReaXstreamAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
-    if (!connectionSetupReady) { return; }// This will allow the process loop to be bypassed when the connection is not setup.
+    if (!connectionSetupReady) { setupInterconnector(); return; }
+    // This will allow the process loop to be bypassed when the connection is not setup.
 
     juce::ScopedNoDenormals noDenormals;
     auto numSamples = buffer.getNumSamples();
