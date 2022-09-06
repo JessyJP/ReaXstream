@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "Logger.h"
 //[/Headers]
 
 #include "ReaXstreamGUI.h"
@@ -30,6 +31,7 @@
 ReaXstreamGUI::ReaXstreamGUI ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    flagChangeGUIstate = true;
     //[/Constructor_pre]
 
     comboBox_directionOfConnection.reset (new juce::ComboBox ("directionOfConnectionComboBox"));
@@ -254,21 +256,27 @@ void ReaXstreamGUI::resized()
 void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 {
     //[UsercomboBoxChanged_Pre]
+    flagChangeGUIstate = true;
     //[/UsercomboBoxChanged_Pre]
 
     if (comboBoxThatHasChanged == comboBox_directionOfConnection.get())
     {
         //[UserComboBoxCode_comboBox_directionOfConnection] -- add your combo box handling code here..
+        LOG(LOG_GUI, "Direction of Connection Change [" + convertEnum2String(getStateDirectionOfConnectionComboBox()) + "]");
         //[/UserComboBoxCode_comboBox_directionOfConnection]
     }
     else if (comboBoxThatHasChanged == comboBox_modeOfOperation.get())
     {
         //[UserComboBoxCode_comboBox_modeOfOperation] -- add your combo box handling code here..
+        LOG(LOG_GUI, "Mode of operation [" + convertEnum2String(getStateModeOfOperationComboBox()) + "]");
+        // Set the apptopirate transmission protocols for the corresponding mode
+        updateTransmissionProtocolsForModeSelection(getStateModeOfOperationComboBox());
         //[/UserComboBoxCode_comboBox_modeOfOperation]
     }
     else if (comboBoxThatHasChanged == comboBox_transmissionProtocol.get())
     {
         //[UserComboBoxCode_comboBox_transmissionProtocol] -- add your combo box handling code here..
+        LOG(LOG_GUI, "Transmission protocol [" + convertEnum2String(getStateTransmissionProtocolComboBox()) + "]");
         //[/UserComboBoxCode_comboBox_transmissionProtocol]
     }
 
@@ -279,6 +287,7 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
 void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
+    flagChangeGUIstate = true;
     //[/UserbuttonClicked_Pre]
 
     if (buttonThatWasClicked == button_apply.get())
@@ -294,6 +303,59 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+//==============================================================================
+void ReaXstreamGUI::setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in)
+{
+    this->rxAudioProcessor = rxAudioProcessorP_in;
+}
+
+bool ReaXstreamGUI::checkGUIstateChanged()
+{
+    if (flagChangeGUIstate)// if true then reset it and return that it was true, ptherwise return false
+    {
+        flagChangeGUIstate = false; // Reset when cheked.
+        return true;
+    }
+    return false;
+}
+
+// GUI elements get state methods
+DirectionOfConnection ReaXstreamGUI::getStateDirectionOfConnectionComboBox()
+{
+    return DirectionOfConnection(comboBox_directionOfConnection->getSelectedId());
+}
+
+ModeOfOperation ReaXstreamGUI::getStateModeOfOperationComboBox()
+{
+    return ModeOfOperation(comboBox_modeOfOperation->getSelectedId());
+}
+
+TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
+{
+    return TransmissionProtocol(comboBox_transmissionProtocol->getSelectedId());
+}
+
+//juce::string ReaXstreamGUI::getStateIpUrlPortTextEditor()
+//{
+//    return textEditor_ipUrlPort->getText();
+//}
+//int ReaXstreamGUI::getStateIdentifierTextEditor()
+//{
+//    return 0;
+//}
+// Method to set the apptopirate transmission protocols for the corresponding mode
+void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
+{
+    // TODO: finish this function 
+    std::list<TransmissionProtocol> protoList = getAvailableProtocolByModeOfOperation(mode);
+    LOG(LOG_INFO, "");
+    LOG(LOG_INFO, convertEnum2String(mode));
+    for (auto const& protoStr : protoList)
+    {
+        LOG(LOG_INFO, "|-- " + convertEnum2String(protoStr));
+    }
+}
+//==============================================================================
 //[/MiscUserCode]
 
 

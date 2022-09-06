@@ -21,6 +21,12 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include <JuceHeader.h>
+#include "Enumerations.h"
+#include "PluginProcessor.h"
+
+// The enumeration conversions can be done here or in the interconnector. 
+// It is more appropriate for all of that to be handled as early as possible,
+// there fore enumeration and input validation can be handled at the scource.
 //[/Headers]
 
 
@@ -44,6 +50,20 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in);
+    // Check the GUI state change check variable
+    bool checkGUIstateChanged();
+
+    // GUI elements get state methods
+    DirectionOfConnection   getStateDirectionOfConnectionComboBox();
+    ModeOfOperation         getStateModeOfOperationComboBox();
+    TransmissionProtocol    getStateTransmissionProtocolComboBox();
+    //    juce::string getStateIpUrlPortTextEditor();
+    //    int getStateIdentifierTextEditor();
+    
+    // Method to set the apptopirate transmission protocols for the corresponding mode
+    void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
+
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -55,6 +75,9 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    // Set the plugin processor pointer reference.
+    ReaXstreamAudioProcessor* rxAudioProcessor;
+    bool flagChangeGUIstate;// This flag indicates a change in the GUI
     //[/UserVariables]
 
     //==============================================================================
