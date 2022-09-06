@@ -11,7 +11,7 @@ Interconnector::Interconnector()
 	mode = ModeOfOperation::ReaStreamClassic;
 	ip = "localhost";//"broadcast"
 	port = 58710;
-	connectionLabel = "default";
+	connectionIdentifier = "default";
 	encoding = AudioStreamEncoding::FLOAT32;
 	// State/Action flags
 	connectionEstablishedOK = false;
@@ -76,6 +76,17 @@ void Interconnector::setTransmissionProtocol(TransmissionProtocol TP)
 	LOG(LOG_INTERCONNECTOR, "TransmissionProtocol: [" + convertEnum2String(protocol) + "]");
 }
 
+void Interconnector::setIP(std::string newIP) 
+{
+	ip = newIP;
+	LOG(LOG_INTERCONNECTOR, "IP: [" + ip + "]");
+}
+
+void Interconnector::setIdentifier(std::string newIdentifier)
+{
+	connectionIdentifier = newIdentifier;
+	LOG(LOG_INTERCONNECTOR, "Identifier: [" + connectionIdentifier + "]");
+}
 
 // Setup function
 void Interconnector::setupInterConnection()

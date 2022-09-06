@@ -30,7 +30,7 @@ class Interconnector
 		// These properties involve the specific protocols
 		std::string ip;
 		unsigned short port;
-		std::string connectionLabel;
+		std::string connectionIdentifier;
 		AudioStreamEncoding encoding;
 
 	protected: // States
@@ -57,6 +57,8 @@ class Interconnector
 		void setDirectionOfConnection(DirectionOfConnection DoC);
 		void setModeOfOperation(ModeOfOperation MoO);
 		void setTransmissionProtocol(TransmissionProtocol TP);
+		void setIP(std::string newIP);
+		void setIdentifier(std::string newIdentifier);
 
 		// This function creates the connections based on the interconnector settings
 		void setupInterConnection();

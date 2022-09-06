@@ -198,6 +198,8 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[UserPreSize]
+    textEditor_ipUrlPort->addListener(this);
+    textEditor_identifier->addListener(this);
     //[/UserPreSize]
 
     setSize (600, 600);
@@ -296,6 +298,7 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == button_apply.get())
     {
         //[UserButtonCode_button_apply] -- add your button handler code here..
+        textEditorTextChanged();
         //[/UserButtonCode_button_apply]
     }
 
@@ -344,10 +347,12 @@ TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
 //{
 //    return textEditor_ipUrlPort->getText();
 //}
+
 //int ReaXstreamGUI::getStateIdentifierTextEditor()
 //{
 //    return 0;
 //}
+
 // Method to set the apptopirate transmission protocols for the corresponding mode
 void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
 {
@@ -359,6 +364,32 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
     {
         LOG(LOG_INFO, "|-- " + convertEnum2String(protoStr));
     }
+}
+
+// Overwrite the listner function for the text fields
+void ReaXstreamGUI::textEditorTextChanged()//juce::TextEditor* textEditorThatHasChanged
+{
+
+    flagChangeGUIstate = true;
+
+//    if (textEditorThatHasChanged == textEditor_ipUrlPort.get())
+    {
+        LOG(LOG_WARNING LOG_GUI, "THE IP/URL:port NEEDS INPUT VALIDATION!!!");
+        LOG(LOG_GUI, "IP [" + textEditor_ipUrlPort->getText().toStdString() + "]");
+        rxAudioProcessor->setIP(textEditor_ipUrlPort->getText().toStdString());
+        //TODO: it's not wokring !!!!!!!!!
+    }
+//    else if (textEditorThatHasChanged == textEditor_identifier.get())
+    {
+        LOG(LOG_WARNING LOG_GUI, "THE IDENTIFIER NEEDS INPUT VALIDATION!!!");
+        LOG(LOG_GUI, "Label [" + textEditor_identifier->getText().toStdString() + "]");
+        rxAudioProcessor->setIdentifier(textEditor_identifier->getText().toStdString());
+
+    }
+
+    this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
+
+
 }
 //==============================================================================
 //[/MiscUserCode]

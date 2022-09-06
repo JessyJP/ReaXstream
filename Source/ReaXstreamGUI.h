@@ -41,7 +41,8 @@
 */
 class ReaXstreamGUI  : public juce::Component,
                        public juce::ComboBox::Listener,
-                       public juce::Button::Listener
+                       public juce::Button::Listener,
+                       public juce::TextEditor::Listener
 {
 public:
     //==============================================================================
@@ -64,6 +65,8 @@ public:
     // Method to set the apptopirate transmission protocols for the corresponding mode
     void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
 
+    // Custom text change callback
+    void textEditorTextChanged();//juce::TextEditor* textEditorThatHasChanged
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
