@@ -263,6 +263,7 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     {
         //[UserComboBoxCode_comboBox_directionOfConnection] -- add your combo box handling code here..
         LOG(LOG_GUI, "Direction of Connection Change [" + convertEnum2String(getStateDirectionOfConnectionComboBox()) + "]");
+        this->rxAudioProcessor->setDirectionOfConnection(getStateDirectionOfConnectionComboBox());
         //[/UserComboBoxCode_comboBox_directionOfConnection]
     }
     else if (comboBoxThatHasChanged == comboBox_modeOfOperation.get())
@@ -271,12 +272,14 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
         LOG(LOG_GUI, "Mode of operation [" + convertEnum2String(getStateModeOfOperationComboBox()) + "]");
         // Set the apptopirate transmission protocols for the corresponding mode
         updateTransmissionProtocolsForModeSelection(getStateModeOfOperationComboBox());
+        this->rxAudioProcessor->setModeOfOperation(getStateModeOfOperationComboBox());
         //[/UserComboBoxCode_comboBox_modeOfOperation]
     }
     else if (comboBoxThatHasChanged == comboBox_transmissionProtocol.get())
     {
         //[UserComboBoxCode_comboBox_transmissionProtocol] -- add your combo box handling code here..
         LOG(LOG_GUI, "Transmission protocol [" + convertEnum2String(getStateTransmissionProtocolComboBox()) + "]");
+        this->rxAudioProcessor->setTransmissionProtocol(getStateTransmissionProtocolComboBox());
         //[/UserComboBoxCode_comboBox_transmissionProtocol]
     }
 

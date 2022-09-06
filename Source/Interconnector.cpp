@@ -1,5 +1,7 @@
 #include "Interconnector.h"
 #include "PluginEditor.h"
+#include "Logger.h"
+#define LOG_INTERCONNECTOR LOG_INFO+std::string("[Interconnector]:")
 
 // Define Constructor 
 Interconnector::Interconnector() 
@@ -23,6 +25,7 @@ Interconnector::~Interconnector()
 
 }
 
+// State check function
 bool Interconnector::isConnectionEstablishedOK()
 {
 	return this->connectionEstablishedOK;
@@ -32,28 +35,45 @@ bool Interconnector::isConnectionEstablishedOK()
 void Interconnector::requestConnectionReset(bool initiateRequest)
 {
 	this->resetInterConnection = resetInterConnection || initiateRequest;
+	LOG(LOG_INTERCONNECTOR,std::string("requestConnectionReset [") + (resetInterConnection?"true":"false") + "] ");
 }
 
-void Interconnector::setInterconnectorPropertiesFromGUI(DirectionOfConnection DoC, ModeOfOperation MoO, TransmissionProtocol TP)
+void Interconnector::setInterconnectorPropertiesFromGUI
+		(DirectionOfConnection DoC, ModeOfOperation MoO, TransmissionProtocol TP)
 {
 	this->direction = DoC;
 	this->mode = MoO;
 	this->protocol = TP;
+	requestConnectionReset(true);
+	LOG(LOG_INTERCONNECTOR, 
+			std::string("\n") +
+			"DirectionOfConnection "	+ convertEnum2String(direction	) + "\n" +
+			"ModeOfOperation: "			+ convertEnum2String(mode		) + "\n" +
+			"TransmissionProtocol: "	+ convertEnum2String(protocol	) + "\n" +
+			"IP: "						+ ip							  + "\n"
+//			"Port: "					+ port							  + "\n"
+		);
 }
 
 void Interconnector::setDirectionOfConnection(DirectionOfConnection DoC)
 {
 	this->direction = DoC;
+	requestConnectionReset(true);
+	LOG(LOG_INTERCONNECTOR, "DirectionOfConnection [" + convertEnum2String(direction) + "]");
 }
 
 void Interconnector::setModeOfOperation(ModeOfOperation MoO)
 {
 	this->mode = MoO;
+	requestConnectionReset(true);
+	LOG(LOG_INTERCONNECTOR, "ModeOfOperation: [" + convertEnum2String(mode) + "]");
 }
 
 void Interconnector::setTransmissionProtocol(TransmissionProtocol TP)
 {
 	this->protocol = TP;
+	requestConnectionReset(true);
+	LOG(LOG_INTERCONNECTOR, "TransmissionProtocol: [" + convertEnum2String(protocol) + "]");
 }
 
 
