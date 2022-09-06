@@ -31,7 +31,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
 
     LOG(LOG_INFO, LoggerWelcomeMessage);
      
-    if (! connectionSetupReady)
+    if (!isConnectionEstablishedOK())
     {
         LOG(LOG_WARNING,"Requesting to setup the plugin inputs!!!")
     }
@@ -116,8 +116,7 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 
     ReaXstreamAudioProcessor::getLatencySamples();
 
- 
-    connectionSetupReady = true;
+
     // TODO: just enabling the connection state
 
     //++++++++++++++++++++++++++++++
@@ -158,7 +157,7 @@ bool ReaXstreamAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
-    if (!connectionSetupReady) { setupInterconnector(); return; }
+    if (!isConnectionEstablishedOK()) { setupInterConnection(); return; }
     // This will allow the process loop to be bypassed when the connection is not setup.
 
     juce::ScopedNoDenormals noDenormals;

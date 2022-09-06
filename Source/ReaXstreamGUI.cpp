@@ -281,13 +281,13 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     }
 
     //[UsercomboBoxChanged_Post]
+    this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
     //[/UsercomboBoxChanged_Post]
 }
 
 void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
-    flagChangeGUIstate = true;
     //[/UserbuttonClicked_Pre]
 
     if (buttonThatWasClicked == button_apply.get())
@@ -297,6 +297,7 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     }
 
     //[UserbuttonClicked_Post]
+    this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
     //[/UserbuttonClicked_Post]
 }
 
@@ -307,6 +308,7 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 void ReaXstreamGUI::setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in)
 {
     this->rxAudioProcessor = rxAudioProcessorP_in;
+    // This function is called by the child constructor as to not call this in the constructor itself.
 }
 
 bool ReaXstreamGUI::checkGUIstateChanged()
