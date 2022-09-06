@@ -35,9 +35,9 @@ enum ModeOfOperation
 // This declares the available transmission protocol methods
 enum TransmissionProtocol
 {
-	UDP=2,
-	TCP=3,
-	SharedMemory=1,
+	UDP=1,
+	TCP=2,
+	SharedMemory=3,
 	USB=4
 };
 
