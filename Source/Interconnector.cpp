@@ -1,14 +1,17 @@
 #include "Interconnector.h"
 #include "PluginEditor.h"
 #include "Logger.h"
+
+
 #define LOG_INTERCONNECTOR LOG_INFO+std::string("[Interconnector]:")
 
 // Define Constructor 
 Interconnector::Interconnector() 
 { 
 	// Default values
-	direction = DirectionOfConnection::HostServerTransmitter;
-	mode = ModeOfOperation::ReaStreamClassic;
+	direction = DirectionOfConnection(0);//DirectionOfConnection::HostServerTransmitter;
+	mode = ModeOfOperation(0);//ModeOfOperation::ReaStreamClassic;
+	protocol = TransmissionProtocol(0);//TransmissionProtocol ::UDP;
 	ip = "localhost";//"broadcast"
 	port = 58710;
 	connectionIdentifier = "default";
@@ -16,22 +19,31 @@ Interconnector::Interconnector()
 	// State/Action flags
 	connectionEstablishedOK = false;
 	resetInterConnection = false;
+	currentEstablishedProtocol = TransmissionProtocol(0);
 }
-
 
 // Define Destructor
 Interconnector::~Interconnector()
 {
+	delete(udp);
+	delete(tcp);
+}
 
+
+// State check function for established connection 
+bool Interconnector::checkIsConnectionEstablishedOK()
+{
+	return connectionEstablishedOK;
 }
 
 // State check function
-bool Interconnector::isConnectionEstablishedOK()
+bool Interconnector::checkIsResetInterConnectionRequested()
 {
-	return this->connectionEstablishedOK;
+	return resetInterConnection;
 }
 
-// Set functions
+
+// Set methods
 void Interconnector::requestConnectionReset(bool initiateRequest)
 {
 	this->resetInterConnection = resetInterConnection || initiateRequest;
@@ -88,6 +100,7 @@ void Interconnector::setIdentifier(std::string newIdentifier)
 	LOG(LOG_INTERCONNECTOR, "Identifier: [" + connectionIdentifier + "]");
 }
 
+
 // Setup function
 void Interconnector::setupInterConnection()
 {
@@ -99,25 +112,83 @@ void Interconnector::setupInterConnection()
 	// 3. If the inputs are valid then try to establish a connection.
 	// 4. If the connection is established set ==> connectionEstablishedOK = true;
 
+	// Validate the enumeration inputs
+	if (!( (direction == HostServerTransmitter) || (direction == ClientReceiver) )) { return; }
+	if (!( (mode == ReaStreamClassic) || (mode == ReaStreamMobile) || (mode == ReaInterConnect) )) { return; }
+	if (!( (protocol == UDP) || (protocol == TCP) || (protocol == SharedMemory) || (protocol == USB) )) { return; }
+		// TODO: Some input validation needs to be done here
+		
+	closeCurrentConecction();
+	
+		
+	// Create a transmission connection adapter here
+	if (direction == HostServerTransmitter)
+	{
+		switch (this->protocol)
+		{
+			case UDP:
+				udp = new juce::DatagramSocket();
+				udp->waitUntilReady(false,-1);
+				connectionEstablishedOK = true;
+				LOG(LOG_INFO," new UDP connection as [HostServerTransmitter]");
+				break;
+			case TCP:
+				tcp = new juce::StreamingSocket();
+				break;
+			case USB:
+				break;
+			case SharedMemory:
+				break;
+			default:
+				connectionEstablishedOK = false;
+				break;
+			
+		}
+	}
+
+
+	// If the connection was established ok 
+	if (connectionEstablishedOK)
+	{
+		resetInterConnection = false;
+		currentEstablishedProtocol = protocol;
+	}
 	// 
 }
 
-bool Interconnector::getInterconnectionSelectionFromGUI()
+void Interconnector::closeCurrentConecction()
 {
+	// First destroy any current connections
+	if	((currentEstablishedProtocol == UDP) ||
+		 (currentEstablishedProtocol == TCP) ||
+		 (currentEstablishedProtocol == USB) ||
+		 (currentEstablishedProtocol == SharedMemory))
+	{
+		switch (currentEstablishedProtocol)
+		{
+			case UDP:
+				udp->shutdown();
+				delete(udp);
+				LOG(LOG_INFO, " Close current UDP connection!");
+				break;
+			case TCP:
 
+				break;
+			case USB:
 
-	return true;
+				break;
+			case SharedMemory:
+
+				break;
+			default:
+				break;
+
+		}
+		currentEstablishedProtocol = TransmissionProtocol(0);
+	}
+
 }
 
-void Interconnector::createTransmitter()
-{
-	UDP;
 
-	connectionEstablishedOK = true;
-}
 
-void Interconnector::createReciever()
-{
-	//	bindToPort 
 
-}

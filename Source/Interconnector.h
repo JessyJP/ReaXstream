@@ -10,12 +10,12 @@
 
 #include <string>
 #include <iostream>
+#include <JuceHeader.h>
+//#include "juce_core/network/juce_Socket.h"
 
 
 #include "Enumerations.h"
-#include <JuceHeader.h>
-// 
-//#include <juce_Socket.h>
+
 
 
 
@@ -36,6 +36,18 @@ class Interconnector
 	protected: // States
 		bool connectionEstablishedOK;
 		bool resetInterConnection;
+		TransmissionProtocol currentEstablishedProtocol;
+
+		// UDP connection
+		juce::DatagramSocket* udp;
+		juce::StreamingSocket* tcp;
+//			SharedMemory = 3,
+//			USB = 4
+
+
+		// Generally it refers to UDP but could work in tandem for the other protocols
+		bool enableBroadcasting;
+
 
 
 	public:
@@ -44,7 +56,10 @@ class Interconnector
 		
 
 	public:
-		bool isConnectionEstablishedOK();
+		// State check function for established connection 
+		bool checkIsConnectionEstablishedOK();
+		bool checkIsResetInterConnectionRequested();
+
 		// This method allows to make a connection reset
 		void requestConnectionReset(bool initiateRequest);
 		// This is the method that updates the interconnector about the GUI changes in bulk.
@@ -62,24 +77,10 @@ class Interconnector
 
 		// This function creates the connections based on the interconnector settings
 		void setupInterConnection();
-
-
-		// UDP connection
-		bool enableBroadcasting;
+		void closeCurrentConecction();
 
 
 
-
-
-
-
-		bool getInterconnectionSelectionFromGUI();
-		
-
-		void createTransmitter();
-		void createReciever();
-		juce::DatagramSocket* UDP;
-		juce::StreamingSocket* TCP;
 
 		
 };
