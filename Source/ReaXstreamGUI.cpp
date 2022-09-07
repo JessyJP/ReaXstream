@@ -81,14 +81,14 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
     textEditor_ipUrlPort.reset (new juce::TextEditor ("ipUrlPortTextEditor"));
     addAndMakeVisible (textEditor_ipUrlPort.get());
-    textEditor_ipUrlPort->setTooltip (TRANS("192.168.0.100:5005"));
+    textEditor_ipUrlPort->setTooltip (TRANS("localhost:5005"));
     textEditor_ipUrlPort->setMultiLine (false);
     textEditor_ipUrlPort->setReturnKeyStartsNewLine (false);
     textEditor_ipUrlPort->setReadOnly (false);
     textEditor_ipUrlPort->setScrollbarsShown (true);
     textEditor_ipUrlPort->setCaretVisible (true);
     textEditor_ipUrlPort->setPopupMenuEnabled (true);
-    textEditor_ipUrlPort->setText (juce::String());
+    textEditor_ipUrlPort->setText (TRANS("localhost:5005"));
 
     textEditor_ipUrlPort->setBounds (264, 249, 200, 24);
 
@@ -356,7 +356,7 @@ TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
 // Method to set the apptopirate transmission protocols for the corresponding mode
 void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
 {
-    // TODO: finish this function 
+    // TODO: finish this function
     std::list<TransmissionProtocol> availableProtocolList = getAvailableProtocolByModeOfOperation(mode);
     LOG(LOG_INFO, "");
     LOG(LOG_INFO, convertEnum2String(mode));
@@ -366,11 +366,11 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
     }
 
     // Loop over the options in the Protocol list in the combo box
-    for (int i = 1; i <= comboBox_transmissionProtocol->getNumItems(); i++) 
+    for (int i = 1; i <= comboBox_transmissionProtocol->getNumItems(); i++)
     {
         bool found = false;
-        // Loop over the protocols and 
-        for (auto const& avalableProtocol : availableProtocolList) 
+        // Loop over the protocols and
+        for (auto const& avalableProtocol : availableProtocolList)
         {
             // If the protocol is found, enable the protocol and break out of the loop and continue
             if (avalableProtocol == comboBox_transmissionProtocol->getItemId(i))
@@ -382,7 +382,7 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
         }
 
         // If not found in the list of available protocols disable the protocol
-        if (!found) 
+        if (!found)
         {
             comboBox_transmissionProtocol->setItemEnabled(i,false);
         }
@@ -446,9 +446,9 @@ BEGIN_JUCER_METADATA
             layout="33" items="UDP&#10;&#10;TCP&#10;&#10;SharedMemory&#10;&#10;USB"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TEXTEDITOR name="ipUrlPortTextEditor" id="24663907342789dd" memberName="textEditor_ipUrlPort"
-              virtualName="" explicitFocusOrder="0" pos="264 249 200 24" tooltip="192.168.0.100:5005"
-              initialText="" multiline="0" retKeyStartsLine="0" readonly="0"
-              scrollbars="1" caret="1" popupmenu="1"/>
+              virtualName="" explicitFocusOrder="0" pos="264 249 200 24" tooltip="localhost:5005"
+              initialText="localhost:5005" multiline="0" retKeyStartsLine="0"
+              readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
   <TEXTEDITOR name="identifierTextEdit" id="3dc7429827394451" memberName="textEditor_identifier"
               virtualName="" explicitFocusOrder="0" pos="264 289 150 24" initialText="default"
               multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="1"

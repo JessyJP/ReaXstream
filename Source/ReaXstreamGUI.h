@@ -24,7 +24,7 @@
 #include "Enumerations.h"
 #include "PluginProcessor.h"
 
-// The enumeration conversions can be done here or in the interconnector. 
+// The enumeration conversions can be done here or in the interconnector.
 // It is more appropriate for all of that to be handled as early as possible,
 // there fore enumeration and input validation can be handled at the scource.
 //[/Headers]
@@ -61,7 +61,7 @@ public:
     TransmissionProtocol    getStateTransmissionProtocolComboBox();
     //    juce::string getStateIpUrlPortTextEditor();
     //    int getStateIdentifierTextEditor();
-    
+
     // Method to set the apptopirate transmission protocols for the corresponding mode
     void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
 
