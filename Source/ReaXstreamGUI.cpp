@@ -343,10 +343,10 @@ TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
     return TransmissionProtocol(comboBox_transmissionProtocol->getSelectedId());
 }
 
-//juce::string ReaXstreamGUI::getStateIpUrlPortTextEditor()
+//std::string ReaXstreamGUI::getStateIpUrlPortTextEditor()
 //{
 //    return textEditor_ipUrlPort->getText();
-//}
+//} // TODO FINISh this and the next function and use them
 
 //int ReaXstreamGUI::getStateIdentifierTextEditor()
 //{
@@ -357,12 +357,36 @@ TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
 void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
 {
     // TODO: finish this function 
-    std::list<TransmissionProtocol> protoList = getAvailableProtocolByModeOfOperation(mode);
+    std::list<TransmissionProtocol> availableProtocolList = getAvailableProtocolByModeOfOperation(mode);
     LOG(LOG_INFO, "");
     LOG(LOG_INFO, convertEnum2String(mode));
-    for (auto const& protoStr : protoList)
+    for (auto const& protoStr : availableProtocolList)
     {
         LOG(LOG_INFO, "|-- " + convertEnum2String(protoStr));
+    }
+
+    // Loop over the options in the Protocol list in the combo box
+    for (int i = 1; i <= comboBox_transmissionProtocol->getNumItems(); i++) 
+    {
+        bool found = false;
+        // Loop over the protocols and 
+        for (auto const& avalableProtocol : availableProtocolList) 
+        {
+            // If the protocol is found, enable the protocol and break out of the loop and continue
+            if (avalableProtocol == comboBox_transmissionProtocol->getItemId(i))
+            {
+                comboBox_transmissionProtocol->setItemEnabled(i,true);
+                found = true;
+                break;
+            }
+        }
+
+        // If not found in the list of available protocols disable the protocol
+        if (!found) 
+        {
+            comboBox_transmissionProtocol->setItemEnabled(i,false);
+        }
+        LOG(LOG_ERROR, "SOMETHING IS WRONG, TODO: debug and fix");
     }
 }
 
