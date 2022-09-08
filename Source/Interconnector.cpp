@@ -71,6 +71,7 @@ void Interconnector::setInterconnectorPropertiesFromGUI
 		);
 }
 
+// Individual Set methods
 void Interconnector::setDirectionOfConnection(DirectionOfConnection DoC)
 {
 	this->direction = DoC;

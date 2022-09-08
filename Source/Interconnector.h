@@ -16,9 +16,7 @@
 
 #include "Enumerations.h"
 
-
-
-
+// Inteconnection Class which acts as protocol adapter/gateway/pipeline
 class Interconnector
 {
 	protected: // Settings/Parameter/Properties
@@ -70,6 +68,7 @@ class Interconnector
 				ModeOfOperation MoO, 
 				TransmissionProtocol TP
 			);
+		// Individual set methods
 		void setDirectionOfConnection(DirectionOfConnection DoC);
 		void setModeOfOperation(ModeOfOperation MoO);
 		void setTransmissionProtocol(TransmissionProtocol TP);
@@ -79,9 +78,5 @@ class Interconnector
 		// This function creates the connections based on the interconnector settings
 		void setupInterConnection();
 		void closeCurrentConecction();
-
-
-
-
 		
 };
