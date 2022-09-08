@@ -31,7 +31,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
 
     LOG(LOG_INFO, LoggerWelcomeMessage);
      
-    if (!isConnectionEstablishedOK())
+    if (!connectionEstablishedOK)
     {
         LOG(LOG_WARNING,"Requesting to setup the plugin inputs!!!")
     }
@@ -157,7 +157,7 @@ bool ReaXstreamAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
-    if (!isConnectionEstablishedOK()) { setupInterConnection(); return; }
+    if ( !connectionEstablishedOK || resetInterConnection ) { setupInterConnection(); return; }
     // This will allow the process loop to be bypassed when the connection is not setup.
 
     juce::ScopedNoDenormals noDenormals;
@@ -172,20 +172,22 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             
             ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
+           // connectionIdentifier
             ReaStreamFrame::printFrameHeader();
 //            send(rframe);
 
-            ReaStreamFrame::frameReset();
+
             ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
             interleaveAudioBuffer(buffer);
             ReaStreamFrame::printFrameHeader();
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
-            LOG(LOG_WARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "Protocols not implemented!")
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
+            LOG(LOG_WARNING, "Protocols not implemented!")
         }
         else { LOG(LOG_ERROR, "No such mode of opperation!") }
 
@@ -194,11 +196,15 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     {
         if (mode == ModeOfOperation::ReaStreamClassic)
         {
-            LOG(LOG_WARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "Protocols not implemented!")
+        }
+        else if (mode == ModeOfOperation::ReaStreamMobile)
+        {
+            LOG(LOG_WARNING, "Protocols not implemented!")
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
-            LOG(LOG_WARNING, "NOT implemented!")
+            LOG(LOG_WARNING, "Protocols not implemented!")
         }
         else { LOG(LOG_ERROR, "No such mode of opperation!") }
     

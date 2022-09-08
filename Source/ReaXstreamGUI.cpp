@@ -198,8 +198,8 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[UserPreSize]
-    textEditor_ipUrlPort->addListener(this);
-    textEditor_identifier->addListener(this);
+ //   textEditor_ipUrlPort->addListener(this);//TODO figure out the texteditor callback methods
+ //   textEditor_identifier->addListener(this);//TODO figure out the texteditor callback methods
     //[/UserPreSize]
 
     setSize (600, 600);

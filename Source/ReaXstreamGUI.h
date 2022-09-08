@@ -41,8 +41,7 @@
 */
 class ReaXstreamGUI  : public juce::Component,
                        public juce::ComboBox::Listener,
-                       public juce::Button::Listener,
-                       public juce::TextEditor::Listener
+                       public juce::Button::Listener
 {
 public:
     //==============================================================================

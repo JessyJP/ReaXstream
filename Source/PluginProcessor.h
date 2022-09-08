@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "Interconnector.h"
-#include "ReaStreamFrame.h"
+#include "ReaXstreamFrames.h"
 
 
 //==============================================================================

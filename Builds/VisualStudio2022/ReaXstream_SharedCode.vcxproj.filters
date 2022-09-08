@@ -577,6 +577,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\ReaXstreamFrames.cpp">
+      <Filter>ReaXstream\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Enumerations.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
@@ -584,9 +587,6 @@
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Logger.cpp">
-      <Filter>ReaXstream\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ReaStreamFrame.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
@@ -2901,6 +2901,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ReaXstreamFrames.h">
+      <Filter>ReaXstream\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Enumerations.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
@@ -2908,9 +2911,6 @@
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Logger.h">
-      <Filter>ReaXstream\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ReaStreamFrame.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">

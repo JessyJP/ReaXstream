@@ -139,10 +139,10 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\ReaXstreamFrames.cpp"/>
     <ClCompile Include="..\..\Source\Enumerations.cpp"/>
     <ClCompile Include="..\..\Source\Interconnector.cpp"/>
     <ClCompile Include="..\..\Source\Logger.cpp"/>
-    <ClCompile Include="..\..\Source\ReaStreamFrame.cpp"/>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\ReaXstreamGUI.cpp"/>
@@ -2297,10 +2297,10 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ReaXstreamFrames.h"/>
     <ClInclude Include="..\..\Source\Enumerations.h"/>
     <ClInclude Include="..\..\Source\Interconnector.h"/>
     <ClInclude Include="..\..\Source\Logger.h"/>
-    <ClInclude Include="..\..\Source\ReaStreamFrame.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
     <ClInclude Include="..\..\Source\ReaXstreamGUI.h"/>

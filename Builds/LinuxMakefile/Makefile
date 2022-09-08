@@ -108,10 +108,10 @@ OBJECTS_STANDALONE_PLUGIN := \
   $(JUCE_OBJDIR)/include_juce_audio_plugin_client_Standalone_1a871192.o \
 
 OBJECTS_SHARED_CODE := \
+  $(JUCE_OBJDIR)/ReaXstreamFrames_c4bab959.o \
   $(JUCE_OBJDIR)/Enumerations_554f0995.o \
   $(JUCE_OBJDIR)/Interconnector_351a71fa.o \
   $(JUCE_OBJDIR)/Logger_4907cd19.o \
-  $(JUCE_OBJDIR)/ReaStreamFrame_56448868.o \
   $(JUCE_OBJDIR)/PluginProcessor_a059e380.o \
   $(JUCE_OBJDIR)/PluginEditor_94d4fb09.o \
   $(JUCE_OBJDIR)/ReaXstreamGUI_ed65a632.o \
@@ -179,6 +179,11 @@ $(JUCE_OBJDIR)/include_juce_audio_plugin_client_Standalone_1a871192.o: ../../Juc
 	@echo "Compiling include_juce_audio_plugin_client_Standalone.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_STANDALONE_PLUGIN) $(JUCE_CFLAGS_STANDALONE_PLUGIN) -o "$@" -c "$<"
 
+$(JUCE_OBJDIR)/ReaXstreamFrames_c4bab959.o: ../../Source/ReaXstreamFrames.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ReaXstreamFrames.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
 $(JUCE_OBJDIR)/Enumerations_554f0995.o: ../../Source/Enumerations.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Enumerations.cpp"
@@ -192,11 +197,6 @@ $(JUCE_OBJDIR)/Interconnector_351a71fa.o: ../../Source/Interconnector.cpp
 $(JUCE_OBJDIR)/Logger_4907cd19.o: ../../Source/Logger.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling Logger.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/ReaStreamFrame_56448868.o: ../../Source/ReaStreamFrame.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling ReaStreamFrame.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/PluginProcessor_a059e380.o: ../../Source/PluginProcessor.cpp

@@ -32,7 +32,7 @@ This is the file that will be updated along with new ideas, suggestions, notes a
 
 ### + Internal
 - [ ] Complete Interconnector Class
-	- [ ] Establish a UDP connection for transmission
+	- [+] Establish a UDP connection for transmission
 	- [ ] Establish a TCP connection for transmission
 	- [ ] Establish a SharedMemory connection for transmission
 	- [ ] Establish a USB connection for transmission
@@ -40,8 +40,14 @@ This is the file that will be updated along with new ideas, suggestions, notes a
 	- [ ] Establish a TCP connection for reception
 	- [ ] Establish a SharedMemory connection for reception
 	- [ ] Establish a USB connection for reception
+	- [*] Close connection UDP
+	- [ ] Close connection TCP
+	- [ ] Close connection USB
+	- [] Close connection SharedMemory
 - [ ] Complete ReaStreamFrame class
 	- [ ] audio frame segmentation for UDP transmission
+	
+- [ ] Enable ASIO driver for the stand-alone application mode.
 	
 ### + VST parameters
 - [ ] Which part of the GUI can be parametrised via VST parameters and should I do that?
