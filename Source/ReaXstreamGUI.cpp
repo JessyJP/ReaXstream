@@ -286,6 +286,7 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     }
 
     //[UsercomboBoxChanged_Post]
+    LOG(LOG_GUI,"[ReaXstreamGUI] requestests for reset from the GUI side!")
     this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
     //[/UsercomboBoxChanged_Post]
 }

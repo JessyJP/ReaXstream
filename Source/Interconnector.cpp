@@ -17,16 +17,16 @@ Interconnector::Interconnector()
 	connectionIdentifier = "default";
 	encoding = AudioStreamEncoding::FLOAT32;
 	// State/Action flags
-	connectionEstablishedOK = false;
-	resetInterConnection = false;
+	connectionEstablishedOK = false;// By default the connection is not established
+	resetInterConnection = false;// By default the connection does not need reset
+	resetFrame = true;// By default the frame has to be reset and then on every interconnection reset
 	currentEstablishedProtocol = TransmissionProtocol(0);
 }
 
 // Define Destructor
 Interconnector::~Interconnector()
 {
-	delete(udp);
-	delete(tcp);
+	closeCurrentConecction();
 }
 
 
@@ -46,8 +46,12 @@ bool Interconnector::checkIsResetInterConnectionRequested()
 // Set methods
 void Interconnector::requestConnectionReset(bool initiateRequest)
 {
-	this->resetInterConnection = resetInterConnection || initiateRequest;
-	LOG(LOG_INTERCONNECTOR,std::string("requestConnectionReset [") + (resetInterConnection?"true":"false") + "] ");
+	// Request to reset the connection
+	resetInterConnection = resetInterConnection || initiateRequest;
+	// Also request to reset the data transmission frame
+	resetFrame = resetFrame || resetInterConnection;
+	LOG(LOG_INTERCONNECTOR,	std::string("requestConnectionReset [") + (resetInterConnection?"true":"false") + "] ");
+	LOG(LOG_INTERCONNECTOR, std::string("requestFrameReset [")		+ (resetFrame ? "true" : "false") + "] ");
 }
 
 void Interconnector::setInterconnectorPropertiesFromGUI
@@ -127,22 +131,30 @@ void Interconnector::setupInterConnection()
 		switch (this->protocol)
 		{
 			case UDP:
+			{
 				udp = new juce::DatagramSocket();
-				udp->waitUntilReady(false,-1);
+				udp->waitUntilReady(false, -1);
 				connectionEstablishedOK = true;
-				LOG(LOG_INFO," new UDP connection as [HostServerTransmitter]");
+				LOG(LOG_INFO, " new UDP connection as [HostServerTransmitter]");
 				break;
+			}
 			case TCP:
+			{
 				tcp = new juce::StreamingSocket();
+				tcp->waitUntilReady(false, -1);
+				connectionEstablishedOK = true;
+				LOG(LOG_INFO, " new TCP connection as [HostServerTransmitter]");
 				break;
+			}
 			case USB:
 				break;
 			case SharedMemory:
 				break;
 			default:
+			{
 				connectionEstablishedOK = false;
 				break;
-			
+			}
 		}
 	}
 

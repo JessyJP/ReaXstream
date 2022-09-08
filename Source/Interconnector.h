@@ -36,6 +36,7 @@ class Interconnector
 	protected: // States
 		bool connectionEstablishedOK;
 		bool resetInterConnection;
+		bool resetFrame;
 		TransmissionProtocol currentEstablishedProtocol;
 
 		// UDP connection
