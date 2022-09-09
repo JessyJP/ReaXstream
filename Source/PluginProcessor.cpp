@@ -162,7 +162,6 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     // This will allow the process loop to be bypassed when the connection is not setup.
 
     juce::ScopedNoDenormals noDenormals;
-    auto numSamples = buffer.getNumSamples();
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -194,23 +193,24 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
                 //Pack the buffer
                 int audioSampleBuffInd = 0;
+                int bytesToWrite = MUT;
                 while(audioSampleBuffInd < buffer.getNumSamples())
                 {
                     if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
                     {
                         audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
+                        bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
                     }
 
                     rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
+                    udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
+
                     audioSampleBuffInd += audioSamplesPerFrame;
                 }
 
                 LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
 
-                //           ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
-                          // connectionIdentifier
-               //            send(rframe);
-
+                // TODO lots of bug fixing here
 
                 //           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
                 //           interleaveAudioBuffer(buffer);
