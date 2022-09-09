@@ -63,7 +63,7 @@ public:
 
 public:
     // Constructors
-    ReaStreamClassicFrame();// Empty constructor
+    ReaStreamClassicFrame();// Empty constructor/ can be also used to reset the frame
     ReaStreamClassicFrame
         (
             char const      in_packetID[4], 
@@ -100,7 +100,8 @@ class ReaStreamFrame
     public:
         // Header and data buffer
         ReaStreamClassicFrame rsHeader;
-        char* UDPpackPayload; // Byte buffer for protocol transmission
+ //       char* UDPpackPayload; // Byte buffer for protocol transmission
+        char UDPpackPayload[MUT]; // Byte buffer for protocol transmission
 
     public:
         ReaStreamFrame();//Default Constructor 
