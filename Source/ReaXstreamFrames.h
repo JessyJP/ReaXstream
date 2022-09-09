@@ -20,37 +20,78 @@
 
 #include <JuceHeader.h>
 
-#define classicFramePacketID 'MRSR'
-
 //=================================================================================
 // This section implements the Classic ReaStream Implementation
-const unsigned int mut = 1247;// MUT (Maximum Unit Transmission) in bytes per UDP frame
+const unsigned int MUT = 1247;// MUT (Maximum Unit Transmission) in bytes per UDP frame.
 // The header contains 47 bytes and the audio data contains 1200 bytes.
-// The header
-class ReaStreamClassicHeader
+
+// Classic frame default frame identifier
+static const char default_packetID[4] = {'M','R','S','R'};
+
+// Reastrema Classic frame class
+class ReaStreamClassicFrame
 {
 public:
-    char packetID[4];// 'MRSR' tag for every packet like an ID (4 bytes)
-    unsigned int packetSize         = 0; // size of the entire transmission packet (4 bytes)
-    char* packetLabel = {};// Name of the stream (ie: default on the plugin) (32 bytes)
-    uint8_t numAudioChannels        = 0;// alternative unsigned chat; // the number of channels the plugin sends (1 byte)
-    unsigned int audioSampleRate    = 0;// the rate Frequency of the data (44100, 48000, ...) (4 bytes)
-    unsigned short sampleByteSize   = 0;// size of the following bytes to read. (2 bytes)
+    // This is the frame itself
+    char packetID[4] = { 0 };// 'MRSR' tag for every packet like an ID (4 bytes)
+    unsigned int packetSize = 0; // size of the entire transmission packet (4 bytes)
+    char interconnectID[32] = {};// Name of the stream (ie: default on the plugin) (32 bytes)
+    uint8_t numAudioChannels = 0;// alternative unsigned chat; // the number of channels the plugin sends (1 byte)
+    unsigned int audioSampleRate = 0;// the rate Frequency of the data (44100, 48000, ...) (4 bytes)
+    unsigned short sampleByteSize = 0;// size of the following bytes to read. (2 bytes)
+    //float audioBufferData[1200 / sizeof(float)] = {};
+
+    struct ReaStreamClassicHeader_index
+    {// Explicit indexing but also dynamically calculated in the constructor.
+        // Problem is, they are useless because of the structure padding !!!!
+        //public:
+        unsigned int i_packetID = 0;
+        unsigned int i_packetSize = 4;
+        unsigned int i_interconnectID = 8;
+        unsigned int i_numAudioChannels = 40;
+        unsigned int i_audioSampleRate = 41;
+        unsigned int i_sampleByteSize = 45;
+        unsigned int i_audioBufferData = 47;
+    }ind;
+
+    // Constant 
+    unsigned int headerByteCount    = 47;// Byte size sum of the header properties
+    unsigned long long packetIndex  = 0;// This inex is used for collision control and missing frame detection.
+
+    // Internal frame buffer
+    //unsigned char udpBuffer[MUT] = {};// void* <= void pointer is also an option
+
+public:
+    // Constructors
+    ReaStreamClassicFrame();// Empty constructor
+    ReaStreamClassicFrame
+        (
+            char const      in_packetID[4], 
+            std::string     packetconnectionIdentifier,
+            uint8_t         in_numAudioChannels,
+            unsigned int    in_audioSampleRate
+        );
+
+    // This function calculates the idices dynamically
+    void calculateMemIndices();
+
+    // Packs the audio buffer into a ReaStream frame for UDP transmission
+    // This function does not use buffer segmentation and assumes the total frame size is less than the MTU
+ //   void packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer);
+    // This function will segment the audio buffer into multiple Reastream frames each for a UDP packet
+    void packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer, int audioSampleBuffInd,int samplesToRead);
+
+    // This function will unapck the payload into ReaStream Frame
+    void unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& buffer, char* UDP_payload);
+
+    // Print frame header info
+    std::string printFrameHeader();
 };
 
 
-struct ReaStreamClassicHeader_index
-{// Explicit indexing but also dynamically calculated in the constructor.
-    // Problem is, they are useless because of the structure padding !!!!
-    //public:
-    unsigned int ind_packetID               = 0;                   
-    unsigned int ind_packetSize             = 4;           
-    unsigned int ind_packetLabel            = 8;        
-    unsigned int ind_numAudioChannels       = 40;           
-    unsigned int ind_audioSampleRate        = 41;       
-    unsigned int ind_sampleByteSize         = 45;
-    unsigned int ind_audioBufferData        = 47;
-};
+
+
+//=================================================================================
 
 //TODO:rename this class
 // This is the classic reasteam frame
@@ -58,31 +99,16 @@ class ReaStreamFrame
 {
     public:
         // Header and data buffer
-        ReaStreamClassicHeader rsHeader;
-        float UDP_Remote_dataAudioBuffer[300] = { };             // start of the audio datas (variable get from "sampleByteSize")
-        float UDP_Local_dataAudioBuffer[8192] = { };             // start of the audio datas (variable get from "sampleByteSize")
+        ReaStreamClassicFrame rsHeader;
+        char* UDPpackPayload; // Byte buffer for protocol transmission
 
-        ReaStreamClassicHeader_index rsH_ind;
-        unsigned int headerByteCount;       // Byte size sum of the header properties
-        unsigned long long packetIndex;     // This inex is used for collision control and missing frame detection.
-        
-        char transmissionPacketByteBuffer[32768] = {}; // Byte buffer for protocol transmission
     public:
         ReaStreamFrame();//Default Constructor 
         ~ReaStreamFrame();//Destructor
-        
-        // Get function
-        virtual const char* getPacketLabel();
 
-
-        void packAudioBufferToTransmissionPacket(juce::AudioBuffer<float>& buffer, unsigned int sampleRateFromAudioProcessor);
-        void unpackTransmissionPackToAudioBuffer(juce::AudioBuffer<float>& buffer);
-
-
-        void interleaveAudioBuffer(juce::AudioBuffer<float>& buffer);
+        void interleaveAudioBuffer(juce::AudioBuffer<float>& buffer, float* outputWriteInterleavedAudioBuffer);
         void interleaveAudioChannels(const float** inputReadChannels, float* outputWriteChannels, const int numChannels, const int numberAudioSamples);
 
-        std::string printFrameHeader();
 };
 
 

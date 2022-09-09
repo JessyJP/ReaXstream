@@ -35,7 +35,8 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     {
         LOG(LOG_WARNING,"Requesting to setup the plugin inputs!!!")
     }
-    printFrameHeader();
+    rsHeader.printFrameHeader();
+    LOG(LOG_WARNING," This part is not finished!!!")
 
 }
 
@@ -170,16 +171,51 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     {
         if  (mode == ModeOfOperation::ReaStreamClassic) 
         {
-            
-            ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
-           // connectionIdentifier
-            ReaStreamFrame::printFrameHeader();
-//            send(rframe);
+            if (protocol == UDP)// At present lets support UDP connection only 
+            {
+                // If connection and therefore frame is requested
+                if (resetFrame)
+                {
+                    rsHeader = ReaStreamClassicFrame
+                    (
+                        default_packetID,
+                        Interconnector::connectionIdentifier,
+                        totalNumInputChannels,
+                        getSampleRate()
+                    );
+                    // Along with the frame reset the buffer to all zero
+                    for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = char(0); }
+                    // Frame reset
+                    resetFrame = false;
+                }
+                //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
+                // Determine the if segmentation is needed or not
+                int audioSamplesPerFrame = (MUT-rsHeader.headerByteCount)/(buffer.getNumChannels()* sizeof(float));
+
+                //Pack the buffer
+                int audioSampleBuffInd = 0;
+                while(audioSampleBuffInd < buffer.getNumSamples())
+                {
+                    if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
+                    {
+                        audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
+                    }
+
+                    rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
+                    audioSampleBuffInd += audioSamplesPerFrame;
+                }
+
+                LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
+
+                //           ReaStreamFrame::packAudioBufferToTransmissionPacket(buffer, getSampleRate());
+                          // connectionIdentifier
+               //            send(rframe);
 
 
-            ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
-            interleaveAudioBuffer(buffer);
-            ReaStreamFrame::printFrameHeader();
+                //           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
+                //           interleaveAudioBuffer(buffer);
+
+            }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
