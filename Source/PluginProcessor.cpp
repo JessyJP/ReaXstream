@@ -173,8 +173,10 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             if (protocol == UDP)// At present lets support UDP connection only 
             {            
                 ReaStreamClassicUDPtransmission(buffer);
-
-
+                // TESTING ....
+                ReaStreamClassicFrame testFrame = ReaStreamClassicFrame();
+                testFrame.unpackUDPpayloadToRSframe(buffer, UDPpackPayload);
+                LOG(LOG_FRAME(testFrame.packetIndex), testFrame.printFrameHeader());
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -240,7 +242,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
             getSampleRate()
         );
         // Along with the frame reset the buffer to all zero
-        for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = char(0); }
+        for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = 0; }
         // Frame reset
         resetFrame = false;
     }
@@ -264,11 +266,13 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
 
         audioSampleBuffInd += audioSamplesPerFrame;
+
+        // Diagnostic message
+        LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
     }
-
-    LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
-
     // TODO: lots of bug fixing here
+    
+
 }
 
 //==============================================================================

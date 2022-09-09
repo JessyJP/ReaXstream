@@ -66,14 +66,14 @@ std::string ReaStreamClassicFrame::printFrameHeader()
     string sep = " ";
     string outputString = "";
 
-    outputString += ("PacketID [") + string(packetID) + "] " + sep;
-    outputString += ("Interconnect ID: [") + string(interconnectID) + "] " + sep;
-    outputString += ("numAudioChannels: [") + std::to_string(numAudioChannels) + "] " + sep;
-    outputString += ("audioSampleRate: [") + std::to_string(audioSampleRate) + "] " + sep;
+    outputString += ("PacketID[") + string(packetID) + "] " + sep;
+    outputString += ("InterconnectID[") + string(interconnectID) + "] " + sep;
+    outputString += ("numAudioChannels[") + std::to_string(numAudioChannels) + "] " + sep;
+    outputString += ("audioSampleRate[") + std::to_string(audioSampleRate) + "] " + sep;
     if (sampleByteSize > 0)
     {
-        outputString += ("Packet Size: [") + std::to_string(packetSize) + "] " + sep;
-        outputString += ("sampleByteSize: [") + std::to_string(sampleByteSize) + "] " + sep;
+        outputString += ("Packet Size[") + std::to_string(packetSize) + "] " + sep;
+        outputString += ("sampleByteSize[") + std::to_string(sampleByteSize) + "] " + sep;
     }
 
     return outputString;
@@ -84,7 +84,7 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
     // Increment the packet index
     this->packetIndex++;
     // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
-    sampleByteSize = samplesToRead * numAudioChannels * sizeof(float);
+    sampleByteSize = numAudioChannels * samplesToRead * sizeof(float);
     packetSize = sampleByteSize + headerByteCount;
     // Change this to std::copy method
     int c = 0;// Counter
@@ -98,8 +98,8 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
     for (int channel = 0; channel < numAudioChannels; ++channel)
     {
         const float* channelData = buffer.getReadPointer(channel, audioSampleBuffInd);
-        memcpy(UDPbuffer + c, (char*)(&channelData), samplesToRead);
-        c += sizeof(float) * samplesToRead;
+        memcpy(UDPbuffer + c, channelData, samplesToRead * sizeof(float));
+        c += samplesToRead * sizeof(float);
 
     }
 }
@@ -118,7 +118,7 @@ void ReaStreamClassicFrame::unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& 
     for (int channel = 0; channel < numAudioChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer(channel);
-        memcpy(channelData, UDP_payload + c, int(sampleByteSize / numAudioChannels));
+        memcpy(channelData, UDP_payload + c, int(sampleByteSize / numAudioChannels) );
         c += sizeof(channelData);
         //TODO some flags were supposed to be set
     }
@@ -129,13 +129,13 @@ void ReaStreamClassicFrame::unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& 
 
 ReaStreamFrame::ReaStreamFrame()
 {
-    UDPpackPayload = (char*)malloc(MUT);
-    for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = char(0); }
+ //   UDPpackPayload = (char*)malloc(MUT);
+    for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = 0; }
 }
 
 ReaStreamFrame::~ReaStreamFrame()
 {
-    free(UDPpackPayload);
+ //   free(UDPpackPayload);
 }
 
 
