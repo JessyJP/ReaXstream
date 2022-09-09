@@ -37,6 +37,9 @@ public:
    #endif
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    //==============================================================================
+    // Methods called by the processBlock method
+    void ReaStreamClassicUDPtransmission(juce::AudioBuffer<float>& buffer);
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;

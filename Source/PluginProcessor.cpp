@@ -162,7 +162,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     // This will allow the process loop to be bypassed when the connection is not setup.
 
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     //++++++Control LOGIC
@@ -171,55 +171,20 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         if  (mode == ModeOfOperation::ReaStreamClassic) 
         {
             if (protocol == UDP)// At present lets support UDP connection only 
-            {
-                // If connection and therefore frame is requested
-                if (resetFrame)
-                {
-                    rsHeader = ReaStreamClassicFrame
-                    (
-                        default_packetID,
-                        Interconnector::connectionIdentifier,
-                        totalNumInputChannels,
-                        getSampleRate()
-                    );
-                    // Along with the frame reset the buffer to all zero
-                    for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = char(0); }
-                    // Frame reset
-                    resetFrame = false;
-                }
-                //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
-                // Determine the if segmentation is needed or not
-                int audioSamplesPerFrame = (MUT-rsHeader.headerByteCount)/(buffer.getNumChannels()* sizeof(float));
+            {            
+                ReaStreamClassicUDPtransmission(buffer);
 
-                //Pack the buffer
-                int audioSampleBuffInd = 0;
-                int bytesToWrite = MUT;
-                while(audioSampleBuffInd < buffer.getNumSamples())
-                {
-                    if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
-                    {
-                        audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
-                        bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
-                    }
-
-                    rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
-                    udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
-
-                    audioSampleBuffInd += audioSamplesPerFrame;
-                }
-
-                LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
-
-                // TODO lots of bug fixing here
-
-                //           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
-                //           interleaveAudioBuffer(buffer);
 
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
-            LOG(LOG_WARNING, "Protocols not implemented!")
+            if (protocol == UDP)
+            {
+//           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
+//           interleaveAudioBuffer(buffer);
+                LOG(LOG_WARNING, "Protocols not implemented!")
+            }
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
@@ -258,6 +223,52 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     // TODO: should i keep that part?
+}
+
+//==============================================================================
+// This section contins the methods called by blcok process loop
+void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer<float>& buffer)
+{
+    // If connection and therefore frame is requested
+    if (resetFrame)
+    {
+        rsHeader = ReaStreamClassicFrame
+        (
+            default_packetID,
+            connectionIdentifier,
+            getTotalNumInputChannels(),
+            getSampleRate()
+        );
+        // Along with the frame reset the buffer to all zero
+        for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = char(0); }
+        // Frame reset
+        resetFrame = false;
+    }
+    //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
+    // Determine the if segmentation is needed or not
+    int audioSamplesPerFrame = (MUT - rsHeader.headerByteCount) / (buffer.getNumChannels() * sizeof(float));
+
+    //Pack the buffer
+    int audioSampleBuffInd = 0;
+    int bytesToWrite = MUT;
+    while (audioSampleBuffInd < buffer.getNumSamples())
+    {
+        // On the last packet
+        if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
+        {
+            audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
+            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
+        }
+
+        rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
+        udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
+
+        audioSampleBuffInd += audioSamplesPerFrame;
+    }
+
+    LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
+
+    // TODO: lots of bug fixing here
 }
 
 //==============================================================================

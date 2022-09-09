@@ -104,8 +104,6 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
     }
 }
 
-
-
 void ReaStreamClassicFrame::unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& buffer, char* UDP_payload)
 {
     // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
