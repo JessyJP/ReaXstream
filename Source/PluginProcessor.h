@@ -40,6 +40,7 @@ public:
     //==============================================================================
     // Methods called by the processBlock method
     void ReaStreamClassicUDPtransmission(juce::AudioBuffer<float>& buffer);
+    void ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer);
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;

@@ -165,7 +165,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    //++++++Control LOGIC
+    // ==== BEGIN: Main Control logic ====
     if (direction == DirectionOfConnection::HostServerTransmitter)
     {
         if  (mode == ModeOfOperation::ReaStreamClassic) 
@@ -173,10 +173,6 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             if (protocol == UDP)// At present lets support UDP connection only 
             {            
                 ReaStreamClassicUDPtransmission(buffer);
-                // TESTING ....
-                ReaStreamClassicFrame testFrame = ReaStreamClassicFrame();
-                testFrame.unpackUDPpayloadToRSframe(buffer, UDPpackPayload);
-                LOG(LOG_FRAME(testFrame.packetIndex), testFrame.printFrameHeader());
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -199,7 +195,17 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     {
         if (mode == ModeOfOperation::ReaStreamClassic)
         {
-            LOG(LOG_WARNING, "Protocols not implemented!")
+            if (protocol == UDP)// At present lets support UDP connection only 
+            {
+                // TESTING .... TODOOOO**********
+                ReaStreamClassicUDPreception(buffer);
+                
+                ReaStreamClassicFrame testFrame = ReaStreamClassicFrame();
+                testFrame.unpackUDPpayloadToRSframe(buffer, UDPpackPayload);
+                LOG(LOG_FRAME(testFrame.packetIndex), testFrame.printFrameHeader());
+                LOG(LOG_WARNING, "Protocols not implemented!");
+                //***************
+            }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
@@ -214,7 +220,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     }
     else { LOG(LOG_ERROR, "No such direction of transmission!") }
 
-    //+++++CONTROL LOGIC
+    // ==== END: Main Control logic ====
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -274,6 +280,56 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
     
 
 }
+
+void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer)
+{
+    
+    // Todo: finish this
+    
+    // If connection and therefore frame is requested
+    if (resetFrame)
+    {
+        rsHeader = ReaStreamClassicFrame
+        (
+            default_packetID,
+            connectionIdentifier,
+            getTotalNumInputChannels(),
+            getSampleRate()
+        );
+        // Along with the frame reset the buffer to all zero
+        for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = 0; }
+        // Frame reset
+        resetFrame = false;
+    }
+    //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
+    // Determine the if segmentation is needed or not
+    int audioSamplesPerFrame = (MUT - rsHeader.headerByteCount) / (buffer.getNumChannels() * sizeof(float));
+
+    //Pack the buffer
+    int audioSampleBuffInd = 0;
+    int bytesToWrite = MUT;
+    while (audioSampleBuffInd < buffer.getNumSamples())
+    {
+        // On the last packet
+        if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
+        {
+            audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
+            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
+        }
+
+        rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
+        udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
+
+        audioSampleBuffInd += audioSamplesPerFrame;
+
+        // Diagnostic message
+        LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
+    }
+    // TODO: lots of bug fixing here
+
+
+}
+
 
 //==============================================================================
 bool ReaXstreamAudioProcessor::hasEditor() const
