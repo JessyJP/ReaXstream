@@ -29,6 +29,7 @@ class Interconnector
 		std::string ip;
 		unsigned short port;
 		std::string connectionIdentifier;
+		int numberOfChannels;// TODO: this has to update and indicate change in the number of channels
 		AudioStreamEncoding encoding;
 
 	protected: // States
