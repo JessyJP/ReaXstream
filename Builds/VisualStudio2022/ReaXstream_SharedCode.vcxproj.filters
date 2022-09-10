@@ -2,6 +2,9 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="ReaXstream\GUI-source">
+      <UniqueIdentifier>{A9C99A8A-57B7-5184-9A49-A0BDD4218E14}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ReaXstream\Source">
       <UniqueIdentifier>{00D05344-41CC-39A2-ECD5-86708887258F}</UniqueIdentifier>
     </Filter>
@@ -577,6 +580,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\PluginEditor.cpp">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ReaXstreamGUI.cpp">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ReaXstreamFrames.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
@@ -591,12 +600,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>ReaXstream\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\PluginEditor.cpp">
-      <Filter>ReaXstream\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ReaXstreamGUI.cpp">
-      <Filter>ReaXstream</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <Filter>JUCE Modules\juce_audio_basics\buffers</Filter>
@@ -2901,6 +2904,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\PluginEditor.h">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ReaXstreamGUI.h">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ReaXstreamFrames.h">
       <Filter>ReaXstream\Source</Filter>
     </ClInclude>
@@ -2915,12 +2924,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>ReaXstream\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\PluginEditor.h">
-      <Filter>ReaXstream\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ReaXstreamGUI.h">
-      <Filter>ReaXstream</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>

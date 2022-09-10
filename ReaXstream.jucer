@@ -5,6 +5,14 @@
               pluginFormats="buildStandalone,buildVST3" companyName="JessyJP"
               cppLanguageStandard="latest" pluginVST3Category="Network">
   <MAINGROUP id="DkRmHL" name="ReaXstream">
+    <GROUP id="{A5D06A54-19C9-830A-09FE-70A98545D208}" name="GUI-source">
+      <FILE id="XUPr0p" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="f2PXLr" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="U8zDm7" name="ReaXstreamGUI.h" compile="0" resource="0" file="Source/ReaXstreamGUI.h"/>
+      <FILE id="MrZB0o" name="ReaXstreamGUI.cpp" compile="1" resource="0"
+            file="Source/ReaXstreamGUI.cpp"/>
+    </GROUP>
     <GROUP id="{985457EF-C243-02DD-26CE-4FA66F87D473}" name="Source">
       <FILE id="CZP2bQ" name="ReaXstreamFrames.cpp" compile="1" resource="0"
             file="Source/ReaXstreamFrames.cpp"/>
@@ -23,13 +31,7 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="K1jc1C" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="f2PXLr" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="XUPr0p" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="MrZB0o" name="ReaXstreamGUI.cpp" compile="1" resource="0"
-          file="Source/ReaXstreamGUI.cpp"/>
-    <FILE id="U8zDm7" name="ReaXstreamGUI.h" compile="0" resource="0" file="Source/ReaXstreamGUI.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
                JUCE_USE_LAME_AUDIO_FORMAT="0" JUCE_USE_MP3AUDIOFORMAT="0" JUCE_USE_OGGVORBIS="0"

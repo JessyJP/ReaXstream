@@ -11,10 +11,8 @@
 #include <string>
 #include <iostream>
 #include <JuceHeader.h>
-//#include "juce_core/network/juce_Socket.h"
-
-
 #include "Enumerations.h"
+
 
 // Inteconnection Class which acts as protocol adapter/gateway/pipeline
 class Interconnector
