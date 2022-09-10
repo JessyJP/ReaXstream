@@ -32,6 +32,8 @@
       <FILE id="K1jc1C" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
     </GROUP>
+    <FILE id="SwyuYr" name="UnitTest.cpp" compile="1" resource="0" file="Source/UnitTest.cpp"/>
+    <FILE id="sPZYdi" name="UnitTest.h" compile="0" resource="0" file="Source/UnitTest.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
                JUCE_USE_LAME_AUDIO_FORMAT="0" JUCE_USE_MP3AUDIOFORMAT="0" JUCE_USE_OGGVORBIS="0"

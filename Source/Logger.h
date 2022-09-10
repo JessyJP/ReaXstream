@@ -27,7 +27,7 @@
 	extern std::unique_ptr<juce::FileLogger> fileLogger;
 	// Logger function
 	#define LOG(DTYPE,MSG) logger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
-
+	#define LOG_UNIT_TEST( str ) logger->outputDebugString( std::string("") + str);//Shorthand
 #endif
 
 #ifdef LOGGER_OFF

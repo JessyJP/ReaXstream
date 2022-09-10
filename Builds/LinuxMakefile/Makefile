@@ -115,6 +115,7 @@ OBJECTS_SHARED_CODE := \
   $(JUCE_OBJDIR)/Interconnector_351a71fa.o \
   $(JUCE_OBJDIR)/Logger_4907cd19.o \
   $(JUCE_OBJDIR)/PluginProcessor_a059e380.o \
+  $(JUCE_OBJDIR)/UnitTest_279a5fbf.o \
   $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o \
   $(JUCE_OBJDIR)/include_juce_audio_devices_63111d02.o \
   $(JUCE_OBJDIR)/include_juce_audio_formats_15f82001.o \
@@ -212,6 +213,11 @@ $(JUCE_OBJDIR)/Logger_4907cd19.o: ../../Source/Logger.cpp
 $(JUCE_OBJDIR)/PluginProcessor_a059e380.o: ../../Source/PluginProcessor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling PluginProcessor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/UnitTest_279a5fbf.o: ../../Source/UnitTest.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling UnitTest.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o: ../../JuceLibraryCode/include_juce_audio_basics.cpp

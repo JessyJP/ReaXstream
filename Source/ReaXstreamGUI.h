@@ -81,7 +81,7 @@ public:
     {// TODO FINISH THIS CLASS Or decide on the method for input validation
         void* parent;// Cast to "ReaXstreamGUI"
         public:
-            TextEditListner_Class(void* pointer);// Lazy do declare 
+            TextEditListner_Class(void* pointer);// Lazy do declare
             void textEditorTextChanged(juce::TextEditor* textEditorThatHasChanged);
 
     };

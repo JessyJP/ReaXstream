@@ -601,6 +601,9 @@
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>ReaXstream\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnitTest.cpp">
+      <Filter>ReaXstream</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.cpp">
       <Filter>JUCE Modules\juce_audio_basics\buffers</Filter>
     </ClCompile>
@@ -2924,6 +2927,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>ReaXstream\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnitTest.h">
+      <Filter>ReaXstream</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>

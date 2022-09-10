@@ -201,8 +201,8 @@ ReaXstreamGUI::ReaXstreamGUI ()
     juce__label6->setBounds (48, 424, 208, 24);
 
 
-    //[UserPreSize]   
-    // Change the size of the font 
+    //[UserPreSize]
+    // Change the size of the font
     juce::String tmpStr = "";
     textEditor_ipUrlPort->setFont(16);
     textEditor_identifier->setFont(16);
@@ -344,12 +344,12 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 void ReaXstreamGUI::setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in)
 {
     this->rxAudioProcessor = rxAudioProcessorP_in;
-    // This function is called by the constructor of the Plugin Editor's constructor after this GUI 
+    // This function is called by the constructor of the Plugin Editor's constructor after this GUI
     // componenet instance has been initialized by the editor's constructor.
     // The editor has been initialized after the processor is fully initialized.
     // Therefore, default parameters for the GUI can be extracted from the processor here.
     this->rxAudioProcessor->getSet_ReaXstreamGUIpointer((void*)this);
-    
+
 }
 
 bool ReaXstreamGUI::checkGUIstateChanged()
@@ -392,16 +392,33 @@ std::string ReaXstreamGUI::getStateIdentifierTextEditor()
 // GUI elements set state methods
 void ReaXstreamGUI::setStateDirectionOfConnectionComboBox(DirectionOfConnection  in_DoC)
 {// The IDs and the options should be already matched.
-    std::numeric_limits<enum Foo>::max();
+    if (!isValidEnum(in_DoC) )
+    {
+        LOG(LOG_ERROR, "[DirectionOfConnection] Not Valid enum: " + std::to_string(in_DoC));
+        return;
+    }
     comboBox_directionOfConnection->setSelectedId((int)in_DoC);
+    LOG(LOG_ERROR, "[DirectionOfConnection] Set to: [" + convertEnum2String(in_DoC)+"]");
 }
 void ReaXstreamGUI::setStateModeOfOperationComboBox(ModeOfOperation in_MoO)
 {// The IDs and the options should be already matched.
+    if (!isValidEnum(in_MoO) )
+    {
+        LOG(LOG_ERROR, "[ModeOfOperation] Not Valid enum: " + std::to_string(in_MoO));
+        return;
+    }
     comboBox_modeOfOperation->setSelectedId((int)in_MoO);
+    LOG(LOG_ERROR, "[DirectionOfConnection] Set to: [" + convertEnum2String(in_MoO) + "]");
 }
 void ReaXstreamGUI::setStateTransmissionProtocolComboBox(TransmissionProtocol in_TP)
 {// The IDs and the options should be already matched.
+    if (!isValidEnum(in_TP))
+    {
+        LOG(LOG_ERROR, "[ModeOfOperation] Not Valid enum: " + std::to_string(in_TP));
+        return;
+    }
     comboBox_transmissionProtocol->setSelectedId((int)in_TP);
+    LOG(LOG_ERROR, "[DirectionOfConnection] Set to: [" + convertEnum2String(in_TP) + "]");
 }
 void ReaXstreamGUI::setStateIpUrlPortTextEditor_IPURL(std::string in_ipOrUrl) {/*Todo finish this function*/}
 void ReaXstreamGUI::setStateIpUrlPortTextEditor_port(unsigned short in_port) {/*Todo finish this function*/ }
