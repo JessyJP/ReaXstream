@@ -11,7 +11,9 @@
 #include "Enumerations.h"
 
 // =============================================================================================
-// Static functions
+
+
+// External functions
 
 std::list<TransmissionProtocol> getAvailableProtocolByModeOfOperation(ModeOfOperation mode)
 {
@@ -42,7 +44,6 @@ std::list<TransmissionProtocol> getAvailableProtocolByModeOfOperation(ModeOfOper
 	return availableProtocolsList;
 }
 
-
 std::list<std::string> convertListOfTransmissionProtocolsToStringList(std::list<TransmissionProtocol> listOfProtocols)
 {
 	std::list<std::string> strList;
@@ -58,6 +59,14 @@ std::list<std::string> convertListOfTransmissionProtocolsToStringList(std::list<
 	}
 	return strList;
 }
+
+ModeOfOperation convertModeOfOperationStringToEnum(std::string modeStr)
+{
+	if (modeStr.compare("ReaInterConnect")) { return ModeOfOperation::ReaInterConnect; }
+	if (modeStr.compare("ReaStreamClassic")) { return ModeOfOperation::ReaStreamClassic; }
+	if (modeStr.compare("ReaStreamMobile")) { return ModeOfOperation::ReaStreamMobile; }
+}
+
 
 
 // Conversion methods from enum to strings
@@ -95,10 +104,37 @@ std::string convertEnum2String(TransmissionProtocol protocol)
 }
 
 
-
-ModeOfOperation convertModeOfOperationStringToEnum(std::string modeStr)
+// Methods to Validate if the input is a valid enumeration
+bool isValidEnum(DirectionOfConnection in_enum)
 {
-	if (modeStr.compare("ReaInterConnect"))		{ return ModeOfOperation::ReaInterConnect;}
-	if (modeStr.compare("ReaStreamClassic")) 	{ return ModeOfOperation::ReaStreamClassic;}
-	if (modeStr.compare("ReaStreamMobile"))		{ return ModeOfOperation::ReaStreamMobile;}
+	switch (in_enum)
+	{
+		case DirectionOfConnection::HostServerTransmitter:	return true;
+		case DirectionOfConnection::ClientReceiver:			return true;
+		default: return false;
+	}
 }
+
+bool isValidEnum(ModeOfOperation in_enum)
+{
+	switch (in_enum)
+	{
+		case ModeOfOperation::ReaStreamClassic:		return true;
+		case ModeOfOperation::ReaInterConnect:		return true;
+		case ModeOfOperation::ReaStreamMobile:		return true;
+		default: return false;
+	}
+}
+
+extern bool isValidEnum(TransmissionProtocol in_enum)
+{
+	switch (in_enum)
+	{
+		case TransmissionProtocol::SharedMemory:	return true;
+		case TransmissionProtocol::TCP:				return true;
+		case TransmissionProtocol::UDP:				return true;
+		case TransmissionProtocol::USB:				return true;
+		default: return false;
+	}
+}
+

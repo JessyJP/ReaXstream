@@ -57,8 +57,11 @@ extern ModeOfOperation convertModeOfOperationStringToEnum(std::string modeStr);
 // Casting allows us to convert form ENUM to INT <=and=> INT to ENUM 
 
 // To convert to sting 
-
 extern std::string convertEnum2String(DirectionOfConnection direction);
 extern std::string convertEnum2String(ModeOfOperation mode );
 extern std::string convertEnum2String(TransmissionProtocol protocol);
 
+// Validate the enumerations
+extern bool isValidEnum(DirectionOfConnection in_enum);
+extern bool isValidEnum(ModeOfOperation in_enum);
+extern bool isValidEnum(TransmissionProtocol in_enum);
