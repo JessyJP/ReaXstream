@@ -25,6 +25,30 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+void ReaXstreamGUI::TextEditListner_Class::textEditorTextChanged(juce::TextEditor* textEditorThatHasChanged)
+{
+
+ //   flagChangeGUIstate = true;
+ //
+ //   //    if (textEditorThatHasChanged == textEditor_ipUrlPort.get())
+ //   {
+ //       LOG(LOG_WARNING LOG_GUI, "THE IP/URL:port NEEDS INPUT VALIDATION!!!");
+ //       LOG(LOG_GUI, "IP [" + textEditor_ipUrlPort->getText().toStdString() + "]");
+ //       rxAudioProcessor->setIP(textEditor_ipUrlPort->getText().toStdString());
+ //       //TODO: it's not wokring !!!!!!!!!
+ //   }
+ //   //    else if (textEditorThatHasChanged == textEditor_identifier.get())
+ //   {
+ //       LOG(LOG_WARNING LOG_GUI, "THE IDENTIFIER NEEDS INPUT VALIDATION!!!");
+ //       LOG(LOG_GUI, "Label [" + textEditor_identifier->getText().toStdString() + "]");
+ //       rxAudioProcessor->setIdentifier(textEditor_identifier->getText().toStdString());
+ //
+ //   }
+ //
+ //   this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
+
+
+}
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -177,9 +201,22 @@ ReaXstreamGUI::ReaXstreamGUI ()
     juce__label6->setBounds (48, 424, 208, 24);
 
 
-    //[UserPreSize]
- //   textEditor_ipUrlPort->addListener(this);//TODO figure out the texteditor callback methods
+    //[UserPreSize]   
+    // Change the size of the font 
+    juce::String tmpStr = "";
+    textEditor_ipUrlPort->setFont(16);
+    textEditor_identifier->setFont(16);
+    // Refresh the strings by reapplying them
+    tmpStr = textEditor_ipUrlPort->getText();
+    textEditor_ipUrlPort->setText(TRANS(""));
+    textEditor_ipUrlPort->setText(tmpStr);
+    tmpStr = textEditor_identifier->getText();
+    textEditor_identifier->setText(TRANS(""));
+    textEditor_identifier->setText(tmpStr);
+
+//    textEditor_ipUrlPort->addListener(this);//TODO figure out the texteditor callback methods
  //   textEditor_identifier->addListener(this);//TODO figure out the texteditor callback methods
+
     //[/UserPreSize]
 
     setSize (300, 450);
@@ -290,7 +327,7 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     if (buttonThatWasClicked == button_apply.get())
     {
         //[UserButtonCode_button_apply] -- add your button handler code here..
-        textEditorTextChanged();
+//        textEditorTextChanged();
         //[/UserButtonCode_button_apply]
     }
 
@@ -303,10 +340,16 @@ void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 //==============================================================================
+
 void ReaXstreamGUI::setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in)
 {
     this->rxAudioProcessor = rxAudioProcessorP_in;
-    // This function is called by the child constructor as to not call this in the constructor itself.
+    // This function is called by the constructor of the Plugin Editor's constructor after this GUI 
+    // componenet instance has been initialized by the editor's constructor.
+    // The editor has been initialized after the processor is fully initialized.
+    // Therefore, default parameters for the GUI can be extracted from the processor here.
+    this->rxAudioProcessor->getSet_ReaXstreamGUIpointer((void*)this);
+    
 }
 
 bool ReaXstreamGUI::checkGUIstateChanged()
@@ -324,25 +367,52 @@ DirectionOfConnection ReaXstreamGUI::getStateDirectionOfConnectionComboBox()
 {
     return DirectionOfConnection(comboBox_directionOfConnection->getSelectedId());
 }
-
 ModeOfOperation ReaXstreamGUI::getStateModeOfOperationComboBox()
 {
     return ModeOfOperation(comboBox_modeOfOperation->getSelectedId());
 }
-
 TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
 {
     return TransmissionProtocol(comboBox_transmissionProtocol->getSelectedId());
 }
-
-//std::string ReaXstreamGUI::getStateIpUrlPortTextEditor()
-//{
-//    return textEditor_ipUrlPort->getText();
-//} // TODO FINISh this and the next function and use them
-
+std::string ReaXstreamGUI::getStateIpUrlPortTextEditor_IPURL()
+{
+    return textEditor_ipUrlPort->getText().toStdString();
+}
+int ReaXstreamGUI::getStateIpUrlPortTextEditor_port()
+{// TODO: FINISH this method
+//    return textEditor_ipUrlPort->getText().toStdString();
+    return 0;
+}
 std::string ReaXstreamGUI::getStateIdentifierTextEditor()
 {
     return textEditor_identifier->getText().toStdString();
+}
+
+// GUI elements set state methods
+void ReaXstreamGUI::setStateDirectionOfConnectionComboBox(DirectionOfConnection  in_DoC)
+{// The IDs and the options should be already matched.
+    std::numeric_limits<enum Foo>::max();
+    comboBox_directionOfConnection->setSelectedId((int)in_DoC);
+}
+void ReaXstreamGUI::setStateModeOfOperationComboBox(ModeOfOperation in_MoO)
+{// The IDs and the options should be already matched.
+    comboBox_modeOfOperation->setSelectedId((int)in_MoO);
+}
+void ReaXstreamGUI::setStateTransmissionProtocolComboBox(TransmissionProtocol in_TP)
+{// The IDs and the options should be already matched.
+    comboBox_transmissionProtocol->setSelectedId((int)in_TP);
+}
+void ReaXstreamGUI::setStateIpUrlPortTextEditor_IPURL(std::string in_ipOrUrl) {/*Todo finish this function*/}
+void ReaXstreamGUI::setStateIpUrlPortTextEditor_port(unsigned short in_port) {/*Todo finish this function*/ }
+void ReaXstreamGUI::setStateIpUrlPortTextEditor(std::string in_ipOrUrlPort) {/*Todo finish this function*/ }
+void ReaXstreamGUI::setStateIpUrlPortTextEditor(std::string in_ipOrUrk, unsigned short in_port)
+{
+    setStateIpUrlPortTextEditor_IPURL(in_ipOrUrk);
+    setStateIpUrlPortTextEditor_port(in_port);
+}
+void ReaXstreamGUI::setStateIdentifierTextEditor(std::string in_identifier)
+{/*Todo finish this function*/
 }
 
 // Method to set the apptopirate transmission protocols for the corresponding mode
@@ -382,31 +452,6 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
     }
 }
 
-// Overwrite the listner function for the text fields
-void ReaXstreamGUI::textEditorTextChanged()//juce::TextEditor* textEditorThatHasChanged
-{
-
-    flagChangeGUIstate = true;
-
-//    if (textEditorThatHasChanged == textEditor_ipUrlPort.get())
-    {
-        LOG(LOG_WARNING LOG_GUI, "THE IP/URL:port NEEDS INPUT VALIDATION!!!");
-        LOG(LOG_GUI, "IP [" + textEditor_ipUrlPort->getText().toStdString() + "]");
-        rxAudioProcessor->setIP(textEditor_ipUrlPort->getText().toStdString());
-        //TODO: it's not wokring !!!!!!!!!
-    }
-//    else if (textEditorThatHasChanged == textEditor_identifier.get())
-    {
-        LOG(LOG_WARNING LOG_GUI, "THE IDENTIFIER NEEDS INPUT VALIDATION!!!");
-        LOG(LOG_GUI, "Label [" + textEditor_identifier->getText().toStdString() + "]");
-        rxAudioProcessor->setIdentifier(textEditor_identifier->getText().toStdString());
-
-    }
-
-    this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
-
-
-}
 //==============================================================================
 //[/MiscUserCode]
 

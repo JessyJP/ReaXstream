@@ -50,6 +50,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+
     void setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAudioProcessorP_in);
     // Check the GUI state change check variable
     bool checkGUIstateChanged();
@@ -58,14 +59,34 @@ public:
     DirectionOfConnection   getStateDirectionOfConnectionComboBox();
     ModeOfOperation         getStateModeOfOperationComboBox();
     TransmissionProtocol    getStateTransmissionProtocolComboBox();
-    //std::string getStateIpUrlPortTextEditor();
-    std::string getStateIdentifierTextEditor();
+    std::string             getStateIpUrlPortTextEditor_IPURL();
+    int                     getStateIpUrlPortTextEditor_port();
+    std::string             getStateIdentifierTextEditor();
+
+    // GUI elements set state methods
+    void setStateDirectionOfConnectionComboBox(DirectionOfConnection  in_DoC);
+    void setStateModeOfOperationComboBox(ModeOfOperation in_MoO);
+    void setStateTransmissionProtocolComboBox(TransmissionProtocol in_TP);
+    void setStateIpUrlPortTextEditor_IPURL(std::string in_ipOrUrl);//IP/URL_PORT v.1: ip/url only
+    void setStateIpUrlPortTextEditor_port(unsigned short in_port);//IP/URL_PORT v.2: port only
+    void setStateIpUrlPortTextEditor(std::string in_ipOrUrlPort);//IP/URL_PORT v.3: ip/url & port as one
+    void setStateIpUrlPortTextEditor(std::string in_ipOrUrk, unsigned short in_port);//IP/URL_PORT v.4: ip/url & port
+    void setStateIdentifierTextEditor(std::string in_identifier);
 
     // Method to set the apptopirate transmission protocols for the corresponding mode
     void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
 
     // Custom text change callback
-    void textEditorTextChanged();//juce::TextEditor* textEditorThatHasChanged
+    class TextEditListner_Class : public juce::TextEditor::Listener
+    {// TODO FINISH THIS CLASS Or decide on the method for input validation
+        void* parent;// Cast to "ReaXstreamGUI"
+        public:
+            TextEditListner_Class(void* pointer);// Lazy do declare 
+            void textEditorTextChanged(juce::TextEditor* textEditorThatHasChanged);
+
+    };
+
+
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -77,9 +98,13 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    // Default port
+    int defaultPort = 0;// This has to be initialized
+
     // Set the plugin processor pointer reference.
     ReaXstreamAudioProcessor* rxAudioProcessor;
     bool flagChangeGUIstate;// This flag indicates a change in the GUI
+
     //[/UserVariables]
 
     //==============================================================================
