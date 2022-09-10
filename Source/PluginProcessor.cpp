@@ -38,6 +38,17 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     rsHeader.printFrameHeader();
     LOG(LOG_WARNING," This part is not finished!!!")
 
+        //++++++++++++++++TODO: test parameter
+
+        addParameter(test_gainParam = new juce::AudioParameterFloat("gain", // parameterID
+            "Gain", // parameter name
+            0.0f,   // minimum value
+            1.0f,   // maximum value
+            0.5f)); // default value
+
+    ReaXstreamGUI* guiPtr = (ReaXstreamGUI*) this->getSet_ReaXstreamGUIpointer(nullptr);
+
+
 }
 
 ReaXstreamAudioProcessor::~ReaXstreamAudioProcessor()
@@ -197,14 +208,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             if (protocol == UDP)// At present lets support UDP connection only 
             {
-                // TESTING .... TODOOOO**********
                 ReaStreamClassicUDPreception(buffer);
-                
-                ReaStreamClassicFrame testFrame = ReaStreamClassicFrame();
-                testFrame.unpackUDPpayloadToRSframe(buffer, UDPpackPayload);
-                LOG(LOG_FRAME(testFrame.packetIndex), testFrame.printFrameHeader());
-                LOG(LOG_WARNING, "Protocols not implemented!");
-                //***************
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -254,7 +258,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
     }
     //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
     // Determine the if segmentation is needed or not
-    int audioSamplesPerFrame = (MUT - rsHeader.headerByteCount) / (buffer.getNumChannels() * sizeof(float));
+    int audioSamplesPerFrame = (MUT - headerByteCount) / (buffer.getNumChannels() * sizeof(float));
 
     //Pack the buffer
     int audioSampleBuffInd = 0;
@@ -265,10 +269,13 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
         {
             audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
-            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
+            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + headerByteCount;
         }
 
         rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
+        // TODO TESTING LINE ++++++++++++++
+        *( (int*)(UDPpackPayload + 47) ) = rsHeader.packetIndex;
+        // TODO TESTING LINE ++++++++++++++
         udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
 
         audioSampleBuffInd += audioSamplesPerFrame;
@@ -283,51 +290,58 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
 
 void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer)
 {
-    
-    // Todo: finish this
-    
-    // If connection and therefore frame is requested
-    if (resetFrame)
+    // First determine how many audio samples the buffer will hold
+    int audioSamplesNeededInBuffer = buffer.getNumSamples();
+    int audioSamplesRead = 0;
+    // There are 2 strategies.
+    // Strategy 1: Read until the audio buffer is full and store the leftover for the next buffer request.
+    // Strategy 2: Read until the UDP buffer is empty and store the leftover.
+    while (audioSamplesRead <= audioSamplesNeededInBuffer)
     {
-        rsHeader = ReaStreamClassicFrame
-        (
-            default_packetID,
-            connectionIdentifier,
-            getTotalNumInputChannels(),
-            getSampleRate()
-        );
-        // Along with the frame reset the buffer to all zero
-        for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = 0; }
-        // Frame reset
-        resetFrame = false;
-    }
-    //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
-    // Determine the if segmentation is needed or not
-    int audioSamplesPerFrame = (MUT - rsHeader.headerByteCount) / (buffer.getNumChannels() * sizeof(float));
-
-    //Pack the buffer
-    int audioSampleBuffInd = 0;
-    int bytesToWrite = MUT;
-    while (audioSampleBuffInd < buffer.getNumSamples())
-    {
-        // On the last packet
-        if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
+        // Read the UPD packet data
+        udp->read((void*)UDPpackDataRead, MUT, false);
+        // Unpack the header
+        rsHeader.unpackUDPheaderToRSframe(UDPpackDataRead);
+        
+        // Do validation/checks on the header
+        // 1. Check the frame signature: if it matches it is a valid packet header; if not return and check on the next buffer.
+        if (!rsHeader.isValidPacketID()) { return; }
+        // 2. Check the interconnect ID: if it matches it proceed; if not bet the next UDP payload-frame.
+        if (connectionIdentifier != rsHeader.interconnectID)
+        { 
+            LOG(LOG_FRAME(-1), "Frame[" + connectionIdentifier + "] =/= [" + rsHeader.interconnectID + "]");
+            continue;
+        }       
+        // 3. Check the number of channels: if it matches it proceed; if not ++++TODO: come back to that later
+        if (rsHeader.numAudioChannels != buffer.getNumChannels()) 
         {
-            audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
-            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + rsHeader.headerByteCount;
+            LOG(LOG_ERROR, "The numberof channels [" + to_string(getTotalNumInputChannels()) +
+                            "] != [" + to_string(rsHeader.numAudioChannels) + "]" ) ;
+            continue;// TODO: how will that be handled??
         }
+        // 4. Check the audio sample rate: if it matches it proceed; if not ++++TODO: come back to that later
+        if ( rsHeader.audioSampleRate != getSampleRate() )
+        {
+            LOG(LOG_ERROR, "The sample rate [" + to_string(getSampleRate()) +
+                            "] != [" + to_string(rsHeader.numAudioChannels) + "] in the frame.");
+            continue;// TODO: how will that be handled??
+        }
+        
+        // The header is check and validated, now pass the UDP audio data payload to the audio buffer
+        LOG(LOG_FRAME(++rsHeader.packetIndex), rsHeader.printFrameHeader());
 
-        rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
-        udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
 
-        audioSampleBuffInd += audioSamplesPerFrame;
+        // ++++ TODO
+            (UDPpackDataRead + headerByteCount); // Convert the data to floats
+            
+ 
 
-        // Diagnostic message
-        LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
+
+        
+        audioSamplesRead += rsHeader.sampleByteSize/(rsHeader.numAudioChannels*sizeof(float));
     }
-    // TODO: lots of bug fixing here
 
-
+    LOG(LOG_WARNING, "DONT't forget to take care of the pottential overflow");// TODO
 }
 
 
@@ -357,7 +371,7 @@ void ReaXstreamAudioProcessor::setStateInformation (const void* data, int sizeIn
 }
 
 //==============================================================================
-
+// This seciton defines methods not used by the pluing processing method.
 
 juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
@@ -371,6 +385,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
     return propertyLayout;
 };
 
+void* ReaXstreamAudioProcessor::getSet_ReaXstreamGUIpointer(void* ptr_in)
+{// The whole editor is not needed 
+ // we jut just the componenet holding all the interaction elements
+    static ReaXstreamGUI* RXS_GUI;
+    if (ptr_in == nullptr) { return (void*)RXS_GUI;}// Get
+    else { RXS_GUI = (ReaXstreamGUI*)ptr_in;}// Set
+    return nullptr;
+}
 
 //==============================================================================
 // This creates new instances of the plugin..

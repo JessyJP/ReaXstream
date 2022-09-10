@@ -65,9 +65,12 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     //==============================================================================
-
+    // This seciton declares methods not used by the pluing processing method.
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState apvts{ *this, nullptr};//"Parameters", createParameterLayout() 
+    juce::AudioParameterFloat* test_gainParam;
+    // This will use a little trick to store get/set the GUI componenet pointer
+    void* getSet_ReaXstreamGUIpointer(void* ptr_in);
 
 private:
     //==============================================================================
