@@ -34,6 +34,19 @@ ReaXstreamGUI::ReaXstreamGUI ()
     flagChangeGUIstate = true;
     //[/Constructor_pre]
 
+    label_LOGO.reset (new juce::Label ("LOGO_label",
+                                       TRANS("ReaXstream")));
+    addAndMakeVisible (label_LOGO.get());
+    label_LOGO->setFont (juce::Font ("David CLM", 30.50f, juce::Font::plain).withExtraKerningFactor (0.035f));
+    label_LOGO->setJustificationType (juce::Justification::centredTop);
+    label_LOGO->setEditable (false, false, false);
+    label_LOGO->setColour (juce::Label::backgroundColourId, juce::Colour (0x008f1414));
+    label_LOGO->setColour (juce::Label::textColourId, juce::Colours::red);
+    label_LOGO->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label_LOGO->setColour (juce::TextEditor::backgroundColourId, juce::Colours::blue);
+
+    label_LOGO->setBounds (0, 0, 300, 50);
+
     comboBox_directionOfConnection.reset (new juce::ComboBox ("directionOfConnectionComboBox"));
     addAndMakeVisible (comboBox_directionOfConnection.get());
     comboBox_directionOfConnection->setEditableText (false);
@@ -44,8 +57,6 @@ ReaXstreamGUI::ReaXstreamGUI ()
     comboBox_directionOfConnection->addSeparator();
     comboBox_directionOfConnection->addItem (TRANS("Client Receiver"), 2);
     comboBox_directionOfConnection->addListener (this);
-
-    comboBox_directionOfConnection->setBounds (264, 49, 280, 32);
 
     comboBox_modeOfOperation.reset (new juce::ComboBox ("modeOfOperationComboBox"));
     addAndMakeVisible (comboBox_modeOfOperation.get());
@@ -59,8 +70,6 @@ ReaXstreamGUI::ReaXstreamGUI ()
     comboBox_modeOfOperation->addSeparator();
     comboBox_modeOfOperation->addItem (TRANS("ReaInterConnect"), 3);
     comboBox_modeOfOperation->addListener (this);
-
-    comboBox_modeOfOperation->setBounds (264, 121, 280, 32);
 
     comboBox_transmissionProtocol.reset (new juce::ComboBox ("transmissionProtocolComboBox"));
     addAndMakeVisible (comboBox_transmissionProtocol.get());
@@ -77,102 +86,84 @@ ReaXstreamGUI::ReaXstreamGUI ()
     comboBox_transmissionProtocol->addItem (TRANS("USB"), 4);
     comboBox_transmissionProtocol->addListener (this);
 
-    comboBox_transmissionProtocol->setBounds (264, 192, 280, 32);
-
     textEditor_ipUrlPort.reset (new juce::TextEditor ("ipUrlPortTextEditor"));
     addAndMakeVisible (textEditor_ipUrlPort.get());
     textEditor_ipUrlPort->setTooltip (TRANS("localhost:58710"));
     textEditor_ipUrlPort->setMultiLine (false);
     textEditor_ipUrlPort->setReturnKeyStartsNewLine (false);
     textEditor_ipUrlPort->setReadOnly (false);
-    textEditor_ipUrlPort->setScrollbarsShown (true);
+    textEditor_ipUrlPort->setScrollbarsShown (false);
     textEditor_ipUrlPort->setCaretVisible (true);
     textEditor_ipUrlPort->setPopupMenuEnabled (true);
     textEditor_ipUrlPort->setText (TRANS("localhost:58710"));
-
-    textEditor_ipUrlPort->setBounds (264, 249, 200, 24);
 
     textEditor_identifier.reset (new juce::TextEditor ("identifierTextEdit"));
     addAndMakeVisible (textEditor_identifier.get());
     textEditor_identifier->setMultiLine (false);
     textEditor_identifier->setReturnKeyStartsNewLine (false);
     textEditor_identifier->setReadOnly (false);
-    textEditor_identifier->setScrollbarsShown (true);
+    textEditor_identifier->setScrollbarsShown (false);
     textEditor_identifier->setCaretVisible (true);
     textEditor_identifier->setPopupMenuEnabled (true);
     textEditor_identifier->setText (TRANS("default"));
-
-    textEditor_identifier->setBounds (264, 289, 150, 24);
 
     button_apply.reset (new juce::TextButton ("apply_button"));
     addAndMakeVisible (button_apply.get());
     button_apply->setButtonText (TRANS("Apply"));
     button_apply->addListener (this);
 
-    button_apply->setBounds (264, 337, 144, 40);
+    button_apply->setBounds (80, 392, 144, 24);
 
-    lable_directionOfConnection.reset (new juce::Label ("directionOfConnectionLabel",
+    label_directionOfConnection.reset (new juce::Label ("directionOfConnectionLabel",
                                                         TRANS("Direction Of Connection")));
-    addAndMakeVisible (lable_directionOfConnection.get());
-    lable_directionOfConnection->setFont (juce::Font (22.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    lable_directionOfConnection->setJustificationType (juce::Justification::centredRight);
-    lable_directionOfConnection->setEditable (false, false, false);
-    lable_directionOfConnection->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    lable_directionOfConnection->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    lable_directionOfConnection->setBounds (0, 49, 256, 24);
+    addAndMakeVisible (label_directionOfConnection.get());
+    label_directionOfConnection->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_directionOfConnection->setJustificationType (juce::Justification::centredBottom);
+    label_directionOfConnection->setEditable (false, false, false);
+    label_directionOfConnection->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label_directionOfConnection->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
     label_modeOfOperation.reset (new juce::Label ("modeOfOperationLabel",
                                                   TRANS("Mode Of Operation")));
     addAndMakeVisible (label_modeOfOperation.get());
-    label_modeOfOperation->setFont (juce::Font (22.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label_modeOfOperation->setJustificationType (juce::Justification::centredRight);
+    label_modeOfOperation->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_modeOfOperation->setJustificationType (juce::Justification::centredBottom);
     label_modeOfOperation->setEditable (false, false, false);
     label_modeOfOperation->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label_modeOfOperation->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    label_modeOfOperation->setBounds (0, 121, 256, 24);
-
     label_transmissionProtocolLabel.reset (new juce::Label ("transmissionProtocolLabel",
                                                             TRANS("Transmission Protocol")));
     addAndMakeVisible (label_transmissionProtocolLabel.get());
-    label_transmissionProtocolLabel->setFont (juce::Font (22.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label_transmissionProtocolLabel->setJustificationType (juce::Justification::centredRight);
+    label_transmissionProtocolLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_transmissionProtocolLabel->setJustificationType (juce::Justification::centredBottom);
     label_transmissionProtocolLabel->setEditable (false, false, false);
     label_transmissionProtocolLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label_transmissionProtocolLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    label_transmissionProtocolLabel->setBounds (0, 192, 256, 24);
-
     label_ipaddres.reset (new juce::Label ("ipaddresLabel",
                                            TRANS("IP/URL : Port")));
     addAndMakeVisible (label_ipaddres.get());
-    label_ipaddres->setFont (juce::Font (22.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label_ipaddres->setJustificationType (juce::Justification::centredRight);
+    label_ipaddres->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_ipaddres->setJustificationType (juce::Justification::centredBottom);
     label_ipaddres->setEditable (false, false, false);
     label_ipaddres->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label_ipaddres->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    label_ipaddres->setBounds (106, 249, 150, 24);
-
     label_identifierLabel.reset (new juce::Label ("identifierLabel",
                                                   TRANS("Identifier")));
     addAndMakeVisible (label_identifierLabel.get());
-    label_identifierLabel->setFont (juce::Font (22.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label_identifierLabel->setJustificationType (juce::Justification::centredRight);
+    label_identifierLabel->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_identifierLabel->setJustificationType (juce::Justification::centredBottom);
     label_identifierLabel->setEditable (false, false, false);
     label_identifierLabel->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     label_identifierLabel->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    label_identifierLabel->setBounds (106, 289, 150, 24);
-
-    hyperlink_gitHub.reset (new juce::HyperlinkButton (TRANS("ReaXstream on GitHub"),
+    hyperlink_gitHub.reset (new juce::HyperlinkButton (TRANS("link to GitHub"),
                                                        juce::URL ("https://github.com/JessyJP/ReaXstream")));
     addAndMakeVisible (hyperlink_gitHub.get());
     hyperlink_gitHub->setTooltip (TRANS("https://github.com/JessyJP/ReaXstream"));
-    hyperlink_gitHub->setButtonText (TRANS("ReaXstream on GitHub"));
-
-    hyperlink_gitHub->setBounds (264, 393, 184, 24);
+    hyperlink_gitHub->setButtonText (TRANS("link to GitHub"));
 
     juce__label6.reset (new juce::Label ("new label",
                                          TRANS("+++ PUT Audio Levels here\n")));
@@ -183,18 +174,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
     juce__label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
     juce__label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    juce__label6->setBounds (208, 432, 288, 24);
-
-    juce__label7.reset (new juce::Label ("new label",
-                                         TRANS("+++ Put ReaXstream cool text logo here")));
-    addAndMakeVisible (juce__label7.get());
-    juce__label7->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    juce__label7->setJustificationType (juce::Justification::centredLeft);
-    juce__label7->setEditable (false, false, false);
-    juce__label7->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    juce__label7->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
-
-    juce__label7->setBounds (224, 8, 288, 24);
+    juce__label6->setBounds (48, 424, 208, 24);
 
 
     //[UserPreSize]
@@ -202,7 +182,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
  //   textEditor_identifier->addListener(this);//TODO figure out the texteditor callback methods
     //[/UserPreSize]
 
-    setSize (600, 600);
+    setSize (300, 450);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -214,20 +194,20 @@ ReaXstreamGUI::~ReaXstreamGUI()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
+    label_LOGO = nullptr;
     comboBox_directionOfConnection = nullptr;
     comboBox_modeOfOperation = nullptr;
     comboBox_transmissionProtocol = nullptr;
     textEditor_ipUrlPort = nullptr;
     textEditor_identifier = nullptr;
     button_apply = nullptr;
-    lable_directionOfConnection = nullptr;
+    label_directionOfConnection = nullptr;
     label_modeOfOperation = nullptr;
     label_transmissionProtocolLabel = nullptr;
     label_ipaddres = nullptr;
     label_identifierLabel = nullptr;
     hyperlink_gitHub = nullptr;
     juce__label6 = nullptr;
-    juce__label7 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -251,6 +231,17 @@ void ReaXstreamGUI::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
+    comboBox_directionOfConnection->setBounds (0 + 300 / 2 - (280 / 2), 0 + 50 - -32, 280, 32);
+    comboBox_modeOfOperation->setBounds ((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2), (0 + 50 - -32) + 32 - -32, 280, 32);
+    comboBox_transmissionProtocol->setBounds (((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2), ((0 + 50 - -32) + 32 - -32) + 32 - -32, 280, 32);
+    textEditor_ipUrlPort->setBounds ((((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2), (((0 + 50 - -32) + 32 - -32) + 32 - -32) + 32 - -32, 280, 32);
+    textEditor_identifier->setBounds (((((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2), ((((0 + 50 - -32) + 32 - -32) + 32 - -32) + 32 - -32) + 32 - -32, 280, 32);
+    label_directionOfConnection->setBounds ((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (220 / 2), (0 + 50 - -32) + 0 - 16, 220, 16);
+    label_modeOfOperation->setBounds (((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (220 / 2), ((0 + 50 - -32) + 32 - -32) + 0 - 16, 220, 16);
+    label_transmissionProtocolLabel->setBounds ((((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (220 / 2), (((0 + 50 - -32) + 32 - -32) + 32 - -32) + 0 - 16, 220, 16);
+    label_ipaddres->setBounds (((((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (220 / 2), ((((0 + 50 - -32) + 32 - -32) + 32 - -32) + 32 - -32) + 0 - 16, 220, 16);
+    label_identifierLabel->setBounds ((((((0 + 300 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (280 / 2)) + 280 / 2 - (220 / 2), (((((0 + 50 - -32) + 32 - -32) + 32 - -32) + 32 - -32) + 32 - -32) + 0 - 16, 220, 16);
+    hyperlink_gitHub->setBounds (0 + 300 / 2 - (128 / 2), 0 + 50 - 5 - 16, 128, 16);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -349,10 +340,10 @@ TransmissionProtocol ReaXstreamGUI::getStateTransmissionProtocolComboBox()
 //    return textEditor_ipUrlPort->getText();
 //} // TODO FINISh this and the next function and use them
 
-//int ReaXstreamGUI::getStateIdentifierTextEditor()
-//{
-//    return 0;
-//}
+std::string ReaXstreamGUI::getStateIdentifierTextEditor()
+{
+    return textEditor_identifier->getText().toStdString();
+}
 
 // Method to set the apptopirate transmission protocols for the corresponding mode
 void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
@@ -432,71 +423,78 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="ReaXstreamGUI" componentName=""
                  parentClasses="public juce::Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="600">
+                 fixedSize="0" initialWidth="300" initialHeight="450">
   <BACKGROUND backgroundColour="ff323e44"/>
+  <LABEL name="LOGO_label" id="2b6750f7890c35fe" memberName="label_LOGO"
+         virtualName="" explicitFocusOrder="0" pos="0 0 300 50" bkgCol="8f1414"
+         textCol="ffff0000" edTextCol="ff000000" edBkgCol="ff0000ff" labelText="ReaXstream"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="David CLM" fontsize="30.5" kerning="0.035" bold="0"
+         italic="0" justification="12"/>
   <COMBOBOX name="directionOfConnectionComboBox" id="7c29d2021560a2d0" memberName="comboBox_directionOfConnection"
-            virtualName="" explicitFocusOrder="0" pos="264 49 280 32" editable="0"
-            layout="33" items="Host Server Transmitter&#10;&#10;Client Receiver"
+            virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="2b6750f7890c35fe"
+            posRelativeY="2b6750f7890c35fe" editable="0" layout="33" items="Host Server Transmitter&#10;&#10;Client Receiver"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <COMBOBOX name="modeOfOperationComboBox" id="dd7819fc9b8b5151" memberName="comboBox_modeOfOperation"
-            virtualName="" explicitFocusOrder="0" pos="264 121 280 32" editable="0"
-            layout="33" items="ReaStreamClassic&#10;&#10;ReaStreamMobile&#10;&#10;ReaInterConnect"
+            virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="7c29d2021560a2d0"
+            posRelativeY="7c29d2021560a2d0" editable="0" layout="33" items="ReaStreamClassic&#10;&#10;ReaStreamMobile&#10;&#10;ReaInterConnect"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <COMBOBOX name="transmissionProtocolComboBox" id="92fbe0d462e2316e" memberName="comboBox_transmissionProtocol"
-            virtualName="" explicitFocusOrder="0" pos="264 192 280 32" editable="0"
-            layout="33" items="UDP&#10;&#10;TCP&#10;&#10;SharedMemory&#10;&#10;USB"
+            virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="dd7819fc9b8b5151"
+            posRelativeY="dd7819fc9b8b5151" editable="0" layout="33" items="UDP&#10;&#10;TCP&#10;&#10;SharedMemory&#10;&#10;USB"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TEXTEDITOR name="ipUrlPortTextEditor" id="24663907342789dd" memberName="textEditor_ipUrlPort"
-              virtualName="" explicitFocusOrder="0" pos="264 249 200 24" tooltip="localhost:58710"
-              initialText="localhost:58710" multiline="0" retKeyStartsLine="0"
-              readonly="0" scrollbars="1" caret="1" popupmenu="1"/>
-  <TEXTEDITOR name="identifierTextEdit" id="3dc7429827394451" memberName="textEditor_identifier"
-              virtualName="" explicitFocusOrder="0" pos="264 289 150 24" initialText="default"
-              multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="1"
+              virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="92fbe0d462e2316e"
+              posRelativeY="92fbe0d462e2316e" tooltip="localhost:58710" initialText="localhost:58710"
+              multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="0"
               caret="1" popupmenu="1"/>
+  <TEXTEDITOR name="identifierTextEdit" id="3dc7429827394451" memberName="textEditor_identifier"
+              virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="24663907342789dd"
+              posRelativeY="24663907342789dd" initialText="default" multiline="0"
+              retKeyStartsLine="0" readonly="0" scrollbars="0" caret="1" popupmenu="1"/>
   <TEXTBUTTON name="apply_button" id="d34c5dc5dafae149" memberName="button_apply"
-              virtualName="" explicitFocusOrder="0" pos="264 337 144 40" buttonText="Apply"
+              virtualName="" explicitFocusOrder="0" pos="80 392 144 24" buttonText="Apply"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
-  <LABEL name="directionOfConnectionLabel" id="f95d663081268283" memberName="lable_directionOfConnection"
-         virtualName="" explicitFocusOrder="0" pos="0 49 256 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Direction Of Connection" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="22.0" kerning="0.0" bold="0" italic="0" justification="34"/>
+  <LABEL name="directionOfConnectionLabel" id="f95d663081268283" memberName="label_directionOfConnection"
+         virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="7c29d2021560a2d0"
+         posRelativeY="7c29d2021560a2d0" edTextCol="ff000000" edBkgCol="0"
+         labelText="Direction Of Connection" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="20"/>
   <LABEL name="modeOfOperationLabel" id="c1dfa9e780524ac3" memberName="label_modeOfOperation"
-         virtualName="" explicitFocusOrder="0" pos="0 121 256 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Mode Of Operation" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="22.0" kerning="0.0" bold="0" italic="0" justification="34"/>
+         virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="dd7819fc9b8b5151"
+         posRelativeY="dd7819fc9b8b5151" edTextCol="ff000000" edBkgCol="0"
+         labelText="Mode Of Operation" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="20"/>
   <LABEL name="transmissionProtocolLabel" id="f14641459af31190" memberName="label_transmissionProtocolLabel"
-         virtualName="" explicitFocusOrder="0" pos="0 192 256 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Transmission Protocol" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="22.0" kerning="0.0" bold="0" italic="0" justification="34"/>
+         virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="92fbe0d462e2316e"
+         posRelativeY="92fbe0d462e2316e" edTextCol="ff000000" edBkgCol="0"
+         labelText="Transmission Protocol" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="20"/>
   <LABEL name="ipaddresLabel" id="7693eeae6ebceb8" memberName="label_ipaddres"
-         virtualName="" explicitFocusOrder="0" pos="106 249 150 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="IP/URL : Port" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="22.0" kerning="0.0" bold="0" italic="0" justification="34"/>
+         virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="24663907342789dd"
+         posRelativeY="24663907342789dd" edTextCol="ff000000" edBkgCol="0"
+         labelText="IP/URL : Port" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="20"/>
   <LABEL name="identifierLabel" id="a54772e0dcb1892a" memberName="label_identifierLabel"
-         virtualName="" explicitFocusOrder="0" pos="106 289 150 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Identifier" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="22.0"
-         kerning="0.0" bold="0" italic="0" justification="34"/>
+         virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="3dc7429827394451"
+         posRelativeY="3dc7429827394451" edTextCol="ff000000" edBkgCol="0"
+         labelText="Identifier" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="20"/>
   <HYPERLINKBUTTON name="gitHubHyperlink" id="17b08a3c4e2b4a2" memberName="hyperlink_gitHub"
-                   virtualName="" explicitFocusOrder="0" pos="264 393 184 24" tooltip="https://github.com/JessyJP/ReaXstream"
-                   buttonText="ReaXstream on GitHub" connectedEdges="0" needsCallback="0"
+                   virtualName="" explicitFocusOrder="0" pos="0Cc 5Rr 128 16" posRelativeX="2b6750f7890c35fe"
+                   posRelativeY="2b6750f7890c35fe" tooltip="https://github.com/JessyJP/ReaXstream"
+                   buttonText="link to GitHub" connectedEdges="0" needsCallback="0"
                    radioGroupId="0" url="https://github.com/JessyJP/ReaXstream"/>
   <LABEL name="new label" id="ea426327de1b3551" memberName="juce__label6"
-         virtualName="" explicitFocusOrder="0" pos="208 432 288 24" edTextCol="ff000000"
+         virtualName="" explicitFocusOrder="0" pos="48 424 208 24" edTextCol="ff000000"
          edBkgCol="0" labelText="+++ PUT Audio Levels here&#10;" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="33"/>
-  <LABEL name="new label" id="2b6750f7890c35fe" memberName="juce__label7"
-         virtualName="" explicitFocusOrder="0" pos="224 8 288 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="+++ Put ReaXstream cool text logo here"
-         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
-         fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
-         italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

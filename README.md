@@ -15,4 +15,9 @@ What is important and different for this project?
 Please, check out the [TODO.md](TODO.md) file for current progress on features and bug-fixes.
 
 The puling/Stand-alone application looks like this:
-![plot](Images/Readme_Plugin_image.png)
+
+<!-- [comment] ![plot](Images/Readme_Plugin_image.png)  -->
+<p align="center">
+  <img src="Images/Readme_Plugin_image.png">
+</p>
+

@@ -58,8 +58,8 @@ public:
     DirectionOfConnection   getStateDirectionOfConnectionComboBox();
     ModeOfOperation         getStateModeOfOperationComboBox();
     TransmissionProtocol    getStateTransmissionProtocolComboBox();
-    //    juce::string getStateIpUrlPortTextEditor();
-    //    int getStateIdentifierTextEditor();
+    //std::string getStateIpUrlPortTextEditor();
+    std::string getStateIdentifierTextEditor();
 
     // Method to set the apptopirate transmission protocols for the corresponding mode
     void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
@@ -83,20 +83,20 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    std::unique_ptr<juce::Label> label_LOGO;
     std::unique_ptr<juce::ComboBox> comboBox_directionOfConnection;
     std::unique_ptr<juce::ComboBox> comboBox_modeOfOperation;
     std::unique_ptr<juce::ComboBox> comboBox_transmissionProtocol;
     std::unique_ptr<juce::TextEditor> textEditor_ipUrlPort;
     std::unique_ptr<juce::TextEditor> textEditor_identifier;
     std::unique_ptr<juce::TextButton> button_apply;
-    std::unique_ptr<juce::Label> lable_directionOfConnection;
+    std::unique_ptr<juce::Label> label_directionOfConnection;
     std::unique_ptr<juce::Label> label_modeOfOperation;
     std::unique_ptr<juce::Label> label_transmissionProtocolLabel;
     std::unique_ptr<juce::Label> label_ipaddres;
     std::unique_ptr<juce::Label> label_identifierLabel;
     std::unique_ptr<juce::HyperlinkButton> hyperlink_gitHub;
     std::unique_ptr<juce::Label> juce__label6;
-    std::unique_ptr<juce::Label> juce__label7;
 
 
     //==============================================================================
