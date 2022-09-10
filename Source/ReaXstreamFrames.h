@@ -22,8 +22,11 @@
 
 //=================================================================================
 // This section implements the Classic ReaStream Implementation
-const unsigned int MUT = 1247;// MUT (Maximum Unit Transmission) in bytes per UDP frame.
+const unsigned int headerByteCount = 47;// Byte size sum of the header properties
+const unsigned int MUT = 1200+headerByteCount;// MUT (Maximum Unit Transmission) in bytes per UDP frame.
 // The header contains 47 bytes and the audio data contains 1200 bytes.
+
+
 
 // Classic frame default frame identifier
 static const char default_packetID[4] = {'M','R','S','R'};
@@ -54,8 +57,7 @@ public:
         unsigned int i_audioBufferData = 47;
     }ind;
 
-    // Constant 
-    unsigned int headerByteCount    = 47;// Byte size sum of the header properties
+
     unsigned long long packetIndex  = 0;// This inex is used for collision control and missing frame detection.
 
     // Internal frame buffer
@@ -76,32 +78,34 @@ public:
     void calculateMemIndices();
 
     // Packs the audio buffer into a ReaStream frame for UDP transmission
-    // This function does not use buffer segmentation and assumes the total frame size is less than the MTU
- //   void packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer);
     // This function will segment the audio buffer into multiple Reastream frames each for a UDP packet
     void packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer, int audioSampleBuffInd,int samplesToRead);
 
-    // This function will unapck the payload into ReaStream Frame
-    void unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& buffer, char* UDP_payload);
+    // This function will unapck the header into ReaStream Frame
+    void unpackUDPheaderToRSframe(char* UDP_frameHeader);
+
+    // This function will unapck the payload into the Audio Buffer
+    void unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData);
 
     // Print frame header info
     std::string printFrameHeader();
+
+    // Check packet ID
+    bool isValidPacketID();
 };
 
 
 
 
 //=================================================================================
-
-//TODO:rename this class
 // This is the classic reasteam frame
 class ReaStreamFrame
 {
     public:
         // Header and data buffer
         ReaStreamClassicFrame rsHeader;
- //       char* UDPpackPayload; // Byte buffer for protocol transmission
         char UDPpackPayload[MUT]; // Byte buffer for protocol transmission
+        char UDPpackDataRead[MUT];
 
     public:
         ReaStreamFrame();//Default Constructor 

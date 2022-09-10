@@ -38,29 +38,6 @@ void ReaStreamClassicFrame::calculateMemIndices()
     ind.i_sampleByteSize        = ind.i_audioSampleRate + sizeof(audioSampleRate);
 }
 
-//void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer)
-//{
-//    // Increment the packet index
-//    this->packetIndex++;
-//    // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
-//    // Change this to std::copy method
-//    int c = 0;// Counter
-//    memcpy(UDPbuffer + ind.i_packetID, packetID, sizeof(packetID)); c += sizeof(packetID);
-//    memcpy(UDPbuffer + c, (char*)(&packetSize), sizeof(packetSize)); c += sizeof(packetSize);
-//    memcpy(UDPbuffer + c, interconnectID, sizeof(interconnectID)); c += sizeof(interconnectID);
-//    memcpy(UDPbuffer + c, (char*)(&numAudioChannels), sizeof(numAudioChannels)); c += sizeof(numAudioChannels);
-//    memcpy(UDPbuffer + c, (char*)(&audioSampleRate), sizeof(audioSampleRate)); c += sizeof(audioSampleRate);
-//    memcpy(UDPbuffer + c, (char*)(&sampleByteSize), sizeof(sampleByteSize)); c += sizeof(sampleByteSize);
-//
-//    for (int channel = 0; channel < numAudioChannels; ++channel)
-//    {
-//        auto* channelData = buffer.getReadPointer(channel);
-//        memcpy(UDPbuffer + c, (char*)(&channelData), sizeof(channelData));
-//        c += sizeof(channelData);
-//
-//    }
-//}
-
 std::string ReaStreamClassicFrame::printFrameHeader()
 {
     string sep = " ";
@@ -77,6 +54,18 @@ std::string ReaStreamClassicFrame::printFrameHeader()
     }
 
     return outputString;
+}
+
+bool ReaStreamClassicFrame::isValidPacketID()
+{
+    for (int c = 0; c < 4; c++)
+    {
+        if (packetID[c] != default_packetID[c])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float>& buffer, char* UDPbuffer, int audioSampleBuffInd, int samplesToRead)
@@ -104,21 +93,26 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
     }
 }
 
-void ReaStreamClassicFrame::unpackUDPpayloadToRSframe(juce::AudioBuffer<float>& buffer, char* UDP_payload)
+void ReaStreamClassicFrame::unpackUDPheaderToRSframe(char* UDP_frameHeader)
 {
     // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
     int c = 0;
-    memcpy(packetID, UDP_payload + c, sizeof(packetID));                   c += sizeof(packetID);
-    memcpy(&packetSize, UDP_payload + c, sizeof(packetSize));              c += sizeof(packetSize);
-    memcpy(interconnectID, UDP_payload + c, sizeof(interconnectID));       c += sizeof(interconnectID);
-    memcpy(&numAudioChannels, UDP_payload + c, sizeof(numAudioChannels));  c += sizeof(numAudioChannels);
-    memcpy(&audioSampleRate, UDP_payload + c, sizeof(audioSampleRate));    c += sizeof(audioSampleRate);
-    memcpy(&sampleByteSize, UDP_payload + c, sizeof(sampleByteSize));      c += sizeof(sampleByteSize);
+    memcpy(packetID, UDP_frameHeader + c, sizeof(packetID));                   c += sizeof(packetID);
+    memcpy(&packetSize, UDP_frameHeader + c, sizeof(packetSize));              c += sizeof(packetSize);
+    memcpy(interconnectID, UDP_frameHeader + c, sizeof(interconnectID));       c += sizeof(interconnectID);
+    memcpy(&numAudioChannels, UDP_frameHeader + c, sizeof(numAudioChannels));  c += sizeof(numAudioChannels);
+    memcpy(&audioSampleRate, UDP_frameHeader + c, sizeof(audioSampleRate));    c += sizeof(audioSampleRate);
+    memcpy(&sampleByteSize, UDP_frameHeader + c, sizeof(sampleByteSize));      c += sizeof(sampleByteSize);
+}
 
+void ReaStreamClassicFrame::unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData)
+{
+    // The UPD payload has to be offset outside this method and here the begining of the data starts with the audio data
+    int c = 0;
     for (int channel = 0; channel < numAudioChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer(channel);
-        memcpy(channelData, UDP_payload + c, int(sampleByteSize / numAudioChannels) );
+        memcpy(channelData, UDP_frameAudioData + c, int(sampleByteSize / numAudioChannels) );
         c += sizeof(channelData);
         //TODO some flags were supposed to be set
     }
