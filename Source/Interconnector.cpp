@@ -136,7 +136,7 @@ void Interconnector::setupInterConnection()
 				udp = new juce::DatagramSocket();
 				udp->waitUntilReady(false, -1);
 				connectionEstablishedOK = true;
-				LOG(LOG_INFO, " new UDP connection as [HostServerTransmitter]");
+				LOG(LOG_INFO, " New UDP connection as [HostServerTransmitter]");
 				break;
 			}
 			case TCP:
@@ -144,9 +144,38 @@ void Interconnector::setupInterConnection()
 				tcp = new juce::StreamingSocket();
 				tcp->waitUntilReady(false, -1);
 				connectionEstablishedOK = true;
-				LOG(LOG_INFO, " new TCP connection as [HostServerTransmitter]");
+				LOG(LOG_INFO, " New TCP connection as [HostServerTransmitter]");
 				break;
 			}
+			case USB:
+				break;
+			case SharedMemory:
+				break;
+			default:
+			{
+				connectionEstablishedOK = false;
+				break;
+			}
+		}
+	}
+
+	// Create a reception connection adapter here
+	if (direction == ClientReceiver)
+	{
+		switch (this->protocol)
+		{
+			case UDP:
+			{
+				udp = new juce::DatagramSocket();
+				udp->waitUntilReady(false, -1);
+				udp->bindToPort(port);
+				udp->setEnablePortReuse(true);
+				connectionEstablishedOK = true;
+				LOG(LOG_INFO, " New UDP connection as [ClientReceiver]");
+				break;
+			}
+			case TCP:
+				break;
 			case USB:
 				break;
 			case SharedMemory:
