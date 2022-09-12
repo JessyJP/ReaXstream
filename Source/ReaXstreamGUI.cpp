@@ -19,6 +19,7 @@
 
 //[Headers] You can add your own extra header files here...
 #include "Logger.h"
+#include <cassert>
 //[/Headers]
 
 #include "ReaXstreamGUI.h"
@@ -202,6 +203,17 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[UserPreSize]
+    // ---- This section modifies the communication protocols.
+    // By default all transmission/reception protocols should be disabled unitl the user selelcts the communication mode.
+    for (int i = 0; i < comboBox_transmissionProtocol->getNumItems(); i++)// i is the item index
+    {// The loop is standard C++ loop starting at 0 and up to but exluding a fixed limit. 
+     // The combo box indices, however, start 1 one and go to the limit.
+     // But the indexing of the items will start from 0
+        assert(comboBox_transmissionProtocol->getItemId(i) != 0);
+        comboBox_transmissionProtocol->setItemEnabled(i+1, false);
+    }
+    
+    // ---- This section modifies the input textfields
     // Change the size of the font
     juce::String tmpStr = "";
     textEditor_ipUrlPort->setFont(16);
@@ -216,6 +228,8 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 //    textEditor_ipUrlPort->addListener(this);//TODO figure out the texteditor callback methods
  //   textEditor_identifier->addListener(this);//TODO figure out the texteditor callback methods
+    // It's most likely quite tricky to have *this (dual meaning here) componenet to inherit from the Listner::TextEdit Class.
+
 
     //[/UserPreSize]
 
@@ -435,8 +449,10 @@ void ReaXstreamGUI::setStateIdentifierTextEditor(std::string in_identifier)
 // Method to set the apptopirate transmission protocols for the corresponding mode
 void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation mode)
 {
-    // TODO: finish this function
+    // Get list for the available protocols for the corresponding mode of operation
     std::list<TransmissionProtocol> availableProtocolList = getAvailableProtocolByModeOfOperation(mode);
+    
+    // Just some logging for display purposess
     LOG(LOG_INFO, "");
     LOG(LOG_INFO, convertEnum2String(mode));
     for (auto const& protoStr : availableProtocolList)
@@ -444,17 +460,27 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
         LOG(LOG_INFO, "|-- " + convertEnum2String(protoStr));
     }
 
-    // Loop over the options in the Protocol list in the combo box
-    for (int i = 1; i <= comboBox_transmissionProtocol->getNumItems(); i++)
+    // Loop over the options in the Protocol list in the combo box by index then get the ID of the item with the corresponding index.
+    // Notes{!} included at the end of the constructor why the indexing is this way.
+    for (int item_Index = 0; item_Index < comboBox_transmissionProtocol->getNumItems(); item_Index++)
     {
+        // The IDs match the enumerations, therefore direclty set the TP_ID as the corresponding ID - enumeration
+        TransmissionProtocol TP_ID = (TransmissionProtocol) comboBox_transmissionProtocol->getItemId(item_Index);
+
+        // This, slightly redundnat, part validates that the type-cast enumeration and the ID of the corresponding index are valid.
+        assert(isValidEnum(TP_ID));
+        assert(comboBox_transmissionProtocol->getItemId(item_Index) != 0);
+
         bool found = false;
+
         // Loop over the protocols and
         for (auto const& avalableProtocol : availableProtocolList)
         {
             // If the protocol is found, enable the protocol and break out of the loop and continue
-            if (avalableProtocol == comboBox_transmissionProtocol->getItemId(i))
+            if (avalableProtocol == TP_ID)
             {
-                comboBox_transmissionProtocol->setItemEnabled(i,true);
+                comboBox_transmissionProtocol->setItemEnabled(TP_ID,true);
+                LOG(LOG_GUI, "Enabled: " + convertEnum2String(TP_ID));
                 found = true;
                 break;
             }
@@ -463,9 +489,10 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
         // If not found in the list of available protocols disable the protocol
         if (!found)
         {
-            comboBox_transmissionProtocol->setItemEnabled(i,false);
+            comboBox_transmissionProtocol->setItemEnabled(TP_ID,false);
+            LOG(LOG_GUI, "Disabled: " + convertEnum2String(TP_ID));
         }
-        LOG(LOG_ERROR, "SOMETHING IS WRONG, TODO: debug and fix");
+        
     }
 }
 

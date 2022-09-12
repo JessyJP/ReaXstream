@@ -34,7 +34,11 @@ This is the file that will be updated along with new ideas, suggestions, notes a
 ### + GUI
 - [x] GUI improved.
 	- [x] GUI redesigned and streamlined. Note: the new design takes less space and is more compact.
- 	- [ ] Fix the selection enable/disable of protocols when the mode is selected.
+ 	- [x] Fix the selection enable/disable of protocols when the mode is selected.
+		  Notes: about the fix and the issue included at the bottom of the constructor.
+	- [x] Technically, the transportation protocol shouldn't be active before the mode is selected. 
+		  The mode can be selected before or after the direction of communication. 
+		  All protocols will be disabled by default until the user selects the appropriate mode.
 	- [ ] Make extra text fields that will be hidden or shown for the shared memory and USB protocols.
 		  Technically the same text filed and label could be used, but it would be better to have 3 and show/hide accordingly. This way the fields can keep their values and be used for setting storage in between changes.
     - [ ] Suitable background image should be selected. 

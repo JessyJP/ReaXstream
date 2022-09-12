@@ -41,6 +41,8 @@ enum TransmissionProtocol
 	USB=4
 };
 
+// Importnat the enumeration ID here match the assigned IDs in the GUI combo boxes.
+
 enum AudioStreamEncoding
 {
 	FLOAT32, FLOAT24, FLOAT16, FLOAT8,
