@@ -406,10 +406,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 void* ReaXstreamAudioProcessor::getSet_ReaXstreamGUIpointer(void* ptr_in)
 {// The whole editor is not needed 
  // we jut just the componenet holding all the interaction elements
-    static ReaXstreamGUI* RXS_GUI;
-    if (ptr_in == nullptr) { return (void*)RXS_GUI;}// Get
-    else { RXS_GUI = (ReaXstreamGUI*)ptr_in;}// Set
-    return nullptr;
+    static ReaXstreamGUI* RXS_GUI = nullptr;
+    if (ptr_in != nullptr) { RXS_GUI = (ReaXstreamGUI*)ptr_in; }//Set
+    return (void*)RXS_GUI;// Normal Get
 }
 
 //==============================================================================
