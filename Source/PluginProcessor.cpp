@@ -46,8 +46,6 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
             1.0f,   // maximum value
             0.5f)); // default value
 
-    ReaXstreamGUI* guiPtr = (ReaXstreamGUI*) this->getSet_ReaXstreamGUIpointer(nullptr);
-
 
 }
 
@@ -273,9 +271,9 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         }
 
         rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
-        // TODO TESTING LINE ++++++++++++++
+        // TODO: TESTING LINE ++++++++++++++
         *( (int*)(UDPpackPayload + 47) ) = rsHeader.packetIndex;
-        // TODO TESTING LINE ++++++++++++++
+        // TODO: TESTING LINE ++++++++++++++
         udp->write(juce::String(ip), port, (void*)UDPpackPayload, bytesToWrite);
 
         audioSampleBuffInd += audioSamplesPerFrame;
@@ -290,13 +288,16 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
 
 void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer)
 {
-    // First determine how many audio samples the buffer will hold
-    int audioSamplesNeededInBuffer = buffer.getNumSamples();
-    int audioSamplesRead = 0;
+    //  Variables to determine the how many packet-frames per buffer are needed and to handle the data overflow.
+    const int audioSamples_NeededInBuffer = buffer.getNumSamples();
+    int audioSamples_ReadCounter = 0;
+    int audioSamples_InTheCurrentFrame = 0;
+    int audioSamples_UntilBufferIsFull = 0;
+    int audioSamples_OverFlow = 0;
     // There are 2 strategies.
     // Strategy 1: Read until the audio buffer is full and store the leftover for the next buffer request.
     // Strategy 2: Read until the UDP buffer is empty and store the leftover.
-    while (audioSamplesRead <= audioSamplesNeededInBuffer)
+    while (audioSamples_ReadCounter < audioSamples_NeededInBuffer)
     {
         // Read the UPD packet data
         udp->read((void*)UDPpackDataRead, MUT, false);
@@ -305,7 +306,8 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
         
         // Do validation/checks on the header
         // 1. Check the frame signature: if it matches it is a valid packet header; if not return and check on the next buffer.
-        if (!rsHeader.isValidPacketID()) { return; }
+        if (!rsHeader.isValidPacketID()) 
+        { LOG(LOG_INFO,"[ReceptionClient][ReaStreamClassic][UDP]=> No Packets found!"); return; }
         // 2. Check the interconnect ID: if it matches it proceed; if not bet the next UDP payload-frame.
         if (connectionIdentifier != rsHeader.interconnectID)
         { 
@@ -330,15 +332,31 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
         // The header is check and validated, now pass the UDP audio data payload to the audio buffer
         LOG(LOG_FRAME(++rsHeader.packetIndex), rsHeader.printFrameHeader());
 
+        // Calculate the audio samples in the current frame
+        audioSamples_InTheCurrentFrame = rsHeader.sampleByteSize / (rsHeader.numAudioChannels * sizeof(float));
+        // Determine the buffer overflow
+        audioSamples_UntilBufferIsFull = audioSamples_NeededInBuffer - audioSamples_ReadCounter;
+        if (audioSamples_UntilBufferIsFull <= audioSamples_InTheCurrentFrame)
+        {
+            audioSamples_OverFlow = audioSamples_InTheCurrentFrame - audioSamples_UntilBufferIsFull;
+            if (audioSamples_UntilBufferIsFull == audioSamples_InTheCurrentFrame)
+            {
+                LOG(LOG_INFO, "Buffer Exactly Full!");
+            }
+            else
+            {               
+                LOG(LOG_INFO, "audioSamples_UntilBufferIsFull ["+to_string(audioSamples_UntilBufferIsFull) + "]"+
+                              "audioSamples_InTheCurrentFrame [" + to_string(audioSamples_InTheCurrentFrame) + "]"+
+                              "audioSamples_OverFlow [" + to_string(audioSamples_OverFlow) + "]");
+            }
+        }
 
         // ++++ TODO
-            (UDPpackDataRead + headerByteCount); // Convert the data to floats
-            
- 
+        (UDPpackDataRead + headerByteCount); // Convert the data to floats
 
 
         
-        audioSamplesRead += rsHeader.sampleByteSize/(rsHeader.numAudioChannels*sizeof(float));
+        audioSamples_ReadCounter += audioSamples_InTheCurrentFrame;
     }
 
     LOG(LOG_WARNING, "DONT't forget to take care of the pottential overflow");// TODO
