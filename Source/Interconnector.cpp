@@ -121,7 +121,9 @@ void Interconnector::setupInterConnection()
 	if (! isValidEnum(direction) ) { return; }
 	if (! isValidEnum(mode) ) { return; }
 	if (! isValidEnum(protocol) ) { return; }
-		// TODO: Some input validation needs to be done here
+
+	// Specific extra validations can be fruther done for the specific cases.
+	// TODO: Some input validation needs to be done here. This has to be reviewed later.
 		
 	closeCurrentConecction();
 	
