@@ -118,9 +118,9 @@ void Interconnector::setupInterConnection()
 	// 4. If the connection is established set ==> connectionEstablishedOK = true;
 
 	// Validate the enumeration inputs
-	if (!( (direction == HostServerTransmitter) || (direction == ClientReceiver) )) { return; }
-	if (!( (mode == ReaStreamClassic) || (mode == ReaStreamMobile) || (mode == ReaInterConnect) )) { return; }
-	if (!( (protocol == UDP) || (protocol == TCP) || (protocol == SharedMemory) || (protocol == USB) )) { return; }
+	if (! isValidEnum(direction) ) { return; }
+	if (! isValidEnum(mode) ) { return; }
+	if (! isValidEnum(protocol) ) { return; }
 		// TODO: Some input validation needs to be done here
 		
 	closeCurrentConecction();
