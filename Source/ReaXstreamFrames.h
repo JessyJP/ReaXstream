@@ -22,8 +22,8 @@
 
 //=================================================================================
 // This section implements the Classic ReaStream Implementation
-const unsigned int headerByteCount = 47;// Byte size sum of the header properties
-const unsigned int MUT = 1200+headerByteCount;// MUT (Maximum Unit Transmission) in bytes per UDP frame.
+const unsigned int headerByteSize = 47;// Byte size sum of the header properties
+const unsigned int MUT = 1200+headerByteSize;// MUT (Maximum Unit Transmission) in bytes per UDP frame.
 // The header contains 47 bytes and the audio data contains 1200 bytes.
 
 

@@ -72,9 +72,9 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
 {
     // Increment the packet index
     this->packetIndex++;
-    // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
+    // This copies the first [this->headerByteSize == 47 (usually)] bytes from the header
     sampleByteSize = numAudioChannels * samplesToRead * sizeof(float);
-    packetSize = sampleByteSize + headerByteCount;
+    packetSize = sampleByteSize + headerByteSize;
     // Change this to std::copy method
     int c = 0;// Counter
     memcpy(UDPbuffer + ind.i_packetID, packetID, sizeof(packetID)); c += sizeof(packetID);
@@ -95,7 +95,7 @@ void ReaStreamClassicFrame::packNextAudioBufferInRSframe(juce::AudioBuffer<float
 
 void ReaStreamClassicFrame::unpackUDPheaderToRSframe(char* UDP_frameHeader)
 {
-    // This copies the first [this->headerByteCount == 47 (usually)] bytes from the header
+    // This copies the first [this->headerByteSize == 47 (usually)] bytes from the header
     int c = 0;
     memcpy(packetID, UDP_frameHeader + c, sizeof(packetID));                   c += sizeof(packetID);
     memcpy(&packetSize, UDP_frameHeader + c, sizeof(packetSize));              c += sizeof(packetSize);

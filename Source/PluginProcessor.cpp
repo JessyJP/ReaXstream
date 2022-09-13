@@ -256,7 +256,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
     }
     //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
     // Determine the if segmentation is needed or not
-    int audioSamplesPerFrame = (MUT - headerByteCount) / (buffer.getNumChannels() * sizeof(float));
+    int audioSamplesPerFrame = (MUT - headerByteSize) / (buffer.getNumChannels() * sizeof(float));
 
     //Pack the buffer
     int audioSampleBuffInd = 0;
@@ -267,7 +267,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         if (audioSampleBuffInd + audioSamplesPerFrame > buffer.getNumSamples())
         {
             audioSamplesPerFrame = buffer.getNumSamples() - audioSampleBuffInd;
-            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + headerByteCount;
+            bytesToWrite = audioSamplesPerFrame * buffer.getNumChannels() * sizeof(float) + headerByteSize;
         }
 
         rsHeader.packNextAudioBufferInRSframe(buffer, UDPpackPayload, audioSampleBuffInd, audioSamplesPerFrame);
@@ -290,14 +290,14 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
 {
     //  Variables to determine the how many packet-frames per buffer are needed and to handle the data overflow.
     const int audioSamples_NeededInBuffer = buffer.getNumSamples();
-    int audioSamples_ReadCounter = 0;
+    int audioSamples_WriteCounter = 0;
     int audioSamples_InTheCurrentFrame = 0;
     int audioSamples_UntilBufferIsFull = 0;
     int audioSamples_OverFlow = 0;
     // There are 2 strategies.
     // Strategy 1: Read until the audio buffer is full and store the leftover for the next buffer request.
     // Strategy 2: Read until the UDP buffer is empty and store the leftover.
-    while (audioSamples_ReadCounter < audioSamples_NeededInBuffer)
+    while (audioSamples_WriteCounter < audioSamples_NeededInBuffer)
     {
         // Read the UPD packet data
         udp->read((void*)UDPpackDataRead, MUT, false);
