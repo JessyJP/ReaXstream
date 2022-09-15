@@ -21,12 +21,17 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include <JuceHeader.h>
-#include "Enumerations.h"
 #include "PluginProcessor.h"
-
+#include "Enumerations.h"
 // The enumeration conversions can be done here or in the interconnector.
 // It is more appropriate for all of that to be handled as early as possible,
 // there fore enumeration and input validation can be handled at the scource.
+
+
+// Level meter components
+#include "../Submodules/sound_meter/meter/sd_MetersComponent.h"
+//#include "jucetice_HighQualityMeter.h"
+
 //[/Headers]
 
 
@@ -102,6 +107,9 @@ private:
     // Set the plugin processor pointer reference.
     ReaXstreamAudioProcessor* rxAudioProcessor;
     bool flagChangeGUIstate;// This flag indicates a change in the GUI
+
+    std::unique_ptr<sd::SoundMeter::MetersComponent> level_meter;
+
 
     //[/UserVariables]
 

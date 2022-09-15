@@ -139,6 +139,27 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterChannel.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterFader.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterHeader.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterHelpers.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterLevel.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MetersComponent.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterSegment.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\Source\DiagnosticWindowGUI.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\ReaXstreamGUI.cpp"/>
@@ -2299,6 +2320,13 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterChannel.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterFader.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterHeader.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterHelpers.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterLevel.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MetersComponent.h"/>
+    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterSegment.h"/>
     <ClInclude Include="..\..\Source\DiagnosticWindowGUI.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
     <ClInclude Include="..\..\Source\ReaXstreamGUI.h"/>

@@ -20,6 +20,10 @@
 //[Headers] You can add your own extra header files here...
 #include "Logger.h"
 #include <cassert>
+
+// Options class is defined in
+//#include "../Submodules/sound_meter/meter/sd_MeterHelpers.h"
+
 //[/Headers]
 
 #include "ReaXstreamGUI.h"
@@ -196,6 +200,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[UserPreSize]
+
     // ---- This section modifies the communication protocols.
     // By default all transmission/reception protocols should be disabled unitl the user selelcts the communication mode.
     for (int i = 0; i < comboBox_transmissionProtocol->getNumItems(); i++)// i is the item index
@@ -223,6 +228,21 @@ ReaXstreamGUI::ReaXstreamGUI ()
  //   textEditor_identifier->addListener(this);//TODO figure out the texteditor callback methods
     // It's most likely quite tricky to have *this (dual meaning here) componenet to inherit from the Listner::TextEdit Class.
 
+    // ---- This section creates the custom level meter
+    level_meter.reset( new sd::SoundMeter::MetersComponent());
+//    level_meter->setChannelFormat(juce::AudioChannelSet::stereo());
+//    addAndMakeVisible(level_meter.get());
+//    // Set options
+//    sd::SoundMeter::Options meterOptions;
+//    meterOptions.faderEnabled = true;
+//    meterOptions.headerEnabled = true;
+//    meterOptions.peakRegion_db = -3.0f;
+//    meterOptions.warningRegion_db = -12.0f;
+//    level_meter->setOptions(meterOptions);
+
+//    level_meter->setBounds(200,  20 , 100, 200 );
+
+
 
     //[/UserPreSize]
 
@@ -230,6 +250,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    setSize(300 + 200, 450);// Fоr testing
     //[/Constructor]
 }
 

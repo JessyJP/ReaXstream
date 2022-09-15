@@ -6,6 +6,34 @@
               cppLanguageStandard="latest" pluginVST3Category="Network">
   <MAINGROUP id="DkRmHL" name="ReaXstream">
     <GROUP id="{A5D06A54-19C9-830A-09FE-70A98545D208}" name="GUI-source">
+      <GROUP id="{8DD8F36E-7E1E-D6EB-14B5-1E1088CBC6C1}" name="Sound-Meter">
+        <FILE id="njqf6j" name="sd_MeterChannel.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterChannel.cpp"/>
+        <FILE id="PYRtEo" name="sd_MeterChannel.h" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterChannel.h"/>
+        <FILE id="wNPGqa" name="sd_MeterFader.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterFader.cpp"/>
+        <FILE id="RR7Hk9" name="sd_MeterFader.h" compile="0" resource="0" file="Submodules/sound_meter/meter/sd_MeterFader.h"/>
+        <FILE id="mMk5MB" name="sd_MeterHeader.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterHeader.cpp"/>
+        <FILE id="oGiP75" name="sd_MeterHeader.h" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterHeader.h"/>
+        <FILE id="xy0Vkt" name="sd_MeterHelpers.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterHelpers.cpp"/>
+        <FILE id="S43C1O" name="sd_MeterHelpers.h" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterHelpers.h"/>
+        <FILE id="X1GdsW" name="sd_MeterLevel.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterLevel.cpp"/>
+        <FILE id="BoXOfB" name="sd_MeterLevel.h" compile="0" resource="0" file="Submodules/sound_meter/meter/sd_MeterLevel.h"/>
+        <FILE id="XPxWm4" name="sd_MetersComponent.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MetersComponent.cpp"/>
+        <FILE id="mRFdts" name="sd_MetersComponent.h" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MetersComponent.h"/>
+        <FILE id="Orow9M" name="sd_MeterSegment.cpp" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterSegment.cpp"/>
+        <FILE id="Mldqxa" name="sd_MeterSegment.h" compile="0" resource="0"
+              file="Submodules/sound_meter/meter/sd_MeterSegment.h"/>
+      </GROUP>
       <FILE id="a3Ou1N" name="DiagnosticWindowGUI.cpp" compile="1" resource="0"
             file="Source/DiagnosticWindowGUI.cpp"/>
       <FILE id="mhtguk" name="DiagnosticWindowGUI.h" compile="0" resource="0"

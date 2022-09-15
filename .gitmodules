@@ -1,0 +1,9 @@
+[submodule "Submodules/sound_meter"]
+	path = Submodules/sound_meter
+	url = https://github.com/SoundDevelopment/sound_meter
+[submodule "Submodules/level-meter-demo"]
+	path = Submodules/level-meter-demo
+	url = https://github.com/Thrifleganger/level-meter-demo
+[submodule "Submodules/juced"]
+	path = Submodules/juced
+	url = https://github.com/kunitoki/juced
