@@ -41,6 +41,8 @@ public:
     // Methods called by the processBlock method
     void ReaStreamClassicUDPtransmission(juce::AudioBuffer<float>& buffer);
     void ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer);
+    
+    void computeAudiolevels(juce::AudioBuffer<float>& buffer);
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -73,6 +75,12 @@ public:
     void* getSet_ReaXstreamGUIpointer(void* ptr_in);
 
 private:
+
+    // Audio level statistic Variables
+    float rmsLevel_L, rmsLevel_R;
+    float maxLevel_L, maxLevel_R;
+
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaXstreamAudioProcessor)
 };

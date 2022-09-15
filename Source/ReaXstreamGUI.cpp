@@ -132,13 +132,6 @@ ReaXstreamGUI::ReaXstreamGUI ()
     textEditor_identifier->setPopupMenuEnabled (true);
     textEditor_identifier->setText (TRANS("default"));
 
-    button_apply.reset (new juce::TextButton ("apply_button"));
-    addAndMakeVisible (button_apply.get());
-    button_apply->setButtonText (TRANS("Apply"));
-    button_apply->addListener (this);
-
-    button_apply->setBounds (80, 392, 144, 24);
-
     label_directionOfConnection.reset (new juce::Label ("directionOfConnectionLabel",
                                                         TRANS("Direction Of Connection")));
     addAndMakeVisible (label_directionOfConnection.get());
@@ -190,29 +183,29 @@ ReaXstreamGUI::ReaXstreamGUI ()
     hyperlink_gitHub->setTooltip (TRANS("https://github.com/JessyJP/ReaXstream"));
     hyperlink_gitHub->setButtonText (TRANS("link to GitHub"));
 
-    juce__label6.reset (new juce::Label ("new label",
-                                         TRANS("+++ PUT Audio Levels here\n")));
-    addAndMakeVisible (juce__label6.get());
-    juce__label6->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    juce__label6->setJustificationType (juce::Justification::centredLeft);
-    juce__label6->setEditable (false, false, false);
-    juce__label6->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    juce__label6->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label_dbLevelRMS.reset (new juce::Label ("dbLevelRMS_label",
+                                             TRANS("-inf")));
+    addAndMakeVisible (label_dbLevelRMS.get());
+    label_dbLevelRMS->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_dbLevelRMS->setJustificationType (juce::Justification::centredLeft);
+    label_dbLevelRMS->setEditable (false, false, false);
+    label_dbLevelRMS->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label_dbLevelRMS->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    juce__label6->setBounds (48, 424, 208, 24);
+    label_dbLevelRMS->setBounds (32, 392, 48, 48);
 
 
     //[UserPreSize]
     // ---- This section modifies the communication protocols.
     // By default all transmission/reception protocols should be disabled unitl the user selelcts the communication mode.
     for (int i = 0; i < comboBox_transmissionProtocol->getNumItems(); i++)// i is the item index
-    {// The loop is standard C++ loop starting at 0 and up to but exluding a fixed limit. 
+    {// The loop is standard C++ loop starting at 0 and up to but exluding a fixed limit.
      // The combo box indices, however, start 1 one and go to the limit.
      // But the indexing of the items will start from 0
         assert(comboBox_transmissionProtocol->getItemId(i) != 0);
         comboBox_transmissionProtocol->setItemEnabled(i+1, false);
     }
-    
+
     // ---- This section modifies the input textfields
     // Change the size of the font
     juce::String tmpStr = "";
@@ -251,14 +244,13 @@ ReaXstreamGUI::~ReaXstreamGUI()
     comboBox_transmissionProtocol = nullptr;
     textEditor_ipUrlPort = nullptr;
     textEditor_identifier = nullptr;
-    button_apply = nullptr;
     label_directionOfConnection = nullptr;
     label_modeOfOperation = nullptr;
     label_transmissionProtocolLabel = nullptr;
     label_ipaddres = nullptr;
     label_identifierLabel = nullptr;
     hyperlink_gitHub = nullptr;
-    juce__label6 = nullptr;
+    label_dbLevelRMS = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -331,23 +323,6 @@ void ReaXstreamGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     LOG(LOG_GUI,"[ReaXstreamGUI] requestests for reset from the GUI side!")
     this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
     //[/UsercomboBoxChanged_Post]
-}
-
-void ReaXstreamGUI::buttonClicked (juce::Button* buttonThatWasClicked)
-{
-    //[UserbuttonClicked_Pre]
-    //[/UserbuttonClicked_Pre]
-
-    if (buttonThatWasClicked == button_apply.get())
-    {
-        //[UserButtonCode_button_apply] -- add your button handler code here..
-//        textEditorTextChanged();
-        //[/UserButtonCode_button_apply]
-    }
-
-    //[UserbuttonClicked_Post]
-    this->rxAudioProcessor->requestConnectionReset(this->checkGUIstateChanged());
-    //[/UserbuttonClicked_Post]
 }
 
 
@@ -451,7 +426,7 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
 {
     // Get list for the available protocols for the corresponding mode of operation
     std::list<TransmissionProtocol> availableProtocolList = getAvailableProtocolByModeOfOperation(mode);
-    
+
     // Just some logging for display purposess
     LOG(LOG_INFO, "");
     LOG(LOG_INFO, convertEnum2String(mode));
@@ -492,7 +467,7 @@ void ReaXstreamGUI::updateTransmissionProtocolsForModeSelection(ModeOfOperation 
             comboBox_transmissionProtocol->setItemEnabled(TP_ID,false);
             LOG(LOG_GUI, "Disabled: " + convertEnum2String(TP_ID));
         }
-        
+
     }
 }
 
@@ -541,9 +516,6 @@ BEGIN_JUCER_METADATA
               virtualName="" explicitFocusOrder="0" pos="0Cc -32R 280 32" posRelativeX="24663907342789dd"
               posRelativeY="24663907342789dd" initialText="default" multiline="0"
               retKeyStartsLine="0" readonly="0" scrollbars="0" caret="1" popupmenu="1"/>
-  <TEXTBUTTON name="apply_button" id="d34c5dc5dafae149" memberName="button_apply"
-              virtualName="" explicitFocusOrder="0" pos="80 392 144 24" buttonText="Apply"
-              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <LABEL name="directionOfConnectionLabel" id="f95d663081268283" memberName="label_directionOfConnection"
          virtualName="" explicitFocusOrder="0" pos="0Cc 0r 220 16" posRelativeX="7c29d2021560a2d0"
          posRelativeY="7c29d2021560a2d0" edTextCol="ff000000" edBkgCol="0"
@@ -579,11 +551,11 @@ BEGIN_JUCER_METADATA
                    posRelativeY="2b6750f7890c35fe" tooltip="https://github.com/JessyJP/ReaXstream"
                    buttonText="link to GitHub" connectedEdges="0" needsCallback="0"
                    radioGroupId="0" url="https://github.com/JessyJP/ReaXstream"/>
-  <LABEL name="new label" id="ea426327de1b3551" memberName="juce__label6"
-         virtualName="" explicitFocusOrder="0" pos="48 424 208 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="+++ PUT Audio Levels here&#10;" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="33"/>
+  <LABEL name="dbLevelRMS_label" id="ea426327de1b3551" memberName="label_dbLevelRMS"
+         virtualName="" explicitFocusOrder="0" pos="32 392 48 48" edTextCol="ff000000"
+         edBkgCol="0" labelText="-inf" editableSingleClick="0" editableDoubleClick="0"
+         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
+         kerning="0.0" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

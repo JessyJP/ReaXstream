@@ -40,8 +40,7 @@
                                                                     //[/Comments]
 */
 class ReaXstreamGUI  : public juce::Component,
-                       public juce::ComboBox::Listener,
-                       public juce::Button::Listener
+                       public juce::ComboBox::Listener
 {
 public:
     //==============================================================================
@@ -92,7 +91,6 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
-    void buttonClicked (juce::Button* buttonThatWasClicked) override;
 
 
 
@@ -114,14 +112,13 @@ private:
     std::unique_ptr<juce::ComboBox> comboBox_transmissionProtocol;
     std::unique_ptr<juce::TextEditor> textEditor_ipUrlPort;
     std::unique_ptr<juce::TextEditor> textEditor_identifier;
-    std::unique_ptr<juce::TextButton> button_apply;
     std::unique_ptr<juce::Label> label_directionOfConnection;
     std::unique_ptr<juce::Label> label_modeOfOperation;
     std::unique_ptr<juce::Label> label_transmissionProtocolLabel;
     std::unique_ptr<juce::Label> label_ipaddres;
     std::unique_ptr<juce::Label> label_identifierLabel;
     std::unique_ptr<juce::HyperlinkButton> hyperlink_gitHub;
-    std::unique_ptr<juce::Label> juce__label6;
+    std::unique_ptr<juce::Label> label_dbLevelRMS;
 
 
     //==============================================================================

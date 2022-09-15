@@ -233,6 +233,9 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     // TODO: should i keep that part?
+
+    // Compute the audio levels for visuals
+    computeAudiolevels(buffer);
 }
 
 //==============================================================================
@@ -360,6 +363,24 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
     }
 
     LOG(LOG_WARNING, "DONT't forget to take care of the pottential overflow");// TODO
+}
+
+void ReaXstreamAudioProcessor::computeAudiolevels(juce::AudioBuffer<float>& buffer)
+{
+    //Todo: consider a loop for more than 2 channels
+    // Compute the RMS values per channel 
+    rmsLevel_L = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
+    rmsLevel_R = buffer.getRMSLevel(1, 0, buffer.getNumSamples());
+    // Compute the Max values per channel
+    maxLevel_L = buffer.getMagnitude(0, 0, buffer.getNumSamples());
+    maxLevel_R = buffer.getMagnitude(2, 0, buffer.getNumSamples());
+
+    // Generally the output should be in decibels 
+    rmsLevel_L = juce::Decibels::gainToDecibels(rmsLevel_L);
+    rmsLevel_R = juce::Decibels::gainToDecibels(rmsLevel_R);
+    maxLevel_L = juce::Decibels::gainToDecibels(maxLevel_L);
+    maxLevel_R = juce::Decibels::gainToDecibels(maxLevel_R);
+
 }
 
 
