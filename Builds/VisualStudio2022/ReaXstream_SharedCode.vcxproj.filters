@@ -580,6 +580,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\DiagnosticWindowGUI.cpp">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginEditor.cpp">
       <Filter>ReaXstream\GUI-source</Filter>
     </ClCompile>
@@ -2907,6 +2910,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\DiagnosticWindowGUI.h">
+      <Filter>ReaXstream\GUI-source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
       <Filter>ReaXstream\GUI-source</Filter>
     </ClInclude>

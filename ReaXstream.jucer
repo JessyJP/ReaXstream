@@ -6,12 +6,16 @@
               cppLanguageStandard="latest" pluginVST3Category="Network">
   <MAINGROUP id="DkRmHL" name="ReaXstream">
     <GROUP id="{A5D06A54-19C9-830A-09FE-70A98545D208}" name="GUI-source">
-      <FILE id="XUPr0p" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="a3Ou1N" name="DiagnosticWindowGUI.cpp" compile="1" resource="0"
+            file="Source/DiagnosticWindowGUI.cpp"/>
+      <FILE id="mhtguk" name="DiagnosticWindowGUI.h" compile="0" resource="0"
+            file="Source/DiagnosticWindowGUI.h"/>
       <FILE id="f2PXLr" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="U8zDm7" name="ReaXstreamGUI.h" compile="0" resource="0" file="Source/ReaXstreamGUI.h"/>
+      <FILE id="XUPr0p" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="MrZB0o" name="ReaXstreamGUI.cpp" compile="1" resource="0"
             file="Source/ReaXstreamGUI.cpp"/>
+      <FILE id="U8zDm7" name="ReaXstreamGUI.h" compile="0" resource="0" file="Source/ReaXstreamGUI.h"/>
     </GROUP>
     <GROUP id="{985457EF-C243-02DD-26CE-4FA66F87D473}" name="Source">
       <FILE id="CZP2bQ" name="ReaXstreamFrames.cpp" compile="1" resource="0"

@@ -20,6 +20,7 @@
 
 
 #define _CHECK_(call,output) // switched off state
+#define _SHOW_RESULTS_(fname) // switched off state
 
 #ifdef LOGGER_OFF
 
@@ -30,7 +31,7 @@
 
     #define _SHOW_RESULTS_(fname) std::cout<<"#fname summary ["<<UnitTestPassed<<"/"<<UnitTestIndex<<"] Passed" ;
 
-#endif
+#endif LOGGER_OFF
 
 
 
@@ -46,6 +47,11 @@
     #define _SHOW_RESULTS_(fname) LOG_UNIT_TEST("[ "+ #fname + " ] summary [" + std::to_string(UnitTestPassed) + "/" + std::to_string(UnitTestIndex) +  "] Passed") ;
 
 #endif LOGGER_ON
+
+
+#ifdef LOGGER_INTEGRATED
+#endif LOGGER_INTEGRATED
+
 
 #include "ReaXstreamGUI.h"
 

@@ -15,10 +15,11 @@ This is the file that will be updated along with new ideas, suggestions, notes a
 	- [x] Put it at the top of the GUI.
 	
 ### + Logger
-- [ ]  Improve the logger.
+- [x]  Improve the logger.
 	- [ ] Make the messages more useful and consistent.
-	- [ ] Logger button for enable/disable that hides/shows a 
+	- [x] Logger button for enable/disable that hides/shows a 
 		  separate logger windows or text field under the existing GUI.
+		- [ ] This introduces a problem that the logger window is not managed by the editor. Fix this bug.
 	- [ ] Decide if the logger should be kept in the releases, therefore the enable disable button should be very useful.
 		  In that case a location for file should be chosen.
 		  Naming scheme should be chosen.

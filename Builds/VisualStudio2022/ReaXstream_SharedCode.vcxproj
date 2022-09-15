@@ -139,6 +139,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\DiagnosticWindowGUI.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\ReaXstreamGUI.cpp"/>
     <ClCompile Include="..\..\Source\ReaXstreamFrames.cpp"/>
@@ -2298,6 +2299,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\DiagnosticWindowGUI.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
     <ClInclude Include="..\..\Source\ReaXstreamGUI.h"/>
     <ClInclude Include="..\..\Source\ReaXstreamFrames.h"/>
