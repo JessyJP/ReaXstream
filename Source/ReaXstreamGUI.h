@@ -29,8 +29,9 @@
 
 
 // Level meter components
-#include "../Submodules/sound_meter/meter/sd_MetersComponent.h"
+//#include "../Submodules/sound_meter/meter/sd_MetersComponent.h"
 //#include "jucetice_HighQualityMeter.h"
+#include "..\Submodules\level-meter-demo\Source\Component\HorizontalMeter.h"
 
 //[/Headers]
 
@@ -76,6 +77,9 @@ public:
     void setStateIpUrlPortTextEditor(std::string in_ipOrUrlPort);//IP/URL_PORT v.3: ip/url & port as one
     void setStateIpUrlPortTextEditor(std::string in_ipOrUrk, unsigned short in_port);//IP/URL_PORT v.4: ip/url & port
     void setStateIdentifierTextEditor(std::string in_identifier);
+    // Set audio levels and repaint
+    void setAudioLevelsAndRepaint(int channel, float level);
+
 
     // Method to set the apptopirate transmission protocols for the corresponding mode
     void updateTransmissionProtocolsForModeSelection(ModeOfOperation mode);
@@ -108,8 +112,10 @@ private:
     ReaXstreamAudioProcessor* rxAudioProcessor;
     bool flagChangeGUIstate;// This flag indicates a change in the GUI
 
-    std::unique_ptr<sd::SoundMeter::MetersComponent> level_meter;
-
+  //  std::unique_ptr<sd::SoundMeter::MetersComponent> level_meter;
+    std::unique_ptr<Gui::HorizontalMeter> level_meter_L;
+    std::unique_ptr<Gui::HorizontalMeter> level_meter_R;
+    
 
     //[/UserVariables]
 

@@ -229,7 +229,8 @@ ReaXstreamGUI::ReaXstreamGUI ()
     // It's most likely quite tricky to have *this (dual meaning here) componenet to inherit from the Listner::TextEdit Class.
 
     // ---- This section creates the custom level meter
-    level_meter.reset( new sd::SoundMeter::MetersComponent());
+    
+//    level_meter.reset( new sd::SoundMeter::MetersComponent());
 //    level_meter->setChannelFormat(juce::AudioChannelSet::stereo());
 //    addAndMakeVisible(level_meter.get());
 //    // Set options
@@ -240,8 +241,17 @@ ReaXstreamGUI::ReaXstreamGUI ()
 //    meterOptions.warningRegion_db = -12.0f;
 //    level_meter->setOptions(meterOptions);
 
-//    level_meter->setBounds(200,  20 , 100, 200 );
+    level_meter_L.reset( new Gui::HorizontalMeter());
+    level_meter_L->setBounds(10,  400 , 280, 16 );
+    level_meter_L->setBounds(10, 400, 280, 16);
+    addAndMakeVisible(level_meter_L.get());
+    level_meter_L->setLevel(-18.f);
 
+    level_meter_R.reset(new Gui::HorizontalMeter());
+    level_meter_R->setBounds(10, 400, 280, 16);
+    level_meter_R->setBounds(10, 400+8+16, 280, 16);
+    addAndMakeVisible(level_meter_R.get());
+    level_meter_R->setLevel(-18.f);
 
 
     //[/UserPreSize]
@@ -250,7 +260,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
 
 
     //[Constructor] You can add your own custom stuff here..
-    setSize(300 + 200, 450);// Fоr testing
+    //setSize(300 + 200, 450);// Fоr testing
     //[/Constructor]
 }
 
@@ -440,6 +450,20 @@ void ReaXstreamGUI::setStateIpUrlPortTextEditor(std::string in_ipOrUrk, unsigned
 }
 void ReaXstreamGUI::setStateIdentifierTextEditor(std::string in_identifier)
 {/*Todo finish this function*/
+}
+void ReaXstreamGUI::setAudioLevelsAndRepaint(int channel, float level)
+{
+    jassert(channel == 0 | channel == 1);
+    if (channel == 0) 
+    { 
+        level_meter_L->setLevel(level);
+        level_meter_L->repaint();
+    };
+    if (channel == 1) 
+    { 
+        level_meter_R->setLevel(level);
+        level_meter_R->repaint();
+    };
 }
 
 // Method to set the apptopirate transmission protocols for the corresponding mode
