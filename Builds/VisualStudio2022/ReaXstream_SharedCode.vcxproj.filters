@@ -2,9 +2,6 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ReaXstream\GUI-source\Sound-Meter">
-      <UniqueIdentifier>{AD46A73E-477B-20F4-B609-A8CC56EF37EC}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ReaXstream\GUI-source">
       <UniqueIdentifier>{A9C99A8A-57B7-5184-9A49-A0BDD4218E14}</UniqueIdentifier>
     </Filter>
@@ -583,27 +580,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterChannel.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterFader.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterHeader.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterHelpers.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterLevel.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MetersComponent.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Submodules\sound_meter\meter\sd_MeterSegment.cpp">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\DiagnosticWindowGUI.cpp">
       <Filter>ReaXstream\GUI-source</Filter>
     </ClCompile>
@@ -2934,27 +2910,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterChannel.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterFader.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterHeader.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterHelpers.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterLevel.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MetersComponent.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Submodules\sound_meter\meter\sd_MeterSegment.h">
-      <Filter>ReaXstream\GUI-source\Sound-Meter</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\DiagnosticWindowGUI.h">
       <Filter>ReaXstream\GUI-source</Filter>
     </ClInclude>
