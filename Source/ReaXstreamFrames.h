@@ -85,7 +85,11 @@ public:
     void unpackUDPheaderToRSframe(char* UDP_frameHeader);
 
     // This function will unapck the payload into the Audio Buffer
-    void unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData);
+    void unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData, int bufferSkipSamplesPerChannel);
+    void unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData, int bufferSkipSamplesPerChannel,
+                                        int sampelsToWritePerChannel, char* overFlowBuffer);
+    // Note: The max lenth of the overflow buffer has to be the MUT - headerByteSize
+    // TODO: the overflow buffer can be either float or byte type. The max
 
     // Print frame header info
     std::string printFrameHeader();

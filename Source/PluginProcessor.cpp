@@ -8,8 +8,11 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
+#include "Enumerations.h"
 #include "Logger.h"
+
+
+#include "UnitTest.h"// TODO: FOR TESTING !!!!!!!! REMOVE ME
 
 using namespace std;
 
@@ -46,6 +49,7 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
             1.0f,   // maximum value
             0.5f)); // default value
 
+    UnitTest_Enumerations();//TODO: this is UNIT TEST Fcuntion and has to be removed
 
 }
 
@@ -181,8 +185,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     if ( !connectionEstablishedOK || resetInterConnection ) { setupInterConnection(); return; }
     // This will allow the process loop to be bypassed when the connection is not setup.
 
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
+     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // ==== BEGIN: Main Control logic ====
@@ -192,7 +195,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             if (protocol == UDP)// At present lets support UDP connection only 
             {            
-                ReaStreamClassicUDPtransmission(buffer);
+//                ReaStreamClassicUDPtransmission(buffer);
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -217,7 +220,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             if (protocol == UDP)// At present lets support UDP connection only 
             {
-                ReaStreamClassicUDPreception(buffer);
+ //               ReaStreamClassicUDPreception(buffer);
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -246,6 +249,8 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     // TODO: should i keep that part?
 
     // Compute the audio levels for visuals
+    juce::ScopedNoDenormals noDenormals;
+
     computeAudiolevels(buffer);
 }
 
@@ -349,30 +354,48 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
         // Calculate the audio samples in the current frame
         audioSamples_InTheCurrentFrame = rsHeader.sampleByteSize / (rsHeader.numAudioChannels * sizeof(float));
         // Determine the buffer overflow
-        audioSamples_UntilBufferIsFull = audioSamples_NeededInBuffer - audioSamples_ReadCounter;
+        audioSamples_UntilBufferIsFull = audioSamples_NeededInBuffer - audioSamples_WriteCounter;
         if (audioSamples_UntilBufferIsFull <= audioSamples_InTheCurrentFrame)
         {
             audioSamples_OverFlow = audioSamples_InTheCurrentFrame - audioSamples_UntilBufferIsFull;
             if (audioSamples_UntilBufferIsFull == audioSamples_InTheCurrentFrame)
             {
                 LOG(LOG_INFO, "Buffer Exactly Full!");
+                // Copy the audio samples from frame to the buffer
+                rsHeader.unpackUDPpayloadToAudioBuffer(buffer, UDPpackDataRead + headerByteSize, audioSamples_WriteCounter);
             }
             else
             {               
+                // TODO: this has to call a method with an overflow handling capabilities
                 LOG(LOG_INFO, "audioSamples_UntilBufferIsFull ["+to_string(audioSamples_UntilBufferIsFull) + "]"+
                               "audioSamples_InTheCurrentFrame [" + to_string(audioSamples_InTheCurrentFrame) + "]"+
                               "audioSamples_OverFlow [" + to_string(audioSamples_OverFlow) + "]");
+                rsHeader.unpackUDPpayloadToAudioBuffer(buffer, UDPpackDataRead + headerByteSize, audioSamples_WriteCounter,
+                    audioSamples_UntilBufferIsFull,nullptr/*TODO: handle the overflow here*/);
             }
         }
+        else 
+        {
+            // Copy the audio samples from frame to the buffer
+            rsHeader.unpackUDPpayloadToAudioBuffer(buffer, UDPpackDataRead + headerByteSize, audioSamples_WriteCounter);
+            // Note: UDPpackDataRead + headerByteSize /* Offset/Skip the frame header to the samples*/
+        }
+        // TODO: a method to append to the begining of the buffer is needed
 
         // ++++ TODO
-        (UDPpackDataRead + headerByteCount); // Convert the data to floats
 
 
         
-        audioSamples_ReadCounter += audioSamples_InTheCurrentFrame;
+        audioSamples_WriteCounter += audioSamples_InTheCurrentFrame;
     }
 
+    // +++++++++++ TODO: testing code begin
+    
+
+    ReaXstreamGUI* guiPtr = (ReaXstreamGUI*)this->getSet_ReaXstreamGUIpointer(nullptr);
+    
+
+        // +++++++++++ TODO: testing code end
     LOG(LOG_WARNING, "DONT't forget to take care of the pottential overflow");// TODO
 }
 

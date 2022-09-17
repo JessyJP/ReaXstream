@@ -105,18 +105,46 @@ void ReaStreamClassicFrame::unpackUDPheaderToRSframe(char* UDP_frameHeader)
     memcpy(&sampleByteSize, UDP_frameHeader + c, sizeof(sampleByteSize));      c += sizeof(sampleByteSize);
 }
 
-void ReaStreamClassicFrame::unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData)
+void ReaStreamClassicFrame::unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData, int bufferSkipSamplesPerChannel)
 {
+    // the counter "int c" is in bytes but can be done with floats if all byte size values are devided by "sizeof(float)" and 
+    // "char* UDP_frameAudioData" be cast as "flaot* UDP_frameAudioData"
+    // int frameByteSizePerChannel = int(sampleByteSize / numAudioChannels) / sizeof(float);
+
+    // Determine the size of the frame bytes size per channel
+    int frameByteSizePerChannel = int(sampleByteSize / numAudioChannels);//i.e sizeof(channelData)
+  
     // The UPD payload has to be offset outside this method and here the begining of the data starts with the audio data
     int c = 0;
     for (int channel = 0; channel < numAudioChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer(channel);
-        memcpy(channelData, UDP_frameAudioData + c, int(sampleByteSize / numAudioChannels) );
-        c += sizeof(channelData);
-        //TODO some flags were supposed to be set
+        memcpy(channelData + bufferSkipSamplesPerChannel, UDP_frameAudioData + c, frameByteSizePerChannel);
+        c += frameByteSizePerChannel;
+        //TODO: some flags were supposed to be set i think! Check wit JUCE documentation 
     }
+}
 
+void ReaStreamClassicFrame::unpackUDPpayloadToAudioBuffer(juce::AudioBuffer<float>& buffer, char* UDP_frameAudioData, int bufferSkipSamplesPerChannel,
+                            int sampelsToWritePerChannel, char* overFlowBuffer)
+{
+    // the counter "int c" is in bytes but can be done with floats if all byte size values are devided by "sizeof(float)" and 
+    // "char* UDP_frameAudioData" be cast as "flaot* UDP_frameAudioData"
+    // int frameByteSizePerChannel = int(sampleByteSize / numAudioChannels) / sizeof(float);
+
+    // Determine the size of the frame bytes size per channel
+    int frameByteSizePerChannel = int(sampleByteSize / numAudioChannels);//i.e sizeof(channelData)
+
+    // The UPD payload has to be offset outside this method and here the begining of the data starts with the audio data
+    int c = 0;
+    for (int channel = 0; channel < numAudioChannels; ++channel)
+    {
+        auto* channelData = buffer.getWritePointer(channel);
+        memcpy(channelData + bufferSkipSamplesPerChannel, UDP_frameAudioData + frameByteSizePerChannel * channel, sampelsToWritePerChannel*sizeof(float));
+        c += frameByteSizePerChannel;
+        //TODO: some flags were supposed to be set i think! Check wit JUCE documentation 
+        //TODO: I have to handle the overflow here.
+    }
 }
 
 //=================================================================================
