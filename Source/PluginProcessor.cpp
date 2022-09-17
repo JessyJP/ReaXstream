@@ -121,6 +121,17 @@ void ReaXstreamAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
+    // Reset the meter values
+    rmsLevel_L.reset(sampleRate, 0.5);
+    rmsLevel_R.reset(sampleRate, 0.5);
+    maxLevel_L.reset(sampleRate, 0.5);
+    maxLevel_R.reset(sampleRate, 0.5);
+
+    rmsLevel_L.setCurrentAndTargetValue(-100.f);
+    rmsLevel_R.setCurrentAndTargetValue(-100.f);
+    maxLevel_L.setCurrentAndTargetValue(-100.f);
+    maxLevel_R.setCurrentAndTargetValue(-100.f);
+
     //++++++++++++++++++++++++++++++
     
 
@@ -368,19 +379,60 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
 void ReaXstreamAudioProcessor::computeAudiolevels(juce::AudioBuffer<float>& buffer)
 {
     //Todo: consider a loop for more than 2 channels
+    
+    // Get the number of samples
+    auto numSamplestoSkip = buffer.getNumSamples();
+    // The deay calculateions based on the skipped number of samples
+    rmsLevel_L.skip(numSamplestoSkip);
+    rmsLevel_R.skip(numSamplestoSkip);
+    maxLevel_L.skip(numSamplestoSkip);
+    maxLevel_R.skip(numSamplestoSkip);
+     
     // Compute the RMS values per channel 
-    rmsLevel_L = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
-    rmsLevel_R = buffer.getRMSLevel(1, 0, buffer.getNumSamples());
+    auto _rmsLevel_L = buffer.getRMSLevel(0, 0, buffer.getNumSamples());
+    auto _rmsLevel_R = buffer.getRMSLevel(1, 0, buffer.getNumSamples());
     // Compute the Max values per channel
-    maxLevel_L = buffer.getMagnitude(0, 0, buffer.getNumSamples());
-    maxLevel_R = buffer.getMagnitude(2, 0, buffer.getNumSamples());
+    auto _maxLevel_L = buffer.getMagnitude(0, 0, buffer.getNumSamples());
+    auto _maxLevel_R = buffer.getMagnitude(1, 0, buffer.getNumSamples());
 
     // Generally the output should be in decibels 
-    rmsLevel_L = juce::Decibels::gainToDecibels(rmsLevel_L);
-    rmsLevel_R = juce::Decibels::gainToDecibels(rmsLevel_R);
-    maxLevel_L = juce::Decibels::gainToDecibels(maxLevel_L);
-    maxLevel_R = juce::Decibels::gainToDecibels(maxLevel_R);
+    const auto __rmsLevel_L = juce::Decibels::gainToDecibels(_rmsLevel_L);
+    const auto __rmsLevel_R = juce::Decibels::gainToDecibels(_rmsLevel_R);
+    const auto __maxLevel_L = juce::Decibels::gainToDecibels(_maxLevel_L);
+    const auto __maxLevel_R = juce::Decibels::gainToDecibels(_maxLevel_R);
 
+    rmsLevel_L.skip(buffer.getNumSamples());
+    rmsLevel_R.skip(buffer.getNumSamples());
+    maxLevel_L.skip(buffer.getNumSamples());
+    maxLevel_R.skip(buffer.getNumSamples());
+
+    if (__rmsLevel_L < rmsLevel_L.getCurrentValue()) { rmsLevel_L.setTargetValue(__rmsLevel_L); }
+    else { rmsLevel_L.setCurrentAndTargetValue(__rmsLevel_L);}
+
+    if (__rmsLevel_R < rmsLevel_R.getCurrentValue()) { rmsLevel_R.setTargetValue(__rmsLevel_R); }
+    else { rmsLevel_R.setCurrentAndTargetValue(__rmsLevel_R); }
+
+    if (__maxLevel_L < maxLevel_L.getCurrentValue()) { maxLevel_L.setTargetValue(__maxLevel_L); }
+    else { maxLevel_L.setCurrentAndTargetValue(__maxLevel_L); }
+
+    if (__maxLevel_R < maxLevel_R.getCurrentValue()) { maxLevel_R.setTargetValue(__maxLevel_R); }
+    else { maxLevel_R.setCurrentAndTargetValue(__maxLevel_R); }
+
+
+}
+
+float ReaXstreamAudioProcessor::getChannelRMS(int channel)
+{
+    jassert(channel == 0 | channel == 1);
+    if (channel == 0) { return rmsLevel_L.getCurrentValue(); }
+    if (channel == 1) { return rmsLevel_R.getCurrentValue(); }
+}
+
+float ReaXstreamAudioProcessor::getChannelMax(int channel)
+{
+    jassert(channel == 0 | channel == 1);
+    if (channel == 0) { return maxLevel_L.getCurrentValue(); }
+    if (channel == 1) { return maxLevel_R.getCurrentValue(); }
 }
 
 

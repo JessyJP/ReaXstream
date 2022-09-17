@@ -43,6 +43,8 @@ public:
     void ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer);
     
     void computeAudiolevels(juce::AudioBuffer<float>& buffer);
+    float getChannelRMS(int channel);
+    float getChannelMax(int channel);
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -77,8 +79,8 @@ public:
 private:
 
     // Audio level statistic Variables
-    float rmsLevel_L, rmsLevel_R;
-    float maxLevel_L, maxLevel_R;
+    juce::LinearSmoothedValue<float> rmsLevel_L, rmsLevel_R;
+    juce::LinearSmoothedValue<float> maxLevel_L, maxLevel_R;
 
 
     //==============================================================================
