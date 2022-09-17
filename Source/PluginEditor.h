@@ -15,7 +15,7 @@
 //==============================================================================
 /**
 */
-class ReaXstreamAudioProcessorEditor  : public juce::AudioProcessorEditor
+class ReaXstreamAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     ReaXstreamAudioProcessorEditor (ReaXstreamAudioProcessor&);
@@ -24,6 +24,9 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    //==============================================================================
+    void timerCallback() override;
 
 private:
     // This reference is provided as a quick way for your editor to
