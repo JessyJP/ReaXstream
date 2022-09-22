@@ -31,15 +31,15 @@ ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()
     // Calling 
     , Interconnector() , ReaStreamFrame()
 {
-
-    LOG(LOG_INFO, LoggerWelcomeMessage);
+    static const std::string name_thisMethod = "[ReaXstreamAudioProcessor::ReaXstreamAudioProcessor()]: ";// Prefix for loggin
+    LOG(LOG_INFO, name_thisMethod + LoggerWelcomeMessage);
      
     if (!connectionEstablishedOK)
     {
-        LOG(LOG_WARNING,"Requesting to setup the plugin inputs!!!")
+        LOG(LOG_WARNING, name_thisMethod+"Requesting to setup the plugin inputs!!!")
     }
     rsHeader.printFrameHeader();
-    LOG(LOG_WARNING," This part is not finished!!!")
+    LOG(LOG_WARNING, name_thisMethod+"This part is not finished!!!")
 
         //++++++++++++++++TODO: test parameter
 
@@ -181,38 +181,38 @@ bool ReaXstreamAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 
 void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-
+    const std::string name_thisMethod = "[ReaXstreamAudioProcessor::processBlock(...)]:";// Prefix for loggin
     if ( !connectionEstablishedOK || resetInterConnection ) { setupInterConnection(); return; }
     // This will allow the process loop to be bypassed when the connection is not setup.
 
-     auto totalNumInputChannels = getTotalNumInputChannels();
+    juce::ScopedNoDenormals noDenormals;// TODO: I don't know what this is for!
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // ==== BEGIN: Main Control logic ====
+    // The inputs for the control flow validated when the connection is established
     if (direction == DirectionOfConnection::HostServerTransmitter)
     {
         if  (mode == ModeOfOperation::ReaStreamClassic) 
         {
             if (protocol == UDP)// At present lets support UDP connection only 
             {            
+                LOG(LOG_INFO, name_thisMethod + " ReaStreamClassicUDPtransmission(buffer) -> called");
 //                ReaStreamClassicUDPtransmission(buffer);
+                LOG(LOG_INFO, name_thisMethod + " ReaStreamClassicUDPtransmission(buffer) -> done");
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
             if (protocol == UDP)
             {
-//           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
-//           interleaveAudioBuffer(buffer);
-                LOG(LOG_WARNING, "Protocols not implemented!")
+  
             }
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
-            LOG(LOG_WARNING, "Protocols not implemented!")
+            LOG(LOG_WARNING, name_thisMethod + "Protocols not implemented!")
         }
-        else { LOG(LOG_ERROR, "No such mode of opperation!") }
-
     }
     else if (direction == DirectionOfConnection::ClientReceiver)
     {
@@ -225,16 +225,16 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
         {
-            LOG(LOG_WARNING, "Protocols not implemented!")
+            LOG(LOG_INFO, name_thisMethod + " unpackTransmissionPackToAudioBuffer(buffer) -> called");
+//           ReaStreamFrame::unpackTransmissionPackToAudioBuffer(buffer);
+//           interleaveAudioBuffer(buffer);
+            LOG(LOG_INFO, name_thisMethod + " unpackTransmissionPackToAudioBuffer(buffer) -> done");
         }
         else if (mode == ModeOfOperation::ReaInterConnect)
         {
-            LOG(LOG_WARNING, "Protocols not implemented!")
+            LOG(LOG_WARNING, name_thisMethod + "Protocols not implemented!")
         }
-        else { LOG(LOG_ERROR, "No such mode of opperation!") }
-    
     }
-    else { LOG(LOG_ERROR, "No such direction of transmission!") }
 
     // ==== END: Main Control logic ====
 
@@ -248,16 +248,20 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         buffer.clear (i, 0, buffer.getNumSamples());
     // TODO: should i keep that part?
 
-    // Compute the audio levels for visuals
-    juce::ScopedNoDenormals noDenormals;
+    // Only compute the audio buffer is the GUI is created and active
+    if (editorIsCreatedAndActiveState)
+    {
+        // Compute the audio levels for the GUI
+        computeAudiolevels(buffer);
+    }
 
-    computeAudiolevels(buffer);
 }
 
 //==============================================================================
 // This section contins the methods called by blcok process loop
 void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer<float>& buffer)
 {
+    const std::string name_thisMethod = "[ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(...)]:";// Prefix for loggin
     // If connection and therefore frame is requested
     if (resetFrame)
     {
@@ -298,7 +302,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         audioSampleBuffInd += audioSamplesPerFrame;
 
         // Diagnostic message
-        LOG(LOG_FRAME(rsHeader.packetIndex), rsHeader.printFrameHeader());
+        LOG(LOG_FRAME(name_thisMethod,rsHeader.packetIndex), rsHeader.printFrameHeader());
     }
     // TODO: lots of bug fixing here
     
@@ -307,6 +311,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
 
 void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<float>& buffer)
 {
+    const std::string name_thisMethod = "[ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(...)]:";// Prefix for loggin
     //  Variables to determine the how many packet-frames per buffer are needed and to handle the data overflow.
     const int audioSamples_NeededInBuffer = buffer.getNumSamples();
     int audioSamples_WriteCounter = 0;
@@ -326,30 +331,30 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
         // Do validation/checks on the header
         // 1. Check the frame signature: if it matches it is a valid packet header; if not return and check on the next buffer.
         if (!rsHeader.isValidPacketID()) 
-        { LOG(LOG_INFO,"[ReceptionClient][ReaStreamClassic][UDP]=> No Packets found!"); return; }
+        { LOG(LOG_INFO, name_thisMethod+"[ReceptionClient][ReaStreamClassic][UDP]=> No Packets found!"); return; }
         // 2. Check the interconnect ID: if it matches it proceed; if not bet the next UDP payload-frame.
         if (connectionIdentifier != rsHeader.interconnectID)
         { 
-            LOG(LOG_FRAME(-1), "Frame[" + connectionIdentifier + "] =/= [" + rsHeader.interconnectID + "]");
+            LOG(LOG_FRAME(name_thisMethod, -1), "Frame[" + connectionIdentifier + "] =/= [" + rsHeader.interconnectID + "]");
             continue;
         }       
         // 3. Check the number of channels: if it matches it proceed; if not ++++TODO: come back to that later
         if (rsHeader.numAudioChannels != buffer.getNumChannels()) 
         {
-            LOG(LOG_ERROR, "The numberof channels [" + to_string(getTotalNumInputChannels()) +
+            LOG(LOG_ERROR, name_thisMethod + "The numberof channels [" + to_string(getTotalNumInputChannels()) +
                             "] != [" + to_string(rsHeader.numAudioChannels) + "]" ) ;
             continue;// TODO: how will that be handled??
         }
         // 4. Check the audio sample rate: if it matches it proceed; if not ++++TODO: come back to that later
         if ( rsHeader.audioSampleRate != getSampleRate() )
         {
-            LOG(LOG_ERROR, "The sample rate [" + to_string(getSampleRate()) +
+            LOG(LOG_ERROR, name_thisMethod + "The sample rate [" + to_string(getSampleRate()) +
                             "] != [" + to_string(rsHeader.numAudioChannels) + "] in the frame.");
             continue;// TODO: how will that be handled??
         }
         
         // The header is check and validated, now pass the UDP audio data payload to the audio buffer
-        LOG(LOG_FRAME(++rsHeader.packetIndex), rsHeader.printFrameHeader());
+        LOG(LOG_FRAME(name_thisMethod, ++rsHeader.packetIndex), rsHeader.printFrameHeader());
 
         // Calculate the audio samples in the current frame
         audioSamples_InTheCurrentFrame = rsHeader.sampleByteSize / (rsHeader.numAudioChannels * sizeof(float));
@@ -360,14 +365,15 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
             audioSamples_OverFlow = audioSamples_InTheCurrentFrame - audioSamples_UntilBufferIsFull;
             if (audioSamples_UntilBufferIsFull == audioSamples_InTheCurrentFrame)
             {
-                LOG(LOG_INFO, "Buffer Exactly Full!");
+                LOG(LOG_INFO, name_thisMethod + "Buffer Exactly Full!");
                 // Copy the audio samples from frame to the buffer
                 rsHeader.unpackUDPpayloadToAudioBuffer(buffer, UDPpackDataRead + headerByteSize, audioSamples_WriteCounter);
             }
             else
             {               
                 // TODO: this has to call a method with an overflow handling capabilities
-                LOG(LOG_INFO, "audioSamples_UntilBufferIsFull ["+to_string(audioSamples_UntilBufferIsFull) + "]"+
+                LOG(LOG_INFO, name_thisMethod +
+                              "audioSamples_UntilBufferIsFull ["+to_string(audioSamples_UntilBufferIsFull) + "]"+
                               "audioSamples_InTheCurrentFrame [" + to_string(audioSamples_InTheCurrentFrame) + "]"+
                               "audioSamples_OverFlow [" + to_string(audioSamples_OverFlow) + "]");
                 rsHeader.unpackUDPpayloadToAudioBuffer(buffer, UDPpackDataRead + headerByteSize, audioSamples_WriteCounter,
@@ -396,7 +402,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPreception(juce::AudioBuffer<fl
     
 
         // +++++++++++ TODO: testing code end
-    LOG(LOG_WARNING, "DONT't forget to take care of the pottential overflow");// TODO
+    LOG(LOG_WARNING, name_thisMethod + "DONT't forget to take care of the pottential overflow");// TODO
 }
 
 void ReaXstreamAudioProcessor::computeAudiolevels(juce::AudioBuffer<float>& buffer)
@@ -468,6 +474,20 @@ bool ReaXstreamAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor* ReaXstreamAudioProcessor::createEditor()
 {
     return new ReaXstreamAudioProcessorEditor (*this);
+}
+
+void ReaXstreamAudioProcessor::setEditorCreateState(bool editorCreatedIsTure)
+{
+    const std::string name_thisMethod = "[ReaXstreamAudioProcessor::setEditorCreateState(...)]:";// Prefix for loggin
+    editorIsCreatedAndActiveState = editorCreatedIsTure;
+    if (editorIsCreatedAndActiveState)
+    {
+        LOG(LOG_INFO, name_thisMethod + "The [Audio Processor] has been infromed that [Editor GUI] as been created and is active!");
+    }
+    else
+    {
+        LOG(LOG_INFO, name_thisMethod + "The [Audio Processor] has been infromed that [Editor GUI] as been destoryed and is not active!");
+    }
 }
 
 //==============================================================================

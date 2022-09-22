@@ -115,7 +115,7 @@ private:
   //  std::unique_ptr<sd::SoundMeter::MetersComponent> level_meter;
     std::unique_ptr<Gui::HorizontalMeter> level_meter_L;
     std::unique_ptr<Gui::HorizontalMeter> level_meter_R;
-    
+
 
     //[/UserVariables]
 
@@ -132,7 +132,8 @@ private:
     std::unique_ptr<juce::Label> label_ipaddres;
     std::unique_ptr<juce::Label> label_identifierLabel;
     std::unique_ptr<juce::HyperlinkButton> hyperlink_gitHub;
-    std::unique_ptr<juce::Label> label_dbLevelRMS;
+    std::unique_ptr<juce::Label> label_dbLevelRMS_L;
+    std::unique_ptr<juce::Label> label_dbLevelRMS_R;
 
 
     //==============================================================================

@@ -8,12 +8,13 @@
 #define LoggerWelcomeMessage  "ReaXstream Starting!"
 
 // The output types
-#define LOG_INFO        "ReaXstream [INFO]:  "
-#define LOG_GUI			"ReaXstream [GUI]:  "
-#define LOG_FRAME(x)     std::string("ReaXstream [Packet][")+ std::to_string(x)+std::string("]:  ")
-#define LOG_DEBUG       "ReaXstream [DEBUG]:  "
-#define LOG_WARNING     "ReaXstream [WARNING]:  "
-#define LOG_ERROR       "ReaXstream [ERROR]:  "
+#define LOG_INFO        "ReaXstream |INFO|:"
+#define LOG_GUI			"ReaXstream |GUI|:"
+#define LOG_DEBUG       "ReaXstream |DEBUG]:"
+#define LOG_WARNING     "ReaXstream |WARNING|:"
+#define LOG_ERROR       "ReaXstream |ERROR|:"
+// More specialized logging options
+#define LOG_FRAME(name_thisMethod,x)  std::string("ReaXstream | Frame[") + std::to_string(x) + "][" + name_thisMethod
 
 // Logger selection Switch. ON/OFF/Itegrated
 // LOGGER_OFF / LOGGER_ON / LOGGER_INTEGRATED

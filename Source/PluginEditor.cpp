@@ -19,11 +19,16 @@ ReaXstreamAudioProcessorEditor::ReaXstreamAudioProcessorEditor (ReaXstreamAudioP
     // editor's size to whatever you need it to be.
     setSize (300, 500);
     startTimerHz(30);
+
+    // Inform the audio processor that the GUI editor is created and active
+    audioProcessor.setEditorCreateState(true);
 }
 
 ReaXstreamAudioProcessorEditor::~ReaXstreamAudioProcessorEditor()
 {
+    audioProcessor.setEditorCreateState(false);
     rxgui.reset();
+
 }
 
 //==============================================================================

@@ -49,6 +49,7 @@ public:
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
+    void setEditorCreateState(bool editorCreatedIsTure);
 
     //==============================================================================
     const juce::String getName() const override;
@@ -77,6 +78,8 @@ public:
     void* getSet_ReaXstreamGUIpointer(void* ptr_in);
 
 private:
+    // This variable is set to true when the GUI editor is created and set to false when destroyed
+    bool editorIsCreatedAndActiveState;
 
     // Audio level statistic Variables
     juce::LinearSmoothedValue<float> rmsLevel_L, rmsLevel_R;

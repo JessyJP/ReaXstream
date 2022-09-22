@@ -187,16 +187,27 @@ ReaXstreamGUI::ReaXstreamGUI ()
     hyperlink_gitHub->setTooltip (TRANS("https://github.com/JessyJP/ReaXstream"));
     hyperlink_gitHub->setButtonText (TRANS("link to GitHub"));
 
-    label_dbLevelRMS.reset (new juce::Label ("dbLevelRMS_label",
-                                             TRANS("-inf")));
-    addAndMakeVisible (label_dbLevelRMS.get());
-    label_dbLevelRMS->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
-    label_dbLevelRMS->setJustificationType (juce::Justification::centredLeft);
-    label_dbLevelRMS->setEditable (false, false, false);
-    label_dbLevelRMS->setColour (juce::TextEditor::textColourId, juce::Colours::black);
-    label_dbLevelRMS->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+    label_dbLevelRMS_L.reset (new juce::Label ("dbLevelRMS_L_label",
+                                               TRANS("-inf dB\n")));
+    addAndMakeVisible (label_dbLevelRMS_L.get());
+    label_dbLevelRMS_L->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_dbLevelRMS_L->setJustificationType (juce::Justification::centredRight);
+    label_dbLevelRMS_L->setEditable (false, false, false);
+    label_dbLevelRMS_L->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label_dbLevelRMS_L->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
 
-    label_dbLevelRMS->setBounds (32, 392, 48, 48);
+    label_dbLevelRMS_L->setBounds (0, 408, 55, 16);
+
+    label_dbLevelRMS_R.reset (new juce::Label ("dbLevelRMS_R_label",
+                                               TRANS("-inf dB")));
+    addAndMakeVisible (label_dbLevelRMS_R.get());
+    label_dbLevelRMS_R->setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+    label_dbLevelRMS_R->setJustificationType (juce::Justification::centredRight);
+    label_dbLevelRMS_R->setEditable (false, false, false);
+    label_dbLevelRMS_R->setColour (juce::TextEditor::textColourId, juce::Colours::black);
+    label_dbLevelRMS_R->setColour (juce::TextEditor::backgroundColourId, juce::Colour (0x00000000));
+
+    label_dbLevelRMS_R->setBounds (0, 432, 55, 18);
 
 
     //[UserPreSize]
@@ -229,7 +240,7 @@ ReaXstreamGUI::ReaXstreamGUI ()
     // It's most likely quite tricky to have *this (dual meaning here) componenet to inherit from the Listner::TextEdit Class.
 
     // ---- This section creates the custom level meter
-    
+
 //    level_meter.reset( new sd::SoundMeter::MetersComponent());
 //    level_meter->setChannelFormat(juce::AudioChannelSet::stereo());
 //    addAndMakeVisible(level_meter.get());
@@ -241,15 +252,15 @@ ReaXstreamGUI::ReaXstreamGUI ()
 //    meterOptions.warningRegion_db = -12.0f;
 //    level_meter->setOptions(meterOptions);
 
+    int labelOffset = 55-10;
+
     level_meter_L.reset( new Gui::HorizontalMeter());
-    level_meter_L->setBounds(10,  400 , 280, 16 );
-    level_meter_L->setBounds(10, 400, 280, 16);
+    level_meter_L->setBounds(10+ labelOffset,  400 , 280- labelOffset, 16 );
     addAndMakeVisible(level_meter_L.get());
     level_meter_L->setLevel(-18.f);
 
     level_meter_R.reset(new Gui::HorizontalMeter());
-    level_meter_R->setBounds(10, 400, 280, 16);
-    level_meter_R->setBounds(10, 400+8+16, 280, 16);
+    level_meter_R->setBounds(10+ labelOffset, 400+8+16, 280- labelOffset, 16);
     addAndMakeVisible(level_meter_R.get());
     level_meter_R->setLevel(-18.f);
 
@@ -281,7 +292,8 @@ ReaXstreamGUI::~ReaXstreamGUI()
     label_ipaddres = nullptr;
     label_identifierLabel = nullptr;
     hyperlink_gitHub = nullptr;
-    label_dbLevelRMS = nullptr;
+    label_dbLevelRMS_L = nullptr;
+    label_dbLevelRMS_R = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -369,6 +381,8 @@ void ReaXstreamGUI::setReaXstreamAudioProcessorP(ReaXstreamAudioProcessor* rxAud
     // The editor has been initialized after the processor is fully initialized.
     // Therefore, default parameters for the GUI can be extracted from the processor here.
     this->rxAudioProcessor->getSet_ReaXstreamGUIpointer((void*)this);
+    // IT is best that the second approach is not used in production,
+    // so that the Audio Processor does not take the initiative to send anything to the GUI
 
 }
 
@@ -453,16 +467,19 @@ void ReaXstreamGUI::setStateIdentifierTextEditor(std::string in_identifier)
 }
 void ReaXstreamGUI::setAudioLevelsAndRepaint(int channel, float level)
 {
+    auto dbStr = std::string(" dB");
     jassert(channel == 0 | channel == 1);
-    if (channel == 0) 
-    { 
+    if (channel == 0)
+    {
         level_meter_L->setLevel(level);
         level_meter_L->repaint();
+//        this->label_dbLevelRMS->setText(TRANS(std::to_string(level) + dbStr), "");
     };
-    if (channel == 1) 
-    { 
+    if (channel == 1)
+    {
         level_meter_R->setLevel(level);
         level_meter_R->repaint();
+  //      this->label_dbLevelRMS2->setText(TRANS(std::to_string(level) + dbStr) );
     };
 }
 
@@ -596,11 +613,16 @@ BEGIN_JUCER_METADATA
                    posRelativeY="2b6750f7890c35fe" tooltip="https://github.com/JessyJP/ReaXstream"
                    buttonText="link to GitHub" connectedEdges="0" needsCallback="0"
                    radioGroupId="0" url="https://github.com/JessyJP/ReaXstream"/>
-  <LABEL name="dbLevelRMS_label" id="ea426327de1b3551" memberName="label_dbLevelRMS"
-         virtualName="" explicitFocusOrder="0" pos="32 392 48 48" edTextCol="ff000000"
-         edBkgCol="0" labelText="-inf" editableSingleClick="0" editableDoubleClick="0"
+  <LABEL name="dbLevelRMS_L_label" id="1c597836be88d370" memberName="label_dbLevelRMS_L"
+         virtualName="" explicitFocusOrder="0" pos="0 408 55 16" edTextCol="ff000000"
+         edBkgCol="0" labelText="-inf dB&#10;" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="34"/>
+  <LABEL name="dbLevelRMS_R_label" id="8bb585aa562502c8" memberName="label_dbLevelRMS_R"
+         virtualName="" explicitFocusOrder="0" pos="0 432 55 18" edTextCol="ff000000"
+         edBkgCol="0" labelText="-inf dB" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
-         kerning="0.0" bold="0" italic="0" justification="33"/>
+         kerning="0.0" bold="0" italic="0" justification="34"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
