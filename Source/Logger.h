@@ -18,7 +18,7 @@
 
 // Logger selection Switch. ON/OFF/Itegrated
 // LOGGER_OFF / LOGGER_ON / LOGGER_INTEGRATED
-#define LOGGER_ON
+#define LOGGER_OFF
 
 //#endif LOGGER_H
 
@@ -39,7 +39,7 @@
 	extern std::shared_ptr<juce::FileLogger> fileLogger;
 
 	// Logger function
-	#define LOG(DTYPE,MSG) stdOutLogger->outputDebugString( std::string(DTYPE) + std::string(MSG) );//Shorthand
+	#define LOG(DTYPE,MSG) stdOutLogger->outputDebugString( std::string(DTYPE) + std::string(MSG) );fileLogger->logMessage(juce::String(DTYPE) + juce::String(MSG)); //Shorthand
 	#define LOG_UNIT_TEST( str ) stdOutLogger->outputDebugString( std::string("") + str);//Shorthand
 	#define GUI_WINDOW_LOG
 

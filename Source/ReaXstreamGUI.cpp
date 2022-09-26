@@ -255,12 +255,12 @@ ReaXstreamGUI::ReaXstreamGUI ()
     int labelOffset = 55-10;
 
     level_meter_L.reset( new Gui::HorizontalMeter());
-    level_meter_L->setBounds(10+ labelOffset,  400 , 280- labelOffset, 16 );
+    level_meter_L->setBounds(10+ labelOffset,  408 , 280- labelOffset, 16 );
     addAndMakeVisible(level_meter_L.get());
     level_meter_L->setLevel(-18.f);
 
     level_meter_R.reset(new Gui::HorizontalMeter());
-    level_meter_R->setBounds(10+ labelOffset, 400+8+16, 280- labelOffset, 16);
+    level_meter_R->setBounds(10+ labelOffset, 408+8+16, 280- labelOffset, 16);
     addAndMakeVisible(level_meter_R.get());
     level_meter_R->setLevel(-18.f);
 

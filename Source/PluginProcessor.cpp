@@ -198,7 +198,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             if (protocol == UDP)// At present lets support UDP connection only 
             {            
                 LOG(LOG_INFO, name_thisMethod + " ReaStreamClassicUDPtransmission(buffer) -> called");
-//                ReaStreamClassicUDPtransmission(buffer);
+                ReaStreamClassicUDPtransmission(buffer);
                 LOG(LOG_INFO, name_thisMethod + " ReaStreamClassicUDPtransmission(buffer) -> done");
             }
         }
@@ -220,7 +220,7 @@ void ReaXstreamAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         {
             if (protocol == UDP)// At present lets support UDP connection only 
             {
- //               ReaStreamClassicUDPreception(buffer);
+                ReaStreamClassicUDPreception(buffer);
             }
         }
         else if (mode == ModeOfOperation::ReaStreamMobile)
@@ -276,6 +276,7 @@ void ReaXstreamAudioProcessor::ReaStreamClassicUDPtransmission(juce::AudioBuffer
         for (int i = 0; i < sizeof(UDPpackPayload); i++) { UDPpackPayload[i] = 0; }
         // Frame reset
         resetFrame = false;
+        LOG(LOG_INFO, name_thisMethod + " Frame Reset!");
     }
     //TODO: This could be computed only once in the future when channel number updates and requests frame resets!!!
     // Determine the if segmentation is needed or not

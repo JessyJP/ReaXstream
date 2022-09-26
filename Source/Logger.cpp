@@ -5,7 +5,7 @@
 // ========================================
 // Initialize plug-in logger
 std::shared_ptr<juce::Logger> stdOutLogger					= std::shared_ptr<juce::Logger>(juce::Logger::getCurrentLogger());
-//std::shared_ptr<juce::FileLogger> fileLogger				= std::shared_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("logs", "mylog", ".log", welcomeMessage));
+std::shared_ptr<juce::FileLogger> fileLogger				= std::shared_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("r:/logs", "mylog", ".log", LoggerWelcomeMessage));
 
 // ========================================
 #endif LOGGER_ON
